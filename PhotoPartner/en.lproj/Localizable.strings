@@ -1,0 +1,155 @@
+/* 
+  Localizable.strings
+  PhotoPartner
+
+  Created by USER on 7/3/2018.
+  Copyright © 2018 MJF. All rights reserved.
+*/
+hudLoading = "Loading";
+confirmOK = "OK";
+confirmCancel = "Cancel";
+networkError = "Network Error";
+willCloseApp = "The application will be closed";
+saveButton = "Save";
+saveSuccess = "Save Success";
+saveFailed = "Save Failed";
+refresh = "Pull to refresh";
+refreshing = "Refreshing";
+
+loadingSignin = "Login";
+loadingDeviceList = "Loading Device";
+loadingProcessing = "Processing";
+loadingBinding = "Binding";
+loadingUnbinding = "Unbinding";
+loadingSaving = "Saving";
+inputMaxText = "No more than 18 characters";
+
+//homeNavigationItemTitle = "Photo Partner";
+
+homeTakePhotoTitle = "Photo";
+homePhotoLibTitle = "Local Photo & Video";
+homeTakeVodioTitle = "Video Recording";
+homeAlartPhotoLibTitle = "Photo";
+homeAlartVideoLibTitle = "Video";
+homeAlartCancelTitle = "Cancel";
+
+uploadPhotoNavigationItemTitle = "Send Photo";
+uploadVideoNavigationItemTitle = "Send Video";
+uploadSendRightBarButtonItemTitle = "Send";
+uploadSendingRightBarButtonItemTitle = "Sending";
+uploadCancelRightBarButtonItemTitle = "Cancel";
+uploadProcessingRightBarButtonItemTitle = "Processing";
+uploadSendSuccess = "Send Success";
+uploadSendFailed = "Send Failed";
+uploadSendCanceled = "Canceled Sending";
+uploadVideoMaxSizeError = "File size can not exceed 50M";
+uploadPhotoEmptyError = "Please select at least one photo";
+uploadVideoEmptyError = "Please select a video";
+uploadDeviceEmptyError = "Please select at least one device";
+uploadTextViewPhotoPlaceHolderText = "Click on the photo to add a describe for each photo";
+uploadTextViewVideoPlaceHolderText = "Click on the photo to add a describe for video";
+uploadDescLabelPlaceHolderText = "Add a text describe";
+uploadPushDeviceTitle = "Push Device";
+
+deviceListNavigationItemTitle = "Device Manager";
+deviceListRename = "Rename";
+deviceListUnbind = "Unbind";
+deviceListEmpty = "No device is currently bound, please click the binding button in the upper right corner to enter the device binding interface";
+deviceListUnbindConfirmTitle = "Do you confirm that you want to unbind the device";
+deviceListUnbindConfirmSubtitle = "This operation is not recoverable";
+deviceListUnbindSuccess = "Unbind Success";
+deviceListUnbindFailed = "Unbind Failed";
+deviceListRenameTextFieldTitle = "Please enter the device's nickname";
+deviceListRenameSuccess = "Rename Success";
+deviceListRenameFailed = "Rename Failed";
+
+deviceAddNavigationItemTitle = "Devices Bind";
+deviceAddRightBarButtonItemTitle = "Bind";
+deviceScanRightBarButtonItemTitle = "Scan";
+deviceAddBindSuccess = "Bind Success";
+deviceAddBindFailed = "Bind Failed";
+deviceAddDeviceName = "Please enter the device's nickname";
+deviceAddDeviceNumber = "Please enter smart device ID number";
+deviceScanNavigationItemTitle = "QR Code";
+deviceScanNoticeText = "Please put the QR code in the lens range for scanning";
+
+settingNavigationItemTitle = "Settings";
+settingTableHeaderUserTitle = "User Settings";
+settingTableHeaderSystemTitle = "System Settings";
+settingCellUserInfoTitle = "Account";
+settingCellClearMessageTitle = "Clear All Messages";
+settingCellVersionTitle = "Version Update";
+
+versionNewTitle = "New Version";
+versionNewDesc = "Go to App Store to Update";
+versionAlreadyLastVersion = "Already last version";
+
+aboutUsTitle = "Version";
+aboutUsContent = "Version:1.0.7";
+aboutUsVersion = "Version";
+
+clearMessageListTitle = "Do you confirm that you want to delete all messages";
+clearMessageListSubtitle = "This operation is not recoverable";
+clearMessageListDone = "All messages deleted";
+
+userInfoNavigationItemTitle = "Account";
+userInfoUserName = "Username：";
+userInfoUserAccount = "Account：";
+userInfoUserNameTextFiledTitle = "Please enter the user's nickname";
+
+messageNavigationItemTitle = "Message";
+messageSendPhotoTo = "Send photo to";
+messageSendVideoTo = "Send video to";
+messageBindDeviceTo = "Bind device";
+messageUnbindDeviceTo = "Unbind device";
+messageSecondAgo = " second ago";
+messageMinuteAgo = " minute ago";
+messageHourAgo = " hour ago";
+
+/*
+ *  从服务器返回的错误码
+ */
+e101 = "Unable to find the device";
+e103 = "Unable to find the relationship between user and device";
+e104 = "Update user status failed, please try again later";
+e105 = "The user has been deleted";
+e106 = "Unknow action";
+e107 = "Update user device relationship failed, please try again later";
+e108 = "The device already been bound";
+e109 = "Unable to find the user";
+e110 = "Update device name failed, please try again later";
+e112 = "Unable to find the device";
+e117 = "The number of binding users of the device exceeds the limit";
+e301 = "File-MD5 property is not set or format error";
+e302 = "File-Size property format error";
+e303 = "File-Size property is not set";
+e304 = "Start bytes is not set or format error";
+e305 = "End bytes is not set or format error";
+e306 = "File-Range property is not set or format error";
+e307 = "The start bytes must be more than 0";
+e308 = "The end bytes must be more or equal than start bytes";
+e309 = "The end bytes must be less or equal than file size";
+e310 = "Content-Disposition property format error";
+e311 = "Content-Disposition property is not set";
+e312 = "The size of the Body is not equal to the size of the File-Range";
+e313 = "User-Id property format error";
+e314 = "User-Id property is not set";
+e315 = "Device-Id property format error";
+e316 = "Device-Id property is not set";
+e317 = "File-Desc property is not set";
+e318 = "Save file url to database failed, please try again later";
+e319 = "The length of the file_desc is not equal to the length of the file";
+e320 = "Current block is not set or format error";
+e321 = "Total block is not set or format error";
+e322 = "File-Block property is not set or format error";
+e323 = "The current block must be more than 0";
+e324 = "The total block must be more than 0";
+e325 = "The total block must be more or equal than current block";
+e326 = "Block file not exists";
+e327 = "User bound device change";
+e403 = "User registration failed, please try again later";
+e404 = "Update user profile failed, please try again later";
+e405 = "Unable to find the user";
+e406 = "Unable to find the app by apk_id";
+e901 = "file not exists";
+e902 = "file already exists";

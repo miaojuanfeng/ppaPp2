@@ -1,0 +1,155 @@
+/* 
+  Localizable.strings
+  PhotoPartner
+
+  Created by USER on 7/3/2018.
+  Copyright © 2018 MJF. All rights reserved.
+*/
+hudLoading = "加载中";
+confirmOK = "确认";
+confirmCancel = "取消";
+networkError = "网络错误";
+willCloseApp = "应用即将关闭";
+saveButton = "保存";
+saveSuccess = "保存成功";
+saveFailed = "保存失败";
+refresh = "下拉刷新";
+refreshing = "正在刷新";
+
+loadingSignin = "登录中";
+loadingDeviceList = "读取设备";
+loadingProcessing = "处理中";
+loadingBinding = "绑定中";
+loadingUnbinding = "解绑中";
+loadingSaving = "保存中";
+inputMaxText = "最多输入18个字符";
+
+//homeNavigationItemTitle = "照片伴侣";
+
+homeTakePhotoTitle = "拍照";
+homePhotoLibTitle = "本地图库";
+homeTakeVodioTitle = "录制视频";
+homeAlartPhotoLibTitle = "照片";
+homeAlartVideoLibTitle = "视频";
+homeAlartCancelTitle = "取消";
+
+uploadPhotoNavigationItemTitle = "发送照片";
+uploadVideoNavigationItemTitle = "发送视频";
+uploadSendRightBarButtonItemTitle = "发送";
+uploadSendingRightBarButtonItemTitle = "发送中";
+uploadCancelRightBarButtonItemTitle = "取消";
+uploadProcessingRightBarButtonItemTitle = "处理中";
+uploadSendSuccess = "发送成功";
+uploadSendFailed = "发送失败";
+uploadSendCanceled = "已取消发送";
+uploadVideoMaxSizeError = "视频大小不能超过50M";
+uploadPhotoEmptyError = "请选择至少一张图片";
+uploadVideoEmptyError = "请选择一个视频";
+uploadDeviceEmptyError = "请选择至少一个设备";
+uploadTextViewPhotoPlaceHolderText = "点击图片为每张图片添加描述";
+uploadTextViewVideoPlaceHolderText = "点击图片为视频添加描述";
+uploadDescLabelPlaceHolderText = "添加文字描述";
+uploadPushDeviceTitle = "推送设备";
+
+deviceListNavigationItemTitle = "设备管理";
+deviceListRename = "重命名";
+deviceListUnbind = "解绑";
+deviceListEmpty = "当前未绑定任何设备，请点击右上角的绑定按钮进入设备绑定界面";
+deviceListUnbindConfirmTitle = "确认要解除与该设备的绑定？";
+deviceListUnbindConfirmSubtitle = "该操作不可恢复";
+deviceListUnbindSuccess = "解除绑定成功";
+deviceListUnbindFailed = "解除绑定失败";
+deviceListRenameTextFieldTitle = "请输入设备昵称";
+deviceListRenameSuccess = "重命名设备成功";
+deviceListRenameFailed = "重命名设备失败";
+
+deviceAddNavigationItemTitle = "设备绑定";
+deviceAddRightBarButtonItemTitle = "绑定";
+deviceScanRightBarButtonItemTitle = "扫描";
+deviceAddBindSuccess = "绑定成功";
+deviceAddBindFailed = "绑定失败";
+deviceAddDeviceName = "请输入设备昵称";
+deviceAddDeviceNumber = "请输入设备编号";
+deviceScanNavigationItemTitle = "二维码";
+deviceScanNoticeText = "请把二维码放在镜头范围内进行扫描";
+
+settingNavigationItemTitle = "设置";
+settingTableHeaderUserTitle = "个人设置";
+settingTableHeaderSystemTitle = "系统设置";
+settingCellUserInfoTitle = "个人信息";
+settingCellClearMessageTitle = "清空全部消息记录";
+settingCellVersionTitle = "版本更新";
+
+versionNewTitle = "版本更新";
+versionNewDesc = "将前往App Store下载";
+versionAlreadyLastVersion = "当前已经是最新版本";
+
+aboutUsTitle = "版本";
+aboutUsContent = "版本：1.0.7";
+aboutUsVersion = "版本";
+
+clearMessageListTitle = "确认要清空全部消息记录？";
+clearMessageListSubtitle = "该操作不可恢复";
+clearMessageListDone = "消息记录已清空";
+
+userInfoNavigationItemTitle = "个人信息";
+userInfoUserName = "名称：";
+userInfoUserAccount = "账号：";
+userInfoUserNameTextFiledTitle = "请输入用户名称";
+
+messageNavigationItemTitle = "消息";
+messageSendPhotoTo = "发送照片给";
+messageSendVideoTo = "发送视频给";
+messageBindDeviceTo = "绑定设备";
+messageUnbindDeviceTo = "解绑设备";
+messageSecondAgo = "秒前";
+messageMinuteAgo = "分钟前";
+messageHourAgo = "小时前";
+
+
+/*
+ *  从服务器返回的错误码
+ */
+e101 = "找不到设备";
+e103 = "无法找到用户和设备之间的关系";
+e104 = "更新用户状态失败，请稍后再试";
+e105 = "用户已被删除";
+e106 = "未知的行动";
+e107 = "更新用户设备关系失败，请稍后再试";
+e108 = "设备已被绑定";
+e109 = "找不到用户";
+e110 = "更新设备名称失败，请稍后再试";
+e117 = "该设备绑定用户的数量超过限制";
+e301 = "文件MD5属性未设置或格式错误";
+e302 = "文件大小属性格式错误";
+e303 = "文件大小属性未设置";
+e304 = "未设置起始字节或格式错误";
+e305 = "未设置结束字节或格式错误";
+e306 = "文件范围属性未设置或格式错误";
+e307 = "起始字节必须大于0";
+e308 = "结束字节必须大于或等于起始字节";
+e309 = "结束字节必须小于或等于文件大小";
+e310 = "内容配置属性格式错误";
+e311 = "未设置内容配置属性";
+e312 = "正文的大小不等于文件范围的大小";
+e313 = "用户ID属性格式错误";
+e314 = "未设置用户ID属性";
+e315 = "设备ID属性格式错误";
+e316 = "未设置设备ID属性";
+e317 = "未设置文件描述属性";
+e318 = "将文件URL保存到数据库失败，请稍后再试";
+e319 = "文件描述长度和文件长度不相等";
+e320 = "当前块没有设置或格式错误";
+e321 = "没有设置总块或格式错误";
+e322 = "文件块属性未设置或格式错误";
+e323 = "当前块必须大于0";
+e324 = "总块必须大于0";
+e325 = "总块必须大于或等于当前块";
+e326 = "块文件不存在";
+e327 = "用户绑定设备变更";
+e403 = "用户注册失败，请稍后再试";
+e404 = "更新用户配置文件失败，请稍后再试";
+e405 = "找不到用户";
+e406 = "无法通过应用程序ID找到应用程序";
+e901 = "文件不存在";
+e902 = "文件已经存在";
