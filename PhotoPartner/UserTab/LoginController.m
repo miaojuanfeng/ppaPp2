@@ -9,6 +9,8 @@
 #import "MacroDefine.h"
 #import "AppDelegate.h"
 #import "LoginController.h"
+#import "ResetPasswordController.h"
+#import "SignUpController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 
@@ -46,7 +48,7 @@
     
         [boxView addSubview:usernameField];
     
-        UITextField *passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(usernameField)+GET_LAYOUT_HEIGHT(usernameField)+GAP_HEIGHT, GET_LAYOUT_WIDTH(boxView), 44)];
+        UITextField *passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(usernameField)+GET_LAYOUT_HEIGHT(usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
         passwordField.backgroundColor = [UIColor whiteColor];
         passwordField.delegate = self;
         passwordField.placeholder = @"请输入密码";
@@ -62,12 +64,55 @@
     
         [boxView addSubview:passwordField];
     
+        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(passwordField)+GET_LAYOUT_HEIGHT(passwordField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
+        loginButton.backgroundColor = RGBA_COLOR(27, 163, 232, 1);
+        loginButton.layer.cornerRadius = 5;
+        loginButton.layer.masksToBounds = YES;
+        [loginButton setTitle:NSLocalizedString(@"deviceAddRightBarButtonItemTitle", nil) forState:UIControlStateNormal];
+        [loginButton addTarget:self action:@selector(clickLoginButton) forControlEvents:UIControlEventTouchUpInside];
+        [boxView addSubview:loginButton];
+    
+        UILabel *forgetLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(loginButton)+GET_LAYOUT_HEIGHT(loginButton), 150, 44)];
+        forgetLabel.text = @"forget";
+        forgetLabel.textAlignment = NSTextAlignmentLeft;
+        forgetLabel.textColor = RGBA_COLOR(27, 163, 232, 1);
+        forgetLabel.userInteractionEnabled = YES;
+        UITapGestureRecognizer* forgetGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(forgetPasswordTap:)];
+        forgetGesture.numberOfTouchesRequired = 1;
+        [forgetLabel addGestureRecognizer:forgetGesture];
+        [boxView addSubview:forgetLabel];
+    
+        UILabel *signUpLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(boxView)-80, GET_LAYOUT_OFFSET_Y(loginButton)+GET_LAYOUT_HEIGHT(loginButton), 80, 44)];
+        signUpLabel.text = @"signup";
+        signUpLabel.textAlignment = NSTextAlignmentRight;
+        signUpLabel.textColor = RGBA_COLOR(27, 163, 232, 1);
+        signUpLabel.userInteractionEnabled = YES;
+        UITapGestureRecognizer* signUpGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(signUpTap:)];
+        signUpGesture.numberOfTouchesRequired = 1;
+        [signUpLabel addGestureRecognizer:signUpGesture];
+        [boxView addSubview:signUpLabel];
+    
     [self.view addSubview:boxView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)clickLoginButton{
+    NSLog(@"点击3");
+    
+}
+
+-(void)forgetPasswordTap:(UITapGestureRecognizer*)gesture {
+    ResetPasswordController *resetPasswordController = [[ResetPasswordController alloc] init];
+    [self.navigationController pushViewController:resetPasswordController animated:YES];
+}
+
+-(void)signUpTap:(UITapGestureRecognizer*)gesture {
+    SignUpController *signUpController = [[SignUpController alloc] init];
+    [self.navigationController pushViewController:signUpController animated:YES];
 }
 
 #pragma mark - UITextFieldDelegate

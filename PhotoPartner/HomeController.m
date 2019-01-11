@@ -51,7 +51,30 @@
     [self.view addSubview:bgView];
     
     UIView *accountBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, MARGIN_TOP+20, VIEW_WIDTH, VIEW_HEIGHT/4-GAP_HEIGHT)];
+        UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(accountBoxView), (GET_LAYOUT_HEIGHT(accountBoxView)-GAP_HEIGHT)/2)];
+        settingButton.backgroundColor = RGBA_COLOR(235, 182, 67, 1);
+        settingButton.clipsToBounds = YES;
+        settingButton.layer.cornerRadius = 10;
+        //        [settingButton setTitle:NSLocalizedString(@"settingNavigationItemTitle", nil) forState:UIControlStateNormal];
+        [settingButton addTarget:self action:@selector(clickSettingButton) forControlEvents:UIControlEventTouchUpInside];
+        [accountBoxView addSubview:settingButton];
     
+    
+    
+        UIView *settingIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(settingButton)-70)/2, (GET_LAYOUT_HEIGHT(settingButton)-60)/2-10, 70, 60)];
+        settingIcon.userInteractionEnabled = NO;
+    
+        UIImageView *settingIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(settingIcon), GET_LAYOUT_HEIGHT(settingIcon))];
+        settingIconImage.image = [UIImage imageNamed:@"settings"];
+        [settingIcon addSubview:settingIconImage];
+    
+        [settingButton addSubview:settingIcon];
+    
+        UILabel *settingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(settingIcon)+GET_LAYOUT_HEIGHT(settingIcon)+5, GET_LAYOUT_WIDTH(settingButton), 20)];
+        settingLabel.textAlignment = NSTextAlignmentCenter;
+        settingLabel.textColor = [UIColor whiteColor];
+        settingLabel.text = NSLocalizedString(@"settingNavigationItemTitle", nil);
+        [settingButton addSubview:settingLabel];
     [self.view addSubview:accountBoxView];
     
     
@@ -438,7 +461,8 @@
     //MessageController *messageController = [[MessageController alloc] init];
     //[self.navigationController pushViewController:messageController animated:YES];
     LoginController *loginController = [[LoginController alloc] init];
-    [self.navigationController pushViewController:loginController animated:YES];}
+    [self.navigationController pushViewController:loginController animated:YES];
+}
 
 - (void)clickSettingButton {
     SettingController *settingController = [[SettingController alloc] init];

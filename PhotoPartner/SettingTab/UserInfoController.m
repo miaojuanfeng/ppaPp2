@@ -9,6 +9,7 @@
 #import "MacroDefine.h"
 #import "AppDelegate.h"
 #import "UserInfoController.h"
+#import "ResetPasswordController.h"
 #import <AFNetworking/AFNetworking.h>
 
 @interface UserInfoController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate>
@@ -41,10 +42,10 @@
     
     self.userNickname = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    self.view.userInteractionEnabled = YES;
-    UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];
-    singleTap.delegate = self;
-    [self.view addGestureRecognizer:singleTap];
+    //self.view.userInteractionEnabled = YES;
+    //UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fingerTapped:)];
+    //singleTap.delegate = self;
+    //[self.view addGestureRecognizer:singleTap];
 }
 
 
@@ -54,7 +55,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 2;
+    return 3;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -63,7 +64,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if( indexPath.row == 0 ){
         self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
         self.userNameField.text = self.userNickname;
@@ -82,6 +83,9 @@
         self.userAccountField.enabled = NO;
         
         [cell.contentView addSubview:self.userAccountField];
+    }else if( indexPath.row == 2 ){
+        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.text = NSLocalizedString(@"settingCellUserInfoTitle", nil);
     }
     return cell;
 }
@@ -97,6 +101,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     //    VideoDetailController *videoDetailController = [[VideoDetailController alloc] init];
     //    [self.navigationController pushViewController:videoDetailController animated:YES];
+    ResetPasswordController *resetPasswordController;
+    if( indexPath.section == 0 ){
+        switch (indexPath.row) {
+            case 2:
+                resetPasswordController = [[ResetPasswordController alloc] init];
+                [self.navigationController pushViewController:resetPasswordController animated:YES];
+                break;
+        }
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

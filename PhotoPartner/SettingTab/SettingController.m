@@ -63,6 +63,7 @@
             case 0:
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = NSLocalizedString(@"settingCellUserInfoTitle", nil);
+                cell.detailTextLabel.text = @"username";
                 break;
             case 1:
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
