@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		70E7C446704F348E198D3D9E /* libPods-PhotoPartnerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A4E528F6CED615309D47372 /* libPods-PhotoPartnerUITests.a */; };
 		77850B570925FA5D8AFD693E /* libPods-PhotoPartnerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A7F0A91C75906489B2EF215 /* libPods-PhotoPartnerTests.a */; };
+		99E6AADB21E8890D00A575CC /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AADA21E8890D00A575CC /* LoginController.m */; };
 		CE70A463204F962D00470A16 /* SettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE70A462204F962D00470A16 /* SettingController.m */; };
 		CE70A468204FC3CD00470A16 /* MessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE70A467204FC3CD00470A16 /* MessageController.m */; };
 		CE70A46F204FD1EB00470A16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE70A471204FD1EB00470A16 /* InfoPlist.strings */; };
@@ -57,6 +58,8 @@
 		411AED00D1AC2261C24E98BE /* Pods-PhotoPartnerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoPartnerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoPartnerUITests/Pods-PhotoPartnerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5DF083557A9DF8F98D6DE818 /* libPods-PhotoPartner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PhotoPartner.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97425E2E19AC274BB7F0847F /* Pods-PhotoPartnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoPartnerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoPartnerTests/Pods-PhotoPartnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		99E6AADA21E8890D00A575CC /* LoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
+		99E6AADC21E8892C00A575CC /* LoginController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
 		BE1067612D2D71EEF032F5F2 /* Pods-PhotoPartner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoPartner.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoPartner/Pods-PhotoPartner.debug.xcconfig"; sourceTree = "<group>"; };
 		CE70A462204F962D00470A16 /* SettingController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingController.m; sourceTree = "<group>"; };
 		CE70A464204F963900470A16 /* SettingController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingController.h; sourceTree = "<group>"; };
@@ -144,6 +147,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		99E6AAD921E887D500A575CC /* UserTab */ = {
+			isa = PBXGroup;
+			children = (
+				99E6AADA21E8890D00A575CC /* LoginController.m */,
+				99E6AADC21E8892C00A575CC /* LoginController.h */,
+			);
+			path = UserTab;
+			sourceTree = "<group>";
+		};
 		CAA48E11D94F422374FFAA6E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +241,7 @@
 		CEC978E8204E38F800AE8CB3 /* PhotoPartner */ = {
 			isa = PBXGroup;
 			children = (
+				99E6AAD921E887D500A575CC /* UserTab */,
 				CEB8E2C4205117A300655887 /* DeviceTab */,
 				CEB8E2BE2050E11700655887 /* UploadTab */,
 				CE70A466204FC3B300470A16 /* MessageTab */,
@@ -485,6 +498,7 @@
 				CE759CF72064F5950034EA46 /* UserInfoController.m in Sources */,
 				CEB95ED5207A27330012DB52 /* AboutUsController.m in Sources */,
 				CE70A463204F962D00470A16 /* SettingController.m in Sources */,
+				99E6AADB21E8890D00A575CC /* LoginController.m in Sources */,
 				CE759CF52064E0910034EA46 /* GSKeyChainDataManager.m in Sources */,
 				CEB8E2C7205117C400655887 /* DeviceController.m in Sources */,
 				CEB8E2C12050E1A900655887 /* UploadPhotoController.m in Sources */,

@@ -15,6 +15,7 @@
 #import "AddDeviceController.h"
 #import "MessageController.h"
 #import "SettingController.h"
+#import "LoginController.h"
 //#import <MobileCoreServices/MobileCoreServices.h>
 #import "GSKeyChainDataManager.h"
 #import <AFNetworking/AFNetworking.h>
@@ -423,7 +424,7 @@
         pickerController.videoQuality = UIImagePickerControllerQualityTypeMedium;
         pickerController.cameraCaptureMode = UIImagePickerControllerCameraCaptureModeVideo;
         //            pickerController.allowsEditing = YES;
-        pickerController.videoMaximumDuration = 300.0f;
+        pickerController.videoMaximumDuration = 30.0f;
         pickerController.delegate = self;
         [self presentViewController:pickerController animated:YES completion:^{
             self.isHideBar = true;
@@ -434,9 +435,10 @@
 }
 
 - (void)clickMessageButton {
-    MessageController *messageController = [[MessageController alloc] init];
-    [self.navigationController pushViewController:messageController animated:YES];
-}
+    //MessageController *messageController = [[MessageController alloc] init];
+    //[self.navigationController pushViewController:messageController animated:YES];
+    LoginController *loginController = [[LoginController alloc] init];
+    [self.navigationController pushViewController:loginController animated:YES];}
 
 - (void)clickSettingButton {
     SettingController *settingController = [[SettingController alloc] init];
