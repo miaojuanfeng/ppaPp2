@@ -13,6 +13,7 @@
 		99E6AAE121E8BB7500A575CC /* ResetPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AADF21E8BB7500A575CC /* ResetPasswordController.m */; };
 		99E6AAE221E8BB7500A575CC /* SignUpController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AAE021E8BB7500A575CC /* SignUpController.m */; };
 		99E6AAE521EADBCB00A575CC /* DetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AAE421EADBCB00A575CC /* DetailController.m */; };
+		99E6AAE821EB269000A575CC /* DevicesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AAE621EB269000A575CC /* DevicesController.m */; };
 		CE70A463204F962D00470A16 /* SettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE70A462204F962D00470A16 /* SettingController.m */; };
 		CE70A468204FC3CD00470A16 /* MessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = CE70A467204FC3CD00470A16 /* MessageController.m */; };
 		CE70A46F204FD1EB00470A16 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = CE70A471204FD1EB00470A16 /* InfoPlist.strings */; };
@@ -69,6 +70,8 @@
 		99E6AAE021E8BB7500A575CC /* SignUpController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpController.m; sourceTree = "<group>"; };
 		99E6AAE321EADBCB00A575CC /* DetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailController.h; sourceTree = "<group>"; };
 		99E6AAE421EADBCB00A575CC /* DetailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailController.m; sourceTree = "<group>"; };
+		99E6AAE621EB269000A575CC /* DevicesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DevicesController.m; sourceTree = "<group>"; };
+		99E6AAE721EB269000A575CC /* DevicesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DevicesController.h; sourceTree = "<group>"; };
 		BE1067612D2D71EEF032F5F2 /* Pods-PhotoPartner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoPartner.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoPartner/Pods-PhotoPartner.debug.xcconfig"; sourceTree = "<group>"; };
 		CE70A462204F962D00470A16 /* SettingController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingController.m; sourceTree = "<group>"; };
 		CE70A464204F963900470A16 /* SettingController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingController.h; sourceTree = "<group>"; };
@@ -215,6 +218,8 @@
 		CEB8E2C4205117A300655887 /* DeviceTab */ = {
 			isa = PBXGroup;
 			children = (
+				99E6AAE721EB269000A575CC /* DevicesController.h */,
+				99E6AAE621EB269000A575CC /* DevicesController.m */,
 				99E6AAE321EADBCB00A575CC /* DetailController.h */,
 				99E6AAE421EADBCB00A575CC /* DetailController.m */,
 				CEB8E2C5205117B800655887 /* DeviceController.h */,
@@ -510,6 +515,7 @@
 			files = (
 				CEFF9E1E2059088C0084DB27 /* UploadVideoController.m in Sources */,
 				CE759CF42064E0910034EA46 /* GSKeyChain.m in Sources */,
+				99E6AAE821EB269000A575CC /* DevicesController.m in Sources */,
 				99E6AAE521EADBCB00A575CC /* DetailController.m in Sources */,
 				99E6AAE221E8BB7500A575CC /* SignUpController.m in Sources */,
 				CE759CF72064F5950034EA46 /* UserInfoController.m in Sources */,

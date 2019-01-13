@@ -17,6 +17,7 @@
 #import "SettingController.h"
 #import "LoginController.h"
 #import "DetailController.h"
+#import "DevicesController.h"
 //#import <MobileCoreServices/MobileCoreServices.h>
 #import "GSKeyChainDataManager.h"
 #import <AFNetworking/AFNetworking.h>
@@ -473,9 +474,10 @@
 - (void)clickDeviceManageButton {
     //DeviceController *deviceController = [[DeviceController alloc] init];
     //[self.navigationController pushViewController:deviceController animated:YES];
-    DetailController *detailController = [[DetailController alloc] init];
-    [self.navigationController pushViewController:detailController animated:YES];
-    
+    //DetailController *detailController = [[DetailController alloc] init];
+    //[self.navigationController pushViewController:detailController animated:YES];
+    DevicesController *devicesController = [[DevicesController alloc] init];
+    [self.navigationController pushViewController:devicesController animated:YES];
 }
 
 //- (void)clickBindDeviceButton {
