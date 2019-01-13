@@ -16,6 +16,7 @@
 #import "MessageController.h"
 #import "SettingController.h"
 #import "LoginController.h"
+#import "DetailController.h"
 //#import <MobileCoreServices/MobileCoreServices.h>
 #import "GSKeyChainDataManager.h"
 #import <AFNetworking/AFNetworking.h>
@@ -332,7 +333,7 @@
                             
                             if( self.appDelegate.deviceList.count == 0 ){
                                 AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
-                                [self.navigationController pushViewController:addDeviceController animated:YES];
+                                //[self.navigationController pushViewController:addDeviceController animated:YES];
                             }
                         }
                     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -354,7 +355,7 @@
         }];
     }else if( self.appDelegate.deviceList.count == 0 && [self.appDelegate isNilDeviceList] ){
         AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
-        [self.navigationController pushViewController:addDeviceController animated:YES];
+        //[self.navigationController pushViewController:addDeviceController animated:YES];
     }
 }
 
@@ -470,8 +471,11 @@
 }
 
 - (void)clickDeviceManageButton {
-    DeviceController *deviceController = [[DeviceController alloc] init];
-    [self.navigationController pushViewController:deviceController animated:YES];
+    //DeviceController *deviceController = [[DeviceController alloc] init];
+    //[self.navigationController pushViewController:deviceController animated:YES];
+    DetailController *detailController = [[DetailController alloc] init];
+    [self.navigationController pushViewController:detailController animated:YES];
+    
 }
 
 //- (void)clickBindDeviceButton {
