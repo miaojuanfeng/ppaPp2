@@ -52,31 +52,30 @@
     bgView.image = [UIImage imageNamed:@"bg_main"];
     [self.view addSubview:bgView];
     
-    UIView *accountBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, MARGIN_TOP+20, VIEW_WIDTH, VIEW_HEIGHT/4-GAP_HEIGHT)];
-        UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(accountBoxView), (GET_LAYOUT_HEIGHT(accountBoxView)-GAP_HEIGHT)/2)];
-        settingButton.backgroundColor = RGBA_COLOR(235, 182, 67, 1);
-        settingButton.clipsToBounds = YES;
-        settingButton.layer.cornerRadius = 10;
-        //        [settingButton setTitle:NSLocalizedString(@"settingNavigationItemTitle", nil) forState:UIControlStateNormal];
+    UIView *accountBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, MARGIN_TOP+20, VIEW_WIDTH, VIEW_HEIGHT/4-GAP_HEIGHT*8)];
+    
+        UIButton *headButton = [[UIButton alloc] initWithFrame:CGRectMake(0, (GET_LAYOUT_HEIGHT(accountBoxView)-60)/2, 60, 60)];
+        headButton.layer.masksToBounds = YES;
+        headButton.layer.cornerRadius = 30;
+        [headButton addTarget:self action:@selector(clickHeadButton) forControlEvents:UIControlEventTouchUpInside];
+        UIImageView *headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(headButton), GET_LAYOUT_HEIGHT(headButton))];
+        headImage.image = [UIImage imageNamed:@"bg_main"];
+        [headButton addSubview:headImage];
+        [accountBoxView addSubview:headButton];
+        UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
+        usernameLabel.font = [UIFont systemFontOfSize:18];
+        usernameLabel.text = @"Allen";
+        usernameLabel.backgroundColor = [UIColor yellowColor];
+        [accountBoxView addSubview:usernameLabel];
+    
+        UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(accountBoxView)-35-GAP_WIDTH*2, (GET_LAYOUT_HEIGHT(accountBoxView)-40)/2, 35, 35)];
+        UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(settingButton), GET_LAYOUT_HEIGHT(settingButton))];
+        settingImageView.image = [UIImage imageNamed:@"bg_main"];
+        [settingButton addSubview:settingImageView];
         [settingButton addTarget:self action:@selector(clickSettingButton) forControlEvents:UIControlEventTouchUpInside];
         [accountBoxView addSubview:settingButton];
     
     
-    
-        UIView *settingIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(settingButton)-70)/2, (GET_LAYOUT_HEIGHT(settingButton)-60)/2-10, 70, 60)];
-        settingIcon.userInteractionEnabled = NO;
-    
-        UIImageView *settingIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(settingIcon), GET_LAYOUT_HEIGHT(settingIcon))];
-        settingIconImage.image = [UIImage imageNamed:@"settings"];
-        [settingIcon addSubview:settingIconImage];
-    
-        [settingButton addSubview:settingIcon];
-    
-        UILabel *settingLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(settingIcon)+GET_LAYOUT_HEIGHT(settingIcon)+5, GET_LAYOUT_WIDTH(settingButton), 20)];
-        settingLabel.textAlignment = NSTextAlignmentCenter;
-        settingLabel.textColor = [UIColor whiteColor];
-        settingLabel.text = NSLocalizedString(@"settingNavigationItemTitle", nil);
-        [settingButton addSubview:settingLabel];
     [self.view addSubview:accountBoxView];
     
     
@@ -85,6 +84,8 @@
             UIButton *takePhotoButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(topLeftBoxView), GET_LAYOUT_HEIGHT(topLeftBoxView))];
             [takePhotoButton addTarget:self action:@selector(clickTakePhotoButton) forControlEvents:UIControlEventTouchUpInside];
             [takePhotoButton setImage:[UIImage imageNamed:@"pictures_bg"] forState:UIControlStateNormal];
+            takePhotoButton.clipsToBounds = YES;
+            takePhotoButton.layer.cornerRadius = 10;
             takePhotoButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
                 UIView *takePhotoIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(topLeftBoxView)-80)/2, (GET_LAYOUT_HEIGHT(topLeftBoxView)-80)/2, 80, 80)];
                 takePhotoIcon.userInteractionEnabled = NO;
@@ -437,6 +438,10 @@
 - (void)clickVideoLibButton {
     UploadVideoController *uploadVideoController = [[UploadVideoController alloc] init];
     [self.navigationController pushViewController:uploadVideoController animated:YES];
+}
+
+- (void)clickHeadButton {
+    NSLog(@"click head");
 }
 
 - (void)clickTakeVideoButton{
