@@ -27,8 +27,8 @@ inputMaxText = "No more than 18 characters";
 //homeNavigationItemTitle = "Photo Partner";
 
 homeTakePhotoTitle = "Photo";
-homePhotoLibTitle = "Local Photo & Video";
-homeTakeVodioTitle = "Video Recording";
+homePhotoLibTitle = "Files";
+homeTakeVodioTitle = "Video";
 homeAlartPhotoLibTitle = "Photo";
 homeAlartVideoLibTitle = "Video";
 homeAlartCancelTitle = "Cancel";
@@ -51,7 +51,7 @@ uploadTextViewVideoPlaceHolderText = "Click on the photo to add a describe for v
 uploadDescLabelPlaceHolderText = "Add a text describe";
 uploadPushDeviceTitle = "Push Device";
 
-deviceListNavigationItemTitle = "Device Manager";
+deviceListNavigationItemTitle = "Devices";
 deviceListRename = "Rename";
 deviceListUnbind = "Unbind";
 deviceListEmpty = "No device is currently bound, please click the binding button in the upper right corner to enter the device binding interface";
@@ -97,7 +97,7 @@ userInfoUserName = "Username：";
 userInfoUserAccount = "Account：";
 userInfoUserNameTextFiledTitle = "Please enter the user's nickname";
 
-messageNavigationItemTitle = "Message";
+messageNavigationItemTitle = "Messages";
 messageSendPhotoTo = "Send photo to";
 messageSendVideoTo = "Send video to";
 messageBindDeviceTo = "Bind device";

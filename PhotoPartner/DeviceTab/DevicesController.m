@@ -45,7 +45,7 @@
     long offsetTop = GAP_HEIGHT;
     long messageWidth = GET_LAYOUT_WIDTH(self.scrollView)-GAP_WIDTH*4;
     float fontSize = 14;
-    UIColor *lineColor = [UIColor lightGrayColor];
+    UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
  
     UIView *myDeviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 36)];
         UILabel *myDeviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceView), GET_LAYOUT_HEIGHT(myDeviceView))];
@@ -54,8 +54,8 @@
         myDeviceLabel.textColor = [UIColor blueColor];
         [myDeviceView addSubview:myDeviceLabel];
         UIButton *myDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(myDeviceView)-20, 8, 20, 20)];
-        UIImageView *myDeviceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceButton), GET_LAYOUT_HEIGHT(myDeviceButton))];
-        myDeviceImageView.image = [UIImage imageNamed:@"bg_main"];
+        UIImageView *myDeviceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(myDeviceButton)+10, GET_LAYOUT_HEIGHT(myDeviceButton)+10)];
+        myDeviceImageView.image = [UIImage imageNamed:@"ic_add_blue"];
         [myDeviceButton addSubview:myDeviceImageView];
         [myDeviceButton addTarget:self action:@selector(clickAddMyDeviceButton) forControlEvents:UIControlEventTouchUpInside];
         [myDeviceView addSubview:myDeviceButton];
@@ -76,14 +76,14 @@
         
         UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
         nameLabel.text = @"ZS5FLV";
-        nameLabel.textColor = [UIColor lightGrayColor];
+        nameLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
         nameLabel.font = [UIFont systemFontOfSize:fontSize];
         [devicesView addSubview:nameLabel];
         
         UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
         emailLabel.text = @"Allen@bsimb.com";
         emailLabel.textAlignment = NSTextAlignmentRight;
-        emailLabel.textColor = [UIColor lightGrayColor];
+        emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
         emailLabel.font = [UIFont systemFontOfSize:fontSize];
         [devicesView addSubview:emailLabel];
         
@@ -101,8 +101,8 @@
         boundDeviceLabel.textColor = [UIColor blueColor];
         [boundDeviceView addSubview:boundDeviceLabel];
         UIButton *boundDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(myDeviceView)-20, 8, 20, 20)];
-        UIImageView *boundDeviceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceButton), GET_LAYOUT_HEIGHT(myDeviceButton))];
-        boundDeviceImageView.image = [UIImage imageNamed:@"bg_main"];
+        UIImageView *boundDeviceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(myDeviceButton)+10, GET_LAYOUT_HEIGHT(myDeviceButton)+10)];
+        boundDeviceImageView.image = [UIImage imageNamed:@"ic_add_blue"];
         [boundDeviceButton addSubview:boundDeviceImageView];
         [boundDeviceButton addTarget:self action:@selector(clickAddBoundDeviceButton) forControlEvents:UIControlEventTouchUpInside];
         [boundDeviceView addSubview:boundDeviceButton];

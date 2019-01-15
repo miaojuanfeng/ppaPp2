@@ -41,36 +41,37 @@
     self.navigationController.delegate = self;
     self.isHideBar = true;
     
-    VIEW_WIDTH = VIEW_WIDTH - GAP_WIDTH * 2;
+    VIEW_WIDTH = VIEW_WIDTH - GAP_WIDTH * 4;
     VIEW_HEIGHT = VIEW_HEIGHT - GAP_HEIGHT * 3 -20;
+    int leftGap = GAP_WIDTH * 2;
 //    MARGIN_TOP -= GET_LAYOUT_HEIGHT(self.navigationController.navigationBar);
 //    VIEW_HEIGHT += GET_LAYOUT_HEIGHT(self.navigationController.navigationBar);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
-    UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(self.view), GET_LAYOUT_HEIGHT(self.view)+GAP_HEIGHT*2)];
-    bgView.image = [UIImage imageNamed:@"bg_main"];
-    [self.view addSubview:bgView];
+    //UIImageView *bgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(self.view), GET_LAYOUT_HEIGHT(self.view)+GAP_HEIGHT*2)];
+    //bgView.image = [UIImage imageNamed:@"bg_main"];
+    //[self.view addSubview:bgView];
     
-    UIView *accountBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, MARGIN_TOP+20, VIEW_WIDTH, VIEW_HEIGHT/4-GAP_HEIGHT*8)];
+    UIView *accountBoxView = [[UIView alloc] initWithFrame:CGRectMake(leftGap, MARGIN_TOP+20, VIEW_WIDTH, VIEW_HEIGHT/4-GAP_HEIGHT*8)];
     
         UIButton *headButton = [[UIButton alloc] initWithFrame:CGRectMake(0, (GET_LAYOUT_HEIGHT(accountBoxView)-60)/2, 60, 60)];
         headButton.layer.masksToBounds = YES;
         headButton.layer.cornerRadius = 30;
         [headButton addTarget:self action:@selector(clickHeadButton) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(headButton), GET_LAYOUT_HEIGHT(headButton))];
-        headImage.image = [UIImage imageNamed:@"bg_main"];
+        headImage.image = [UIImage imageNamed:@"ic_profile_black"];
         [headButton addSubview:headImage];
         [accountBoxView addSubview:headButton];
         UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
         usernameLabel.font = [UIFont systemFontOfSize:18];
         usernameLabel.text = @"Allen";
-        usernameLabel.backgroundColor = [UIColor yellowColor];
+        //usernameLabel.backgroundColor = [UIColor yellowColor];
         [accountBoxView addSubview:usernameLabel];
     
         UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(accountBoxView)-35-GAP_WIDTH*2, (GET_LAYOUT_HEIGHT(accountBoxView)-40)/2, 35, 35)];
-        UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(settingButton), GET_LAYOUT_HEIGHT(settingButton))];
-        settingImageView.image = [UIImage imageNamed:@"bg_main"];
+        UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-15, 0-15, GET_LAYOUT_WIDTH(settingButton)+30, GET_LAYOUT_HEIGHT(settingButton)+30)];
+        settingImageView.image = [UIImage imageNamed:@"ic_settings_black"];
         [settingButton addSubview:settingImageView];
         [settingButton addTarget:self action:@selector(clickSettingButton) forControlEvents:UIControlEventTouchUpInside];
         [accountBoxView addSubview:settingButton];
@@ -79,18 +80,19 @@
     [self.view addSubview:accountBoxView];
     
     
-    UIView *topBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, GET_LAYOUT_OFFSET_Y(accountBoxView)+GET_LAYOUT_HEIGHT(accountBoxView)+GAP_HEIGHT, VIEW_WIDTH, VIEW_HEIGHT/4)];
-        UIView *topLeftBoxView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (GET_LAYOUT_WIDTH(topBoxView)-GAP_WIDTH)/2, GET_LAYOUT_HEIGHT(topBoxView))];
+    UIView *topBoxView = [[UIView alloc] initWithFrame:CGRectMake(leftGap, GET_LAYOUT_OFFSET_Y(accountBoxView)+GET_LAYOUT_HEIGHT(accountBoxView)+GAP_HEIGHT, VIEW_WIDTH, VIEW_HEIGHT/4+GAP_HEIGHT*2)];
+        UIView *topLeftBoxView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (GET_LAYOUT_WIDTH(topBoxView)-GAP_WIDTH*2)/2, GET_LAYOUT_HEIGHT(topBoxView))];
             UIButton *takePhotoButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(topLeftBoxView), GET_LAYOUT_HEIGHT(topLeftBoxView))];
             [takePhotoButton addTarget:self action:@selector(clickTakePhotoButton) forControlEvents:UIControlEventTouchUpInside];
-            [takePhotoButton setImage:[UIImage imageNamed:@"pictures_bg"] forState:UIControlStateNormal];
+            //[takePhotoButton setImage:[UIImage imageNamed:@"pictures_bg"] forState:UIControlStateNormal];
+            takePhotoButton.backgroundColor = RGBA_COLOR(255, 69, 0, 1);
             takePhotoButton.clipsToBounds = YES;
             takePhotoButton.layer.cornerRadius = 10;
             takePhotoButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-                UIView *takePhotoIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(topLeftBoxView)-80)/2, (GET_LAYOUT_HEIGHT(topLeftBoxView)-80)/2, 80, 80)];
+                UIView *takePhotoIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(topLeftBoxView)-60)/2, (GET_LAYOUT_HEIGHT(topLeftBoxView)-60)/2-15, 60, 60)];
                 takePhotoIcon.userInteractionEnabled = NO;
                     UIImageView *takePhotoIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(takePhotoIcon), GET_LAYOUT_HEIGHT(takePhotoIcon))];
-                    takePhotoIconImage.image = [UIImage imageNamed:@"pictures"];
+                    takePhotoIconImage.image = [UIImage imageNamed:@"ic_camera_white"];
                     [takePhotoIcon addSubview:takePhotoIconImage];
                     UILabel *takePhotoIconLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(takePhotoIcon)+10, GET_LAYOUT_WIDTH(takePhotoIcon), 20)];
                     takePhotoIconLabel.textAlignment = NSTextAlignmentCenter;
@@ -101,17 +103,18 @@
         [topLeftBoxView addSubview:takePhotoButton];
         [topBoxView addSubview:topLeftBoxView];
     
-        UIView *topRightBoxView = [[UIView alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(topLeftBoxView)+GAP_WIDTH, 0, (GET_LAYOUT_WIDTH(topBoxView)-GAP_WIDTH)/2, topBoxView.frame.size.height)];
+        UIView *topRightBoxView = [[UIView alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(topLeftBoxView)+GAP_WIDTH*2, 0, (GET_LAYOUT_WIDTH(topBoxView)-GAP_WIDTH*2)/2, topBoxView.frame.size.height)];
             UIButton *takeVideoButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(topRightBoxView), GET_LAYOUT_HEIGHT(topRightBoxView))];
             [takeVideoButton addTarget:self action:@selector(clickTakeVideoButton) forControlEvents:UIControlEventTouchUpInside];
-            [takeVideoButton setImage:[UIImage imageNamed:@"video_recording_bg"] forState:UIControlStateNormal];
+            //[takeVideoButton setImage:[UIImage imageNamed:@"video_recording_bg"] forState:UIControlStateNormal];
+            takeVideoButton.backgroundColor = RGBA_COLOR(29, 161, 242, 1);
             takeVideoButton.clipsToBounds = YES;
             takeVideoButton.layer.cornerRadius = 10;
             takeVideoButton.imageView.contentMode = UIViewContentModeScaleAspectFill;
-            UIView *takeVideoIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(takeVideoButton)-80)/2, (GET_LAYOUT_HEIGHT(takeVideoButton)-80)/2, 80, 80)];
+            UIView *takeVideoIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(takeVideoButton)-60)/2, (GET_LAYOUT_HEIGHT(takeVideoButton)-60)/2-15, 60, 60)];
             takeVideoIcon.userInteractionEnabled = NO;
             UIImageView *takeVideoIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(takePhotoIcon), GET_LAYOUT_HEIGHT(takePhotoIcon))];
-            takeVideoIconImage.image = [UIImage imageNamed:@"video_recording"];
+            takeVideoIconImage.image = [UIImage imageNamed:@"ic_video_white"];
             [takeVideoIcon addSubview:takeVideoIconImage];
             [takeVideoButton addSubview:takeVideoIcon];
     
@@ -124,7 +127,7 @@
         [topBoxView addSubview:topRightBoxView];
     [self.view addSubview:topBoxView];
     
-    UIView *centerBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, GET_LAYOUT_OFFSET_Y(topBoxView)+GET_LAYOUT_HEIGHT(topBoxView)+GAP_HEIGHT, VIEW_WIDTH, VIEW_HEIGHT/4)];
+    UIView *centerBoxView = [[UIView alloc] initWithFrame:CGRectMake(leftGap, GET_LAYOUT_OFFSET_Y(topBoxView)+GET_LAYOUT_HEIGHT(topBoxView)+GAP_HEIGHT*2, VIEW_WIDTH, VIEW_HEIGHT/4)];
         //UIView *centerLeftBoxView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (GET_LAYOUT_WIDTH(centerBoxView)-GAP_WIDTH)/2, GET_LAYOUT_HEIGHT(centerBoxView))];
           /*  UIButton *takeVideoButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(centerLeftBoxView), GET_LAYOUT_HEIGHT(centerLeftBoxView))];
             [takeVideoButton addTarget:self action:@selector(clickTakeVideoButton) forControlEvents:UIControlEventTouchUpInside];
@@ -149,17 +152,17 @@
     
         //UIView *centerRightBoxView = [[UIView alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(centerLeftBoxView)+GAP_WIDTH, 0, (GET_LAYOUT_WIDTH(centerBoxView)-GAP_WIDTH)/2, centerBoxView.frame.size.height)];
             UIButton *photoLibButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(centerBoxView), GET_LAYOUT_HEIGHT(centerBoxView))];
-            photoLibButton.backgroundColor = RGBA_COLOR(31, 193, 203, 1);
+            photoLibButton.backgroundColor = RGBA_COLOR(239, 179, 54, 1);
             photoLibButton.clipsToBounds = YES;
             photoLibButton.layer.cornerRadius = 10;
 //            [photoLibButton setTitle:NSLocalizedString(@"homePhotoLibTitle", nil) forState:UIControlStateNormal];
             [photoLibButton addTarget:self action:@selector(clickPhotoLibButton) forControlEvents:UIControlEventTouchUpInside];
     
-            UIView *photoLibIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(photoLibButton)-70)/2, (GET_LAYOUT_HEIGHT(photoLibButton)-50)/2-10, 70, 50)];
+            UIView *photoLibIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(photoLibButton)-60)/2, (GET_LAYOUT_HEIGHT(photoLibButton)-60)/2-15, 60, 60)];
             photoLibIcon.userInteractionEnabled = NO;
     
                 UIImageView *photoLibImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(photoLibIcon), GET_LAYOUT_HEIGHT(photoLibIcon))];
-                photoLibImage.image = [UIImage imageNamed:@"photos_videos"];
+                photoLibImage.image = [UIImage imageNamed:@"ic_folder_white"];
                 [photoLibIcon addSubview:photoLibImage];
     
             [photoLibButton addSubview:photoLibIcon];
@@ -178,22 +181,22 @@
     
     [self.view addSubview:centerBoxView];
     
-    UIView *bottomBoxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH, GET_LAYOUT_OFFSET_Y(centerBoxView)+GET_LAYOUT_HEIGHT(centerBoxView)+GAP_HEIGHT, VIEW_WIDTH, VIEW_HEIGHT/4)];
-        UIView *bottomLeftBoxView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (GET_LAYOUT_WIDTH(bottomBoxView)-GAP_WIDTH)/2, GET_LAYOUT_HEIGHT(bottomBoxView))];
+    UIView *bottomBoxView = [[UIView alloc] initWithFrame:CGRectMake(leftGap, GET_LAYOUT_OFFSET_Y(centerBoxView)+GET_LAYOUT_HEIGHT(centerBoxView)+GAP_HEIGHT*2, VIEW_WIDTH, VIEW_HEIGHT/4+GAP_HEIGHT*2)];
+        UIView *bottomLeftBoxView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, (GET_LAYOUT_WIDTH(bottomBoxView)-GAP_WIDTH*2)/2, GET_LAYOUT_HEIGHT(bottomBoxView))];
     
             UIButton *bindDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(bottomLeftBoxView), GET_LAYOUT_HEIGHT(bottomLeftBoxView))];
-            bindDeviceButton.backgroundColor = RGBA_COLOR(36, 218, 170, 1);
+            bindDeviceButton.backgroundColor = RGBA_COLOR(52, 168, 83, 1);
             bindDeviceButton.clipsToBounds = YES;
             bindDeviceButton.layer.cornerRadius = 10;
     //        [bindDeviceButton setTitle:NSLocalizedString(@"deviceListNavigationItemTitle", nil) forState:UIControlStateNormal];
             [bindDeviceButton addTarget:self action:@selector(clickDeviceManageButton) forControlEvents:UIControlEventTouchUpInside];
             [bottomBoxView addSubview:bindDeviceButton];
     
-            UIView *bindDevicIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(bindDeviceButton)-90)/2, (GET_LAYOUT_HEIGHT(bindDeviceButton)-60)/2-10, 90, 60)];
+            UIView *bindDevicIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(bindDeviceButton)-60)/2, (GET_LAYOUT_HEIGHT(bindDeviceButton)-60)/2-15, 60, 60)];
             bindDevicIcon.userInteractionEnabled = NO;
     
             UIImageView *bindDevicIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(bindDevicIcon), GET_LAYOUT_HEIGHT(bindDevicIcon))];
-            bindDevicIconImage.image = [UIImage imageNamed:@"connecting_devices"];
+            bindDevicIconImage.image = [UIImage imageNamed:@"ic_devices_white"];
             [bindDevicIcon addSubview:bindDevicIconImage];
     
             [bindDeviceButton addSubview:bindDevicIcon];
@@ -206,19 +209,19 @@
         [bottomLeftBoxView addSubview:bindDeviceButton];
         [bottomBoxView addSubview:bottomLeftBoxView];
     
-        UIView *bottomRightBoxView = [[UIView alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(bottomLeftBoxView)+GAP_WIDTH, 0, (GET_LAYOUT_WIDTH(bottomBoxView)-GAP_WIDTH)/2, GET_LAYOUT_HEIGHT(bottomBoxView))];
+        UIView *bottomRightBoxView = [[UIView alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(bottomLeftBoxView)+GAP_WIDTH*2, 0, (GET_LAYOUT_WIDTH(bottomBoxView)-GAP_WIDTH*2)/2, GET_LAYOUT_HEIGHT(bottomBoxView))];
     
             UIButton *messageButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(bottomRightBoxView), GET_LAYOUT_HEIGHT(bottomRightBoxView))];
-            messageButton.backgroundColor = RGBA_COLOR(122, 144, 218, 1);
+            messageButton.backgroundColor = RGBA_COLOR(123, 142, 221, 1);
             messageButton.clipsToBounds = YES;
             messageButton.layer.cornerRadius = 10;
             [messageButton addTarget:self action:@selector(clickMessageButton) forControlEvents:UIControlEventTouchUpInside];
     
-            UIView *messageIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(messageButton)-70)/2, (GET_LAYOUT_HEIGHT(messageButton)-60)/2-10, 70, 60)];
+            UIView *messageIcon = [[UIView alloc] initWithFrame:CGRectMake((GET_LAYOUT_WIDTH(messageButton)-60)/2, (GET_LAYOUT_HEIGHT(messageButton)-60)/2-15, 60, 60)];
             messageIcon.userInteractionEnabled = NO;
     
             UIImageView *messageIconImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(messageIcon), GET_LAYOUT_HEIGHT(messageIcon))];
-            messageIconImage.image = [UIImage imageNamed:@"message"];
+            messageIconImage.image = [UIImage imageNamed:@"ic_message_white"];
             [messageIcon addSubview:messageIconImage];
     
             [messageButton addSubview:messageIcon];
@@ -479,10 +482,10 @@
 - (void)clickDeviceManageButton {
     //DeviceController *deviceController = [[DeviceController alloc] init];
     //[self.navigationController pushViewController:deviceController animated:YES];
-    //DetailController *detailController = [[DetailController alloc] init];
-    //[self.navigationController pushViewController:detailController animated:YES];
-    DevicesController *devicesController = [[DevicesController alloc] init];
-    [self.navigationController pushViewController:devicesController animated:YES];
+    DetailController *detailController = [[DetailController alloc] init];
+    [self.navigationController pushViewController:detailController animated:YES];
+    //DevicesController *devicesController = [[DevicesController alloc] init];
+    //[self.navigationController pushViewController:devicesController animated:YES];
 }
 
 //- (void)clickBindDeviceButton {
