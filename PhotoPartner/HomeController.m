@@ -482,10 +482,10 @@
 - (void)clickDeviceManageButton {
     //DeviceController *deviceController = [[DeviceController alloc] init];
     //[self.navigationController pushViewController:deviceController animated:YES];
-    DetailController *detailController = [[DetailController alloc] init];
-    [self.navigationController pushViewController:detailController animated:YES];
-    //DevicesController *devicesController = [[DevicesController alloc] init];
-    //[self.navigationController pushViewController:devicesController animated:YES];
+    //DetailController *detailController = [[DetailController alloc] init];
+    //[self.navigationController pushViewController:detailController animated:YES];
+    DevicesController *devicesController = [[DevicesController alloc] init];
+    [self.navigationController pushViewController:devicesController animated:YES];
 }
 
 //- (void)clickBindDeviceButton {

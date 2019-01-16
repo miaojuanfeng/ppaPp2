@@ -24,7 +24,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
+    
     self.navigationItem.title = NSLocalizedString(@"messageNavigationItemTitle", nil);
+    
+    INIT_RightBarButtonItem(ICON_REFRESH, clickRefreshButton);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -138,5 +141,7 @@
     NSLog(@"add bound device");
 }
 
-
+-(void)clickRefreshButton{
+    NSLog(@"refresh");
+}
 @end

@@ -73,7 +73,7 @@
         self.userNameField.placeholder = NSLocalizedString(@"userInfoUserNameTextFiledTitle", nil);
         self.userNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.userNameField.delegate = self;
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.contentView addSubview:self.userNameField];
     }else if( indexPath.row == 1 ){
         self.userAccountField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
@@ -81,7 +81,7 @@
         [self setTextFieldLeftPadding:self.userAccountField forWidth:110 forText:NSLocalizedString(@"userInfoUserAccount", nil)];
         self.userAccountField.text = [[self.appDelegate.userInfo objectForKey:@"user_account"] stringValue];
         self.userAccountField.enabled = NO;
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.contentView addSubview:self.userAccountField];
     }else if( indexPath.row == 2 ){
         //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

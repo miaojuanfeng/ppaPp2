@@ -209,9 +209,10 @@
 #define VIDEO_CELL_HEIGHT IMAGE_CELL_HEIGHT
 #define TEXT_CELL_HEIGHT 70
 
-#define ICON_ADD @"\U0000e767"
-#define ICON_SCAN @"\U0000e689"
-#define ICON_FORWARD @"\U000f0026"
-#define ICON_CANCEL @"\U0000e646"
+#define ICON_ADD @"\U0000e6c3"
+#define ICON_SCAN @"\U0000e69d"
+#define ICON_FORWARD @"\U0000e607"
+#define ICON_CANCEL @"\U0000e666"
+#define ICON_REFRESH @"\U0000e7d1"
 
 #endif /* MacroDefine_h */
