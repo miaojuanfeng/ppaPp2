@@ -9,16 +9,15 @@
 #import "MacroDefine.h"
 #import <AFNetworking/AFNetworking.h>
 #import "AppDelegate.h"
-#import "AddDeviceController.h"
+#import "AvaDeviceController.h"
 #import "ScanDeviceController.h"
 
-@interface AddDeviceController () <UIGestureRecognizerDelegate, ScanDeviceControllerDelegate, UITextFieldDelegate>
+@interface AvaDeviceController () <UIGestureRecognizerDelegate, ScanDeviceControllerDelegate, UITextFieldDelegate>
 @property AppDelegate *appDelegate;
-@property UITextField *deviceNameField;
 @property UITextField *deviceTokenField;
 @end
 
-@implementation AddDeviceController
+@implementation AvaDeviceController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -27,7 +26,7 @@
     self.view.backgroundColor = RGBA_COLOR(239, 239, 239, 1);
     self.navigationItem.title = NSLocalizedString(@"deviceAddNavigationItemTitle", nil);
     
-    //INIT_RightBarButtonItem(ICON_SCAN, clickDeviceScanButton);
+    INIT_RightBarButtonItem(ICON_SCAN, clickDeviceScanButton);
     
 //    UIBarButtonItem *deviceAddButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"deviceAddRightBarButtonItemTitle", nil) style:UIBarButtonItemStylePlain target:self action:@selector(clickDeviceAddButtonButton)];
 //    self.navigationItem.rightBarButtonItem = deviceAddButton;
@@ -37,16 +36,7 @@
     
     UIView *deviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP+GAP_HEIGHT*2+64, VIEW_WIDTH-4*GAP_WIDTH, VIEW_HEIGHT)];
     
-    self.deviceNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(deviceView), 44)];
-    self.deviceNameField.delegate = self;
-    UIView *nameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceNameField)-1, GET_LAYOUT_WIDTH(self.deviceNameField), 1)];
-    nameLineView.backgroundColor = lineColor;
-    [self.deviceNameField addSubview:nameLineView];
-    self.deviceNameField.placeholder = NSLocalizedString(@"deviceAddDeviceName", nil);
-    self.deviceNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    [deviceView addSubview:self.deviceNameField];
-    
-    self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.deviceNameField)+GET_LAYOUT_HEIGHT(self.deviceNameField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
+    self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(deviceView), 44)];
     self.deviceTokenField.delegate = self;
     UIView *tokenLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceTokenField)-1, GET_LAYOUT_WIDTH(self.deviceTokenField), 1)];
     tokenLineView.backgroundColor = lineColor;
@@ -91,17 +81,8 @@
 - (void)clickDeviceAddButton {
     [self.view endEditing:YES];
     
-    if( [self.deviceNameField.text isEqualToString:@""] ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddDeviceName", nil));
-        return;
-    }
     if( [self.deviceTokenField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddDeviceNumber", nil));
-        return;
-    }
-    
-    if( self.deviceNameField.text.length > INPUT_MAX_TEXT ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
         return;
     }
     
@@ -110,8 +91,7 @@
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
-                               @"device_token":self.deviceTokenField.text,
-                               @"device_name":[self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                               @"device_token":self.deviceTokenField.text
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
     [manager POST:BASE_URL(@"device/bind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
@@ -133,7 +113,7 @@
             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
             [device setObject:device_id forKey:@"device_id"];
             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
-            [device setObject:self.deviceNameField.text forKey:@"device_name"];
+            //[device setObject:self.deviceNameField.text forKey:@"device_name"];
             [device setObject:@0 forKey:@"isSelected"];
             [self.appDelegate.deviceList addObject:device];
             
@@ -145,9 +125,9 @@
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             NSString *time = [dateFormatter stringFromDate:date];
-            NSString *deviceName = self.deviceNameField.text;
+            //NSString *deviceName = self.deviceNameField.text;
             NSString *desc = @"";
-            [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];
+            //[self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];
             
             HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
         }else{
@@ -206,10 +186,10 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    if( (self.deviceNameField.text.length + string.length) > INPUT_MAX_TEXT ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
-        return NO;
-    }
+    //if( (self.deviceNameField.text.length + string.length) > INPUT_MAX_TEXT ){
+    //    HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
+    //    return NO;
+    //}
     return YES;
 }
 

@@ -42,8 +42,8 @@
         usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
         UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(usernameField)-1, GET_LAYOUT_WIDTH(usernameField), 1)];
-            usernameLineView.backgroundColor = lineColor;
-            [usernameField addSubview:usernameLineView];
+        usernameLineView.backgroundColor = lineColor;
+        [usernameField addSubview:usernameLineView];
     
         [boxView addSubview:usernameField];
     
@@ -56,10 +56,11 @@
         newPwdField.leftView=newPwdImageViewPwd;
         newPwdField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         newPwdField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [newPwdField setSecureTextEntry:YES];
     
         UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(newPwdField)-1, GET_LAYOUT_WIDTH(newPwdField), 1)];
-            newPwdLineView.backgroundColor = lineColor;
-            [newPwdField addSubview:newPwdLineView];
+        newPwdLineView.backgroundColor = lineColor;
+        [newPwdField addSubview:newPwdLineView];
     
         [boxView addSubview:newPwdField];
     
@@ -72,6 +73,7 @@
         VPField.leftView=VPImageViewPwd;
         VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [VPField setSecureTextEntry:YES];
     
         UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(VPField)-1, GET_LAYOUT_WIDTH(VPField), 1)];
         VPLineView.backgroundColor = lineColor;

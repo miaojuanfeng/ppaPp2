@@ -53,6 +53,7 @@
         usernameField.leftView=usernameImageViewPwd;
         usernameField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
         UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(usernameField)-1, GET_LAYOUT_WIDTH(usernameField), 1)];
         usernameLineView.backgroundColor = lineColor;
@@ -69,6 +70,8 @@
         passwordField.leftView=passwordImageViewPwd;
         passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        [passwordField setSecureTextEntry:YES];
     
         UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(passwordField)-1, GET_LAYOUT_WIDTH(passwordField), 1)];
         lineView.backgroundColor = lineColor;

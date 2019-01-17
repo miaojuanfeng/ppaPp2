@@ -9,6 +9,8 @@
 #import "MacroDefine.h"
 #import "AppDelegate.h"
 #import "DevicesController.h"
+#import "AddDeviceController.h"
+#import "AvaDeviceController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 
@@ -96,6 +98,18 @@
         self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
         [self.scrollView addSubview:devicesView];
     }
+    if(false){
+        for(int i=0;i<4;i++){
+            long messageHeight = 0;
+            UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
+            
+            messageHeight = GET_LAYOUT_HEIGHT(devicesView);
+            
+            offsetTop+=messageHeight;
+            self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
+            [self.scrollView addSubview:devicesView];
+        }
+    }
     offsetTop+=GAP_HEIGHT*4;
     UIView *boundDeviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 36)];
         UILabel *boundDeviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceView), GET_LAYOUT_HEIGHT(myDeviceView))];
@@ -134,11 +148,13 @@
 }
 
 -(void)clickAddMyDeviceButton{
-    NSLog(@"add my device");
+    AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
+    [self.navigationController pushViewController:addDeviceController animated:YES];
 }
 
 -(void)clickAddBoundDeviceButton{
-    NSLog(@"add bound device");
+    AvaDeviceController *avaDeviceController = [[AvaDeviceController alloc] init];
+    [self.navigationController pushViewController:avaDeviceController animated:YES];
 }
 
 -(void)clickRefreshButton{
