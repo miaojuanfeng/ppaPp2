@@ -106,6 +106,12 @@ messageSecondAgo = " second ago";
 messageMinuteAgo = " minute ago";
 messageHourAgo = " hour ago";
 
+userEmailEmpty = "Please enter the email";
+SendingEmail = "Sending email";
+SendEmailSuccess = "Send successfully";
+SendEmailFailue = "fail in send";
+RegisterButton = "Register";
+
 /*
  *  从服务器返回的错误码
  */

@@ -16,6 +16,12 @@
 @property UIScrollView *scrollView;
 
 @property AppDelegate *appDelegate;
+
+@property UITextField *usernameField;
+@property UITextField *pwdField;
+@property UITextField *VPField;
+@property UITextField *emailField;
+@property UITextField *VCField;
 @end
 
 @implementation SignUpController
@@ -31,98 +37,110 @@
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
     UIView *boxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP, GET_LAYOUT_WIDTH(self.view)-GAP_WIDTH*4, GET_LAYOUT_HEIGHT(self.view)-MARGIN_TOP)];
     
-        UITextField *usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
-        usernameField.backgroundColor = [UIColor whiteColor];
-        usernameField.delegate = self;
-        usernameField.placeholder = @"Username";
+        self.usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.usernameField.backgroundColor = [UIColor whiteColor];
+        self.usernameField.delegate = self;
+        self.usernameField.placeholder = @"Username";
         UIImageView *usernameImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         usernameImageViewPwd.image=[UIImage imageNamed:@"ic_account_black"];
-        usernameField.leftView=usernameImageViewPwd;
-        usernameField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.usernameField.leftView=usernameImageViewPwd;
+        self.usernameField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(usernameField)-1, GET_LAYOUT_WIDTH(usernameField), 1)];
+        UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.usernameField)-1, GET_LAYOUT_WIDTH(self.usernameField), 1)];
         usernameLineView.backgroundColor = lineColor;
-        [usernameField addSubview:usernameLineView];
+        [self.usernameField addSubview:usernameLineView];
     
-        [boxView addSubview:usernameField];
+        [boxView addSubview:self.usernameField];
     
-        UITextField *newPwdField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(usernameField)+GET_LAYOUT_HEIGHT(usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        newPwdField.backgroundColor = [UIColor whiteColor];
-        newPwdField.delegate = self;
-        newPwdField.placeholder = @"Password";
+        self.pwdField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.pwdField.backgroundColor = [UIColor whiteColor];
+        self.pwdField.delegate = self;
+        self.pwdField.placeholder = @"Password";
         UIImageView *newPwdImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         newPwdImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        newPwdField.leftView=newPwdImageViewPwd;
-        newPwdField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        newPwdField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [newPwdField setSecureTextEntry:YES];
+        self.pwdField.leftView=newPwdImageViewPwd;
+        self.pwdField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.pwdField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self.pwdField setSecureTextEntry:YES];
+        self.pwdField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(newPwdField)-1, GET_LAYOUT_WIDTH(newPwdField), 1)];
+        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.pwdField)-1, GET_LAYOUT_WIDTH(self.pwdField), 1)];
         newPwdLineView.backgroundColor = lineColor;
-        [newPwdField addSubview:newPwdLineView];
+        [self.pwdField addSubview:newPwdLineView];
     
-        [boxView addSubview:newPwdField];
+        [boxView addSubview:self.pwdField];
     
-        UITextField *VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(newPwdField)+GET_LAYOUT_HEIGHT(newPwdField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        VPField.backgroundColor = [UIColor whiteColor];
-        VPField.delegate = self;
-        VPField.placeholder = @"Verify password";
+        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.pwdField)+GET_LAYOUT_HEIGHT(self.pwdField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.VPField.backgroundColor = [UIColor whiteColor];
+        self.VPField.delegate = self;
+        self.VPField.placeholder = @"Verify password";
         UIImageView *VPImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         VPImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        VPField.leftView=VPImageViewPwd;
-        VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [VPField setSecureTextEntry:YES];
+        self.VPField.leftView=VPImageViewPwd;
+        self.VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self.VPField setSecureTextEntry:YES];
+        self.VPField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(VPField)-1, GET_LAYOUT_WIDTH(VPField), 1)];
+        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VPField)-1, GET_LAYOUT_WIDTH(self.VPField), 1)];
         VPLineView.backgroundColor = lineColor;
-        [VPField addSubview:VPLineView];
+        [self.VPField addSubview:VPLineView];
     
-        [boxView addSubview:VPField];
+        [boxView addSubview:self.VPField];
     
     
     
-        UITextField *emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(VPField)+GET_LAYOUT_HEIGHT(VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        emailField.backgroundColor = [UIColor whiteColor];
-        emailField.delegate = self;
-        emailField.placeholder = @"Email";
+        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VPField)+GET_LAYOUT_HEIGHT(self.VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView)-20, 44)];
+        self.emailField.backgroundColor = [UIColor whiteColor];
+        self.emailField.delegate = self;
+        self.emailField.placeholder = @"Email";
         UIImageView *emailImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         emailImageViewPwd.image=[UIImage imageNamed:@"ic_email_black"];
-        emailField.leftView=emailImageViewPwd;
-        emailField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.emailField.leftView=emailImageViewPwd;
+        self.emailField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *emailLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(emailField)-1, GET_LAYOUT_WIDTH(emailField), 1)];
+        UIButton *emailSendButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(self.emailField)+GET_LAYOUT_WIDTH(self.emailField), GET_LAYOUT_OFFSET_Y(self.emailField)+12, 20, 20)];
+        emailSendButton.titleLabel.font = [UIFont fontWithName:@"iconfont" size:14.0f];
+        [emailSendButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [emailSendButton setTitle:ICON_FORWARD forState:UIControlStateNormal];
+        [emailSendButton addTarget:self action:@selector(clickSendEmailButton) forControlEvents:UIControlEventTouchUpInside];
+        [boxView addSubview:emailSendButton];
+    
+        UIView *emailLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.emailField)-1, GET_LAYOUT_WIDTH(self.emailField)+20, 1)];
         emailLineView.backgroundColor = lineColor;
-        [emailField addSubview:emailLineView];
+        [self.emailField addSubview:emailLineView];
     
-        [boxView addSubview:emailField];
+        [boxView addSubview:self.emailField];
     
     
-        UITextField *VCField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(emailField)+GET_LAYOUT_HEIGHT(emailField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        VCField.backgroundColor = [UIColor whiteColor];
-        VCField.delegate = self;
-        VCField.placeholder = @"Verification code";
+        self.VCField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.emailField)+GET_LAYOUT_HEIGHT(self.emailField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.VCField.backgroundColor = [UIColor whiteColor];
+        self.VCField.delegate = self;
+        self.VCField.placeholder = @"Verification code";
         UIImageView *VCImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         VCImageViewPwd.image=[UIImage imageNamed:@"ic_verification_black"];
-        VCField.leftView=VCImageViewPwd;
-        VCField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        VCField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.VCField.leftView=VCImageViewPwd;
+        self.VCField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.VCField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.VCField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *VCLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(VCField)-1, GET_LAYOUT_WIDTH(VCField), 1)];
+        UIView *VCLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VCField)-1, GET_LAYOUT_WIDTH(self.VCField), 1)];
         VCLineView.backgroundColor = lineColor;
-        [VCField addSubview:VCLineView];
+        [self.VCField addSubview:VCLineView];
     
-        [boxView addSubview:VCField];
+        [boxView addSubview:self.VCField];
     
     
-        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(VCField)+GET_LAYOUT_HEIGHT(VCField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
+        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VCField)+GET_LAYOUT_HEIGHT(self.VCField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
         loginButton.backgroundColor = RGBA_COLOR(27, 163, 232, 1);
         loginButton.layer.cornerRadius = 5;
         loginButton.layer.masksToBounds = YES;
-        [loginButton setTitle:NSLocalizedString(@"deviceAddRightBarButtonItemTitle", nil) forState:UIControlStateNormal];
-        [loginButton addTarget:self action:@selector(clickResetButton) forControlEvents:UIControlEventTouchUpInside];
+        [loginButton setTitle:NSLocalizedString(@"RegisterButton", nil) forState:UIControlStateNormal];
+        [loginButton addTarget:self action:@selector(clickRegisterButton) forControlEvents:UIControlEventTouchUpInside];
         [boxView addSubview:loginButton];
     
     [self.view addSubview:boxView];
@@ -133,17 +151,105 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)clickLoginButton{
+-(void)clickSendEmailButton{
+    if( [self.emailField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userEmailEmpty", nil));
+        return;
+    }
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"userEmail":self.emailField.text,
+                               @"companyName":COMPANY_NAME
+                               };
+    HUD_WAITING_SHOW(NSLocalizedString(@"SendingEmail", nil));
+    [manager GET:BASE_URL(@"email/emailVerificationCode") parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            HUD_TOAST_SHOW(NSLocalizedString(@"SendEmailSuccess", nil));
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    }failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+    }];
+}
+
+-(void)clickRegisterButton{
     NSLog(@"点击3");
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"userName":self.usernameField.text,
+                               @"userPassword":self.pwdField.text,
+                               @"userEmail":self.emailField.text,
+                               @"userEmailCode":self.VPField.text
+                               };
+    HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
+    [manager POST:BASE_URL(@"user/userRegister") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            //NSDictionary *data = [dic objectForKey:@"data"];
+            //NSLog(data);
+            /*NSString *device_id = [data objectForKey:@"device_id"];
+             
+             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
+             [device setObject:device_id forKey:@"device_id"];
+             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
+             [device setObject:self.deviceNameField.text forKey:@"device_name"];
+             [device setObject:@0 forKey:@"isSelected"];
+             [self.appDelegate.deviceList addObject:device];
+             
+             NSLog(@"%@", self.appDelegate.deviceList);
+             [self.appDelegate addDeviceList:device];
+             
+             
+             NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+             NSString *time = [dateFormatter stringFromDate:date];
+             NSString *deviceName = self.deviceNameField.text;
+             NSString *desc = @"";
+             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
+            
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+    }];
     
-}
-
--(void)forgetPasswordTap:(UITapGestureRecognizer*)gesture {
-    NSLog(@"点击");
-}
-
--(void)signUpTap:(UITapGestureRecognizer*)gesture {
-    NSLog(@"点击2");
 }
 
 #pragma mark - UITextFieldDelegate

@@ -9,6 +9,8 @@
 #ifndef MacroDefine_h
 #define MacroDefine_h
 
+#define COMPANY_NAME @"Joyhong"
+
 #define IS_IPHONE_X ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
 #define SET_VIEW_BACKGROUND_COLOR self.view.backgroundColor = [UIColor whiteColor]
 #define GET_LAYOUT_MARGIN   float MARGIN_TOP = 0; \
