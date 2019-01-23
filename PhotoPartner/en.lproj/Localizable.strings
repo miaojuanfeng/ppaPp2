@@ -106,12 +106,27 @@ messageSecondAgo = " second ago";
 messageMinuteAgo = " minute ago";
 messageHourAgo = " hour ago";
 
-userEmailEmpty = "Please enter the email";
+username = "Username";
+password = "Password";
+verifyPassword = "Verify password";
+email = "Email";
+verifyCode = "Verify Code";
+
+usernameEmpty = "Please enter username";
+userPasswordEmpty = "Please enter password";
+userVerifyPasswordEmpty = "Please enter verify password";
+userEmailEmpty = "Please enter email";
+userVerificationCodeEmpty = "Please enter verify code";
 SendingEmail = "Sending email";
 SendEmailSuccess = "Send successfully";
-SendEmailFailue = "fail in send";
-RegisterButton = "Register";
+SendEmailFailue = "Failed to send email";
+RegisterNavigationItemTitle = "Sign Up";
+RegisterButton = "Submit";
+Registering = "Loading";
 
+LoginNavigationItemTitle = "Log In";
+LoginButton = "Log In";
+Loging = "Loading";
 /*
  *  从服务器返回的错误码
  */
@@ -157,5 +172,17 @@ e403 = "User registration failed, please try again later";
 e404 = "Update user profile failed, please try again later";
 e405 = "Unable to find the user";
 e406 = "Unable to find the app by apk_id";
+
+e407 = "User registration failed";
+e408 = "Email verification code timeout";
+e409 = "Incorrect Email verification code";
+e410 = "Username already exists";
+e411 = "Email already exists";
+e412 = "Email does not exist";
+e413 = "Failed to update database";
+e414 = "Incorrect password";
+e415 = "Username already exists";
+e416 = "Failed to send email";
+
 e901 = "file not exists";
 e902 = "file already exists";

@@ -30,7 +30,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.navigationItem.title = NSLocalizedString(@"messageNavigationItemTitle", nil);
+    self.navigationItem.title = NSLocalizedString(@"RegisterNavigationItemTitle", nil);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
@@ -40,7 +40,7 @@
         self.usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
         self.usernameField.backgroundColor = [UIColor whiteColor];
         self.usernameField.delegate = self;
-        self.usernameField.placeholder = @"Username";
+        self.usernameField.placeholder = NSLocalizedString(@"username", nil);
         UIImageView *usernameImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         usernameImageViewPwd.image=[UIImage imageNamed:@"ic_account_black"];
         self.usernameField.leftView=usernameImageViewPwd;
@@ -57,7 +57,7 @@
         self.pwdField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
         self.pwdField.backgroundColor = [UIColor whiteColor];
         self.pwdField.delegate = self;
-        self.pwdField.placeholder = @"Password";
+        self.pwdField.placeholder = NSLocalizedString(@"password", nil);
         UIImageView *newPwdImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         newPwdImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
         self.pwdField.leftView=newPwdImageViewPwd;
@@ -75,7 +75,7 @@
         self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.pwdField)+GET_LAYOUT_HEIGHT(self.pwdField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
         self.VPField.backgroundColor = [UIColor whiteColor];
         self.VPField.delegate = self;
-        self.VPField.placeholder = @"Verify password";
+        self.VPField.placeholder = NSLocalizedString(@"verifyCode", nil);
         UIImageView *VPImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         VPImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
         self.VPField.leftView=VPImageViewPwd;
@@ -95,7 +95,7 @@
         self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VPField)+GET_LAYOUT_HEIGHT(self.VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView)-20, 44)];
         self.emailField.backgroundColor = [UIColor whiteColor];
         self.emailField.delegate = self;
-        self.emailField.placeholder = @"Email";
+        self.emailField.placeholder = NSLocalizedString(@"email", nil);
         UIImageView *emailImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         emailImageViewPwd.image=[UIImage imageNamed:@"ic_email_black"];
         self.emailField.leftView=emailImageViewPwd;
@@ -120,7 +120,7 @@
         self.VCField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.emailField)+GET_LAYOUT_HEIGHT(self.emailField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
         self.VCField.backgroundColor = [UIColor whiteColor];
         self.VCField.delegate = self;
-        self.VCField.placeholder = @"Verification code";
+        self.VCField.placeholder = NSLocalizedString(@"verifyCode", nil);
         UIImageView *VCImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         VCImageViewPwd.image=[UIImage imageNamed:@"ic_verification_black"];
         self.VCField.leftView=VCImageViewPwd;
@@ -190,7 +190,26 @@
 }
 
 -(void)clickRegisterButton{
-    NSLog(@"点击3");
+    if( [self.usernameField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"usernameEmpty", nil));
+        return;
+    }
+    if( [self.pwdField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordEmpty", nil));
+        return;
+    }
+    if( [self.VPField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userVerifyPasswordEmpty", nil));
+        return;
+    }
+    if( [self.emailField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userEmailEmpty", nil));
+        return;
+    }
+    if( [self.VCField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userVerificationCodeEmpty", nil));
+        return;
+    }
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
@@ -200,7 +219,7 @@
                                @"userEmail":self.emailField.text,
                                @"userEmailCode":self.VPField.text
                                };
-    HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
+    HUD_WAITING_SHOW(NSLocalizedString(@"Registering", nil));
     [manager POST:BASE_URL(@"user/userRegister") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {

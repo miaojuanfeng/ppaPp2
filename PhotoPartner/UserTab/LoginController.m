@@ -18,6 +18,9 @@
 @property UIScrollView *scrollView;
 
 @property AppDelegate *appDelegate;
+
+@property UITextField *usernameField;
+@property UITextField *passwordField;
 @end
 
 @implementation LoginController
@@ -26,9 +29,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.navigationItem.title = NSLocalizedString(@"messageNavigationItemTitle", nil);
+    self.navigationItem.title = NSLocalizedString(@"LoginNavigationItemTitle", nil);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    [self.navigationItem setHidesBackButton:YES];
+    self.navigationController.delegate = self;
     
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
     UIView *boxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP, GET_LAYOUT_WIDTH(self.view)-GAP_WIDTH*4, GET_LAYOUT_HEIGHT(self.view)-MARGIN_TOP)];
@@ -44,46 +50,46 @@
         [logoView addSubview:logoLable];
         [boxView addSubview:logoView];
     
-        UITextField *usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(logoView)+GET_LAYOUT_HEIGHT(logoView)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        usernameField.backgroundColor = [UIColor whiteColor];
-        usernameField.delegate = self;
-        usernameField.placeholder = @"Username";
+        self.usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(logoView)+GET_LAYOUT_HEIGHT(logoView)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.usernameField.backgroundColor = [UIColor whiteColor];
+        self.usernameField.delegate = self;
+        self.usernameField.placeholder = NSLocalizedString(@"username", nil);
         UIImageView *usernameImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         usernameImageViewPwd.image=[UIImage imageNamed:@"ic_account_black"];
-        usernameField.leftView=usernameImageViewPwd;
-        usernameField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        self.usernameField.leftView=usernameImageViewPwd;
+        self.usernameField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(usernameField)-1, GET_LAYOUT_WIDTH(usernameField), 1)];
+    UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.usernameField)-1, GET_LAYOUT_WIDTH(self.usernameField), 1)];
         usernameLineView.backgroundColor = lineColor;
-        [usernameField addSubview:usernameLineView];
+        [self.usernameField addSubview:usernameLineView];
     
-        [boxView addSubview:usernameField];
+        [boxView addSubview:self.usernameField];
     
-        UITextField *passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(usernameField)+GET_LAYOUT_HEIGHT(usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        passwordField.backgroundColor = [UIColor whiteColor];
-        passwordField.delegate = self;
-        passwordField.placeholder = @"Password";
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.passwordField.backgroundColor = [UIColor whiteColor];
+        self.passwordField.delegate = self;
+        self.passwordField.placeholder = NSLocalizedString(@"password", nil);
         UIImageView *passwordImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         passwordImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        passwordField.leftView=passwordImageViewPwd;
-        passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        [passwordField setSecureTextEntry:YES];
+        self.passwordField.leftView=passwordImageViewPwd;
+        self.passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        [self.passwordField setSecureTextEntry:YES];
     
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(passwordField)-1, GET_LAYOUT_WIDTH(passwordField), 1)];
+        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
         lineView.backgroundColor = lineColor;
-        [passwordField addSubview:lineView];
+        [self.passwordField addSubview:lineView];
     
-        [boxView addSubview:passwordField];
+        [boxView addSubview:self.passwordField];
     
-        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(passwordField)+GET_LAYOUT_HEIGHT(passwordField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
+        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.passwordField)+GET_LAYOUT_HEIGHT(self.passwordField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
         loginButton.backgroundColor = RGBA_COLOR(27, 163, 232, 1);
         loginButton.layer.cornerRadius = 5;
         loginButton.layer.masksToBounds = YES;
-        [loginButton setTitle:NSLocalizedString(@"deviceAddRightBarButtonItemTitle", nil) forState:UIControlStateNormal];
+        [loginButton setTitle:NSLocalizedString(@"LoginButton", nil) forState:UIControlStateNormal];
         [loginButton addTarget:self action:@selector(clickLoginButton) forControlEvents:UIControlEventTouchUpInside];
         [boxView addSubview:loginButton];
     
@@ -98,7 +104,7 @@
         [boxView addSubview:forgetLabel];
     
         UILabel *signUpLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(boxView)-80, GET_LAYOUT_OFFSET_Y(loginButton)+GET_LAYOUT_HEIGHT(loginButton), 80, 44)];
-        signUpLabel.text = @"signup";
+        signUpLabel.text = NSLocalizedString(@"RegisterNavigationItemTitle", nil);
         signUpLabel.textAlignment = NSTextAlignmentRight;
         signUpLabel.textColor = RGBA_COLOR(27, 163, 232, 1);
         signUpLabel.userInteractionEnabled = YES;
@@ -110,13 +116,86 @@
     [self.view addSubview:boxView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 -(void)clickLoginButton{
-    NSLog(@"点击3");
+    if( [self.usernameField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"usernameEmpty", nil));
+        return;
+    }
+    if( [self.passwordField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordEmpty", nil));
+        return;
+    }
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"userName":self.usernameField.text,
+                               @"userPassword":self.passwordField.text
+                               };
+    HUD_WAITING_SHOW(NSLocalizedString(@"Loging", nil));
+    [manager POST:BASE_URL(@"user/signin") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            //NSDictionary *data = [dic objectForKey:@"data"];
+            //NSLog(data);
+            /*NSString *device_id = [data objectForKey:@"device_id"];
+             
+             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
+             [device setObject:device_id forKey:@"device_id"];
+             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
+             [device setObject:self.deviceNameField.text forKey:@"device_name"];
+             [device setObject:@0 forKey:@"isSelected"];
+             [self.appDelegate.deviceList addObject:device];
+             
+             NSLog(@"%@", self.appDelegate.deviceList);
+             [self.appDelegate addDeviceList:device];
+             
+             
+             NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+             NSString *time = [dateFormatter stringFromDate:date];
+             NSString *deviceName = self.deviceNameField.text;
+             NSString *desc = @"";
+             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
+            
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+    }];
     
 }
 
