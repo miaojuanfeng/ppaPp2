@@ -123,6 +123,8 @@ SendingEmail = "发送邮件中";
 SendEmailSuccess = "邮件发送成功";
 SendEmailFailue = "邮件发送失败";
 RegisterButton = "注册";
+RegisterSuccess = "注册成功";
+RegisterFailed = "注册失败";
 
 LoginNavigationItemTitle = "登录";
 LoginButton = "登录";
@@ -131,6 +133,8 @@ Loging = "登录中";
 ResetNavigationItemTitle= "重设密码";
 ResetLabel = "忘记密码？";
 ResetButton = "提交";
+
+ChangePassword = "修改密码";
 
 /*
  *  从服务器返回的错误码

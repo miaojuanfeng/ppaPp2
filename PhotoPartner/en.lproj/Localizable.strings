@@ -125,6 +125,8 @@ SendEmailFailue = "Failed to send email";
 RegisterNavigationItemTitle = "Sign Up";
 RegisterButton = "Submit";
 Registering = "Loading";
+RegisterSuccess = "Success";
+RegisterFailed = "Failed";
 
 LoginNavigationItemTitle = "Log In";
 LoginButton = "Log In";
@@ -133,6 +135,8 @@ Loging = "Loading";
 ResetNavigationItemTitle= "Password Reset";
 ResetLabel = "Forgot Password?";
 ResetButton = "Submit";
+
+ChangePassword = "Change password";
 
 /*
  *  从服务器返回的错误码

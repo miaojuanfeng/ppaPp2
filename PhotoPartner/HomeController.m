@@ -6,6 +6,7 @@
 //  Copyright © 2018 MJF. All rights reserved.
 //
 #import <MediaPlayer/MediaPlayer.h>
+#import <TZImagePickerController.h>
 #import "MacroDefine.h"
 #import "AppDelegate.h"
 #import "HomeController.h"
@@ -23,12 +24,15 @@
 #import <AFNetworking/AFNetworking.h>
 #import <TZImageManager.h>
 #import <Photos/Photos.h>
+#import <QiniuSDK.h>
 
 @interface HomeController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 @property UIAlertController *actionSheet;
 @property AppDelegate *appDelegate;
 
 @property Boolean isHideBar;
+
+@property TZImagePickerController *imagePickerVc;
 @end
 
 @implementation HomeController
@@ -65,7 +69,7 @@
         [accountBoxView addSubview:headButton];
         UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
         usernameLabel.font = [UIFont systemFontOfSize:18];
-        usernameLabel.text = @"Allen";
+        usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         //usernameLabel.backgroundColor = [UIColor yellowColor];
         [accountBoxView addSubview:usernameLabel];
     
@@ -394,6 +398,126 @@
 
 #pragma mark - Button Action
 
+- (void)showImagePickerVc:(long) count{
+    self.imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:count delegate:self];
+    self.imagePickerVc.allowPickingVideo = NO;
+    self.imagePickerVc.allowPickingOriginalPhoto = NO;
+    //    self.imagePickerVc.allowTakePicture = NO;
+    [self presentViewController:self.imagePickerVc animated:YES completion:nil];
+}
+
+- (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto{
+    HUD_WAITING_SHOW(NSLocalizedString(@"loadingSignin", nil));
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentPath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
+    
+    int imageWidth = 0;
+    int imageHeight = 0;
+    if( photos[0].size.width >= photos[0].size.height ){
+        imageWidth = 100;
+        imageHeight = 100 / photos[0].size.width * photos[0].size.height;
+    }else{
+        imageWidth = 100 / photos[0].size.height * photos[0].size.width;
+        imageHeight = 100;
+    }
+    CGSize imageSize = CGSizeMake(imageWidth, imageHeight);
+    NSData *file = [self.appDelegate compressQualityWithMaxLength:PHOTO_MAX_SIZE withSourceImage:[self.appDelegate imageByScalingAndCroppingForSize:imageSize withSourceImage:photos[0]]];
+    NSString *fileExt = [self.appDelegate typeForImageData:file];
+    if( fileExt == nil ){
+        fileExt = @"jpeg";
+    }
+    NSString *fileName = [NSString stringWithFormat:@"AVA_%@.%@", [self.appDelegate.userInfo objectForKey:@"user_id"], fileExt];
+    NSString *filePath = [documentPath stringByAppendingString:[NSString stringWithFormat:@"/%@", fileName]];
+    [file writeToFile:filePath atomically:NO];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"user_id":@"111",
+                               @"userName":@"miaojuanfeng",
+                               @"fileName":[NSString stringWithFormat:@"upload/ava/%@", fileName]
+                               };
+    
+    NSLog(@"测试数据输出，%@", parameters);
+    
+    HUD_WAITING_SHOW(NSLocalizedString(@"hudLoading", nil));
+    [manager POST:BASE_URL(@"upload/tokenUserImage") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            NSDictionary *data = [dic objectForKey:@"data"];
+            
+            [self ossUpload:[data objectForKey:@"upToken"] withFile:filePath withFileName:fileName];
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"uploadSendFailed", nil));
+    }];
+
+}
+
+- (void)ossUpload:(NSString*) upToken withFile:(NSString*) filePath withFileName:(NSString*) fileName{
+    
+    
+    QNConfiguration *config = [QNConfiguration build:^(QNConfigurationBuilder *builder) {
+        builder.zone = [QNFixedZone zoneNa0];
+    }];
+    QNUploadManager *upManager = [[QNUploadManager alloc] initWithConfiguration:config];
+    
+    QNUploadOption *uploadOption = [[QNUploadOption alloc] initWithMime:nil progressHandler:^(NSString *key, float percent) {
+        // percent 为上传进度
+        NSLog(@"percent: %@ %f", key, percent);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            HUD_LOADING_PROGRESS(percent);
+        });
+    }
+    params:@{
+    
+    }
+    checkCrc:NO
+    cancellationSignal:^BOOL() {
+        return false;
+    }];
+
+    [upManager putFile:filePath key:[NSString stringWithFormat:@"upload/ava/%@", fileName] token:upToken complete: ^(QNResponseInfo *info, NSString *key, NSDictionary *resp) {
+        NSLog(@"oss: %@", info);
+        NSLog(@"oss: %@", resp);
+        
+        NSInteger statusCode = [info statusCode];
+        
+        if( [[resp objectForKey:@"status"] intValue] == 200 ){
+            NSLog(resp);
+            
+            HUD_LOADING_HIDE;
+            HUD_TOAST_SHOW(NSLocalizedString(@"uploadSendSuccess", nil));
+        }else{
+            HUD_TOAST_SHOW(NSLocalizedString(@"uploadSendFailed", nil));
+            HUD_LOADING_HIDE;
+        }
+        // 删除zip文件
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        [fileManager removeItemAtPath:filePath error:nil];
+    } option:uploadOption];
+    
+}
+
 - (void)clickTakePhotoButton {
 //    UploadPhotoController *uploadPhotoController = [[UploadPhotoController alloc] init];
 //    [self.navigationController pushViewController:uploadPhotoController animated:YES];
@@ -444,7 +568,8 @@
 }
 
 - (void)clickHeadButton {
-    NSLog(@"click head");
+    self.isHideBar = false;
+    [self showImagePickerVc:1];
 }
 
 - (void)clickTakeVideoButton{

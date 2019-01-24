@@ -376,7 +376,7 @@
                 CGSize imageSize = CGSizeMake(imageWidth, imageHeight);
                 //NSData *file = [self.appDelegate compressQualityWithMaxLength:PHOTO_MAX_SIZE withSourceImage:[self.appDelegate imageByScalingAndCroppingForSize:imageSize withSourceImage:self.appDelegate.photos[i]]];
                 NSData *file = UIImageJPEGRepresentation([self.appDelegate imageByScalingAndCroppingForSize:imageSize withSourceImage:self.appDelegate.photos[i]], 1);
-                NSString *fileExt = [self typeForImageData:file];
+                NSString *fileExt = [self.appDelegate typeForImageData:file];
                 if( fileExt == nil ){
                     fileExt = @"jpeg";
                 }
@@ -531,24 +531,6 @@
     if( self.appDelegate.focusImageIndex > -1 && !self.isDeleteSignals ){
         [self.appDelegate.fileDesc replaceObjectAtIndex:self.appDelegate.focusImageIndex withObject:self.textView.text];
     }
-}
-
-- (NSString *)typeForImageData:(NSData *)data {
-    uint8_t c;
-    [data getBytes:&c length:1];
-    
-    switch (c) {
-        case 0xFF:
-            return @"jpeg";
-        case 0x89:
-            return @"png";
-        case 0x47:
-            return @"gif";
-        case 0x49:
-        case 0x4D:
-            return @"tiff";
-    }
-    return nil;
 }
 
 - (void)didMoveToParentViewController:(UIViewController*)parent {
@@ -872,15 +854,15 @@
         int imageWidth = 0;
         int imageHeight = 0;
         if( self.appDelegate.photos[i].size.width >= self.appDelegate.photos[i].size.height ){
-            imageWidth = 750;
-            imageHeight = 750 / self.appDelegate.photos[i].size.width * self.appDelegate.photos[i].size.height;
+            imageWidth = 1920;
+            imageHeight = 1920 / self.appDelegate.photos[i].size.width * self.appDelegate.photos[i].size.height;
         }else{
-            imageWidth = 750 / self.appDelegate.photos[i].size.height * self.appDelegate.photos[i].size.width;
-            imageHeight = 750;
+            imageWidth = 1080 / self.appDelegate.photos[i].size.height * self.appDelegate.photos[i].size.width;
+            imageHeight = 1080;
         }
         CGSize imageSize = CGSizeMake(imageWidth, imageHeight);
         NSData *file = [self.appDelegate compressQualityWithMaxLength:PHOTO_MAX_SIZE withSourceImage:[self.appDelegate imageByScalingAndCroppingForSize:imageSize withSourceImage:self.appDelegate.photos[i]]];
-        NSString *fileExt = [self typeForImageData:file];
+        NSString *fileExt = [self.appDelegate typeForImageData:file];
         if( fileExt == nil ){
             fileExt = @"jpeg";
         }

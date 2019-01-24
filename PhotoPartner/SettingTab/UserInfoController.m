@@ -85,7 +85,7 @@
         [cell.contentView addSubview:self.userAccountField];
     }else if( indexPath.row == 2 ){
         //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.textLabel.text = NSLocalizedString(@"settingCellUserInfoTitle", nil);
+        cell.textLabel.text = NSLocalizedString(@"ChangePassword", nil);
     }
     return cell;
 }
@@ -139,11 +139,11 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
-                               @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
-                               @"user_nickname": [self.userNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                               @"userId":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                               @"userNewName": [self.userNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingSaving", nil));
-    [manager POST:BASE_URL(@"user/update_profile") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+    [manager POST:BASE_URL(@"user/userModUserName") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         

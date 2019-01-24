@@ -71,5 +71,7 @@
 - (void)saveUserInfo;
 - (void)loadUserInfo;
 
+- (NSString *)typeForImageData:(NSData *)data;
+
 @end
 
