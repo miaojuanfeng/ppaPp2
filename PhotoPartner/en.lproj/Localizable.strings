@@ -116,6 +116,7 @@ verifyCode = "Verify Code";
 usernameEmpty = "Please enter username";
 userPasswordEmpty = "Please enter password";
 userVerifyPasswordEmpty = "Please enter verify password";
+userPasswordNotEqual = "Inconsistent password input";
 userEmailEmpty = "Please enter email";
 userVerificationCodeEmpty = "Please enter verify code";
 SendingEmail = "Sending email";

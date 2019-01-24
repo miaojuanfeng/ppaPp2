@@ -46,6 +46,7 @@
         self.passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [self.passwordField setSecureTextEntry:YES];
+        self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
         UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
         newPwdLineView.backgroundColor = lineColor;
@@ -63,6 +64,7 @@
         self.VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         self.VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         [self.VPField setSecureTextEntry:YES];
+        self.VPField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
         UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VPField)-1, GET_LAYOUT_WIDTH(self.VPField), 1)];
         VPLineView.backgroundColor = lineColor;
@@ -71,7 +73,7 @@
         [boxView addSubview:self.VPField];
     
     
-        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VPField)+GET_LAYOUT_HEIGHT(self.VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VPField)+GET_LAYOUT_HEIGHT(self.VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView)-20, 44)];
         self.emailField.backgroundColor = [UIColor whiteColor];
         self.emailField.delegate = self;
         self.emailField.placeholder = NSLocalizedString(@"email", nil);
@@ -80,8 +82,16 @@
         self.emailField.leftView=emailImageViewPwd;
         self.emailField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.emailField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *emailLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.emailField)-1, GET_LAYOUT_WIDTH(self.emailField), 1)];
+        UIButton *emailSendButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(self.emailField)+GET_LAYOUT_WIDTH(self.emailField), GET_LAYOUT_OFFSET_Y(self.emailField)+12, 20, 20)];
+        emailSendButton.titleLabel.font = [UIFont fontWithName:@"iconfont" size:14.0f];
+        [emailSendButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [emailSendButton setTitle:ICON_FORWARD forState:UIControlStateNormal];
+        [emailSendButton addTarget:self action:@selector(clickSendEmailButton) forControlEvents:UIControlEventTouchUpInside];
+        [boxView addSubview:emailSendButton];
+    
+        UIView *emailLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.emailField)-1, GET_LAYOUT_WIDTH(self.emailField)+20, 1)];
         emailLineView.backgroundColor = lineColor;
         [self.emailField addSubview:emailLineView];
     
@@ -97,6 +107,7 @@
         self.VCField.leftView=VCImageViewPwd;
         self.VCField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
         self.VCField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.VCField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
         UIView *VCLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VCField)-1, GET_LAYOUT_WIDTH(self.VCField), 1)];
         VCLineView.backgroundColor = lineColor;
@@ -122,8 +133,122 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)clickSendEmailButton{
+    if( [self.emailField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userEmailEmpty", nil));
+        return;
+    }
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"userEmail":self.emailField.text,
+                               @"companyName":COMPANY_NAME
+                               };
+    HUD_WAITING_SHOW(NSLocalizedString(@"SendingEmail", nil));
+    [manager GET:BASE_URL(@"email/emailVerificationCode") parameters:parameters progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            HUD_TOAST_SHOW(NSLocalizedString(@"SendEmailSuccess", nil));
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    }failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+    }];
+}
+
 -(void)clickResetButton{
-    NSLog(@"点击3");
+    if( [self.passwordField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordEmpty", nil));
+        return;
+    }
+    if( [self.VPField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userVerifyPasswordEmpty", nil));
+        return;
+    }
+    if( ![self.passwordField.text isEqualToString:self.VPField.text] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordNotEqual", nil));
+        return;
+    }
+    if( [self.emailField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userEmailEmpty", nil));
+        return;
+    }
+    if( [self.VCField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userVerificationCodeEmpty", nil));
+        return;
+    }
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"userPassword":self.passwordField.text,
+                               @"userEmail":self.emailField.text,
+                               @"userEmailCode":self.VCField.text
+                               };
+    HUD_WAITING_SHOW(NSLocalizedString(@"Resetting", nil));
+    [manager POST:BASE_URL(@"user/userResetPassword") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            //NSDictionary *data = [dic objectForKey:@"data"];
+            //NSLog(data);
+            /*NSString *device_id = [data objectForKey:@"device_id"];
+             
+             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
+             [device setObject:device_id forKey:@"device_id"];
+             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
+             [device setObject:self.deviceNameField.text forKey:@"device_name"];
+             [device setObject:@0 forKey:@"isSelected"];
+             [self.appDelegate.deviceList addObject:device];
+             
+             NSLog(@"%@", self.appDelegate.deviceList);
+             [self.appDelegate addDeviceList:device];
+             
+             
+             NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+             NSString *time = [dateFormatter stringFromDate:date];
+             NSString *deviceName = self.deviceNameField.text;
+             NSString *desc = @"";
+             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
+            
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+    }];
     
 }
 

@@ -18,7 +18,7 @@
 @property AppDelegate *appDelegate;
 
 @property UITextField *usernameField;
-@property UITextField *pwdField;
+@property UITextField *passwordField;
 @property UITextField *VPField;
 @property UITextField *emailField;
 @property UITextField *VCField;
@@ -54,25 +54,25 @@
     
         [boxView addSubview:self.usernameField];
     
-        self.pwdField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        self.pwdField.backgroundColor = [UIColor whiteColor];
-        self.pwdField.delegate = self;
-        self.pwdField.placeholder = NSLocalizedString(@"password", nil);
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.passwordField.backgroundColor = [UIColor whiteColor];
+        self.passwordField.delegate = self;
+        self.passwordField.placeholder = NSLocalizedString(@"password", nil);
         UIImageView *newPwdImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         newPwdImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        self.pwdField.leftView=newPwdImageViewPwd;
-        self.pwdField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        self.pwdField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [self.pwdField setSecureTextEntry:YES];
-        self.pwdField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        self.passwordField.leftView=newPwdImageViewPwd;
+        self.passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self.passwordField setSecureTextEntry:YES];
+        self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.pwdField)-1, GET_LAYOUT_WIDTH(self.pwdField), 1)];
+        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
         newPwdLineView.backgroundColor = lineColor;
-        [self.pwdField addSubview:newPwdLineView];
+        [self.passwordField addSubview:newPwdLineView];
     
-        [boxView addSubview:self.pwdField];
+        [boxView addSubview:self.passwordField];
     
-        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.pwdField)+GET_LAYOUT_HEIGHT(self.pwdField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.passwordField)+GET_LAYOUT_HEIGHT(self.passwordField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
         self.VPField.backgroundColor = [UIColor whiteColor];
         self.VPField.delegate = self;
         self.VPField.placeholder = NSLocalizedString(@"verifyCode", nil);
@@ -194,8 +194,12 @@
         HUD_TOAST_SHOW(NSLocalizedString(@"usernameEmpty", nil));
         return;
     }
-    if( [self.pwdField.text isEqualToString:@""] ){
+    if( [self.passwordField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordEmpty", nil));
+        return;
+    }
+    if( ![self.passwordField.text isEqualToString:self.VPField.text] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordNotEqual", nil));
         return;
     }
     if( [self.VPField.text isEqualToString:@""] ){
@@ -215,9 +219,9 @@
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"userName":self.usernameField.text,
-                               @"userPassword":self.pwdField.text,
+                               @"userPassword":self.passwordField.text,
                                @"userEmail":self.emailField.text,
-                               @"userEmailCode":self.VPField.text
+                               @"userEmailCode":self.VCField.text
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"Registering", nil));
     [manager POST:BASE_URL(@"user/userRegister") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {

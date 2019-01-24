@@ -116,6 +116,7 @@ verifyCode = "验证码";
 usernameEmpty = "请输入用户名";
 userPasswordEmpty = "请输入密码";
 userVerifyPasswordEmpty = "请输入确认密码";
+userPasswordNotEqual = "密码输入不一致";
 userEmailEmpty = "请输入邮箱";
 userVerificationCodeEmpty = "请输入验证码";
 SendingEmail = "发送邮件中";
