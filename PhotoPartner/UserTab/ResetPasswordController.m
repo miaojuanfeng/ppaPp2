@@ -16,6 +16,11 @@
 @property UIScrollView *scrollView;
 
 @property AppDelegate *appDelegate;
+
+@property UITextField *passwordField;
+@property UITextField *VPField;
+@property UITextField *emailField;
+@property UITextField *VCField;
 @end
 
 @implementation ResetPasswordController
@@ -24,87 +29,87 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.navigationItem.title = NSLocalizedString(@"messageNavigationItemTitle", nil);
+    self.navigationItem.title = NSLocalizedString(@"ResetNavigationItemTitle", nil);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
     UIView *boxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP, GET_LAYOUT_WIDTH(self.view)-GAP_WIDTH*4, GET_LAYOUT_HEIGHT(self.view)-MARGIN_TOP)];
     
-        UITextField *newPwdField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
-        newPwdField.backgroundColor = [UIColor whiteColor];
-        newPwdField.delegate = self;
-        newPwdField.placeholder = @"New password";
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.passwordField.backgroundColor = [UIColor whiteColor];
+        self.passwordField.delegate = self;
+        self.passwordField.placeholder = NSLocalizedString(@"newPassword", nil);
         UIImageView *newPwdImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         newPwdImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        newPwdField.leftView=newPwdImageViewPwd;
-        newPwdField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        newPwdField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [newPwdField setSecureTextEntry:YES];
+        self.passwordField.leftView=newPwdImageViewPwd;
+        self.passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self.passwordField setSecureTextEntry:YES];
     
-        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(newPwdField)-1, GET_LAYOUT_WIDTH(newPwdField), 1)];
+        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
         newPwdLineView.backgroundColor = lineColor;
-        [newPwdField addSubview:newPwdLineView];
+        [self.passwordField addSubview:newPwdLineView];
     
-        [boxView addSubview:newPwdField];
+        [boxView addSubview:self.passwordField];
     
-        UITextField *VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(newPwdField)+GET_LAYOUT_HEIGHT(newPwdField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        VPField.backgroundColor = [UIColor whiteColor];
-        VPField.delegate = self;
-        VPField.placeholder = @"Verify password";
+        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.passwordField)+GET_LAYOUT_HEIGHT(self.passwordField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.VPField.backgroundColor = [UIColor whiteColor];
+        self.VPField.delegate = self;
+        self.VPField.placeholder = NSLocalizedString(@"verifyPassword", nil);
         UIImageView *VPImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         VPImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        VPField.leftView=VPImageViewPwd;
-        VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [VPField setSecureTextEntry:YES];
+        self.VPField.leftView=VPImageViewPwd;
+        self.VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        [self.VPField setSecureTextEntry:YES];
     
-        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(VPField)-1, GET_LAYOUT_WIDTH(VPField), 1)];
+        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VPField)-1, GET_LAYOUT_WIDTH(self.VPField), 1)];
         VPLineView.backgroundColor = lineColor;
-        [VPField addSubview:VPLineView];
+        [self.VPField addSubview:VPLineView];
     
-        [boxView addSubview:VPField];
+        [boxView addSubview:self.VPField];
     
     
-        UITextField *emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(VPField)+GET_LAYOUT_HEIGHT(VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        emailField.backgroundColor = [UIColor whiteColor];
-        emailField.delegate = self;
-        emailField.placeholder = @"Email";
+        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VPField)+GET_LAYOUT_HEIGHT(self.VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.emailField.backgroundColor = [UIColor whiteColor];
+        self.emailField.delegate = self;
+        self.emailField.placeholder = NSLocalizedString(@"email", nil);
         UIImageView *emailImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         emailImageViewPwd.image=[UIImage imageNamed:@"ic_email_black"];
-        emailField.leftView=emailImageViewPwd;
-        emailField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.emailField.leftView=emailImageViewPwd;
+        self.emailField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.emailField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-        UIView *emailLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(emailField)-1, GET_LAYOUT_WIDTH(emailField), 1)];
+        UIView *emailLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.emailField)-1, GET_LAYOUT_WIDTH(self.emailField), 1)];
         emailLineView.backgroundColor = lineColor;
-        [emailField addSubview:emailLineView];
+        [self.emailField addSubview:emailLineView];
     
-        [boxView addSubview:emailField];
+        [boxView addSubview:self.emailField];
     
     
-        UITextField *VCField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(emailField)+GET_LAYOUT_HEIGHT(emailField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        VCField.backgroundColor = [UIColor whiteColor];
-        VCField.delegate = self;
-        VCField.placeholder = @"Verification code";
+        self.VCField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.emailField)+GET_LAYOUT_HEIGHT(self.emailField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.VCField.backgroundColor = [UIColor whiteColor];
+        self.VCField.delegate = self;
+        self.VCField.placeholder = NSLocalizedString(@"verifyCode", nil);
         UIImageView *VCImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         VCImageViewPwd.image=[UIImage imageNamed:@"ic_verification_black"];
-        VCField.leftView=VCImageViewPwd;
-        VCField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        VCField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+        self.VCField.leftView=VCImageViewPwd;
+        self.VCField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
+        self.VCField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
     
-        UIView *VCLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(VCField)-1, GET_LAYOUT_WIDTH(VCField), 1)];
+        UIView *VCLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VCField)-1, GET_LAYOUT_WIDTH(self.VCField), 1)];
         VCLineView.backgroundColor = lineColor;
-        [VCField addSubview:VCLineView];
+        [self.VCField addSubview:VCLineView];
     
-        [boxView addSubview:VCField];
+        [boxView addSubview:self.VCField];
     
     
-        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(VCField)+GET_LAYOUT_HEIGHT(VCField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
+        UIButton *loginButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VCField)+GET_LAYOUT_HEIGHT(self.VCField)+GAP_HEIGHT*3, GET_LAYOUT_WIDTH(boxView), 44)];
         loginButton.backgroundColor = RGBA_COLOR(27, 163, 232, 1);
         loginButton.layer.cornerRadius = 5;
         loginButton.layer.masksToBounds = YES;
-        [loginButton setTitle:NSLocalizedString(@"deviceAddRightBarButtonItemTitle", nil) forState:UIControlStateNormal];
+        [loginButton setTitle:NSLocalizedString(@"ResetButton", nil) forState:UIControlStateNormal];
         [loginButton addTarget:self action:@selector(clickResetButton) forControlEvents:UIControlEventTouchUpInside];
         [boxView addSubview:loginButton];
     

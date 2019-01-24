@@ -109,6 +109,7 @@ messageHourAgo = "小时前";
 username = "用户名";
 password = "密码";
 verifyPassword = "确认密码";
+newPassword = "新密码";
 email = "邮箱";
 verifyCode = "验证码";
 
@@ -125,6 +126,11 @@ RegisterButton = "注册";
 LoginNavigationItemTitle = "登录";
 LoginButton = "登录";
 Loging = "登录中";
+
+ResetNavigationItemTitle= "重设密码";
+ResetLabel = "忘记密码？";
+ResetButton = "提交";
+
 /*
  *  从服务器返回的错误码
  */

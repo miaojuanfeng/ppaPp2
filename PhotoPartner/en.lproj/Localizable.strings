@@ -109,6 +109,7 @@ messageHourAgo = " hour ago";
 username = "Username";
 password = "Password";
 verifyPassword = "Verify password";
+newPassword = "New password";
 email = "Email";
 verifyCode = "Verify Code";
 
@@ -127,6 +128,11 @@ Registering = "Loading";
 LoginNavigationItemTitle = "Log In";
 LoginButton = "Log In";
 Loging = "Loading";
+
+ResetNavigationItemTitle= "Password Reset";
+ResetLabel = "Forgot Password?";
+ResetButton = "Submit";
+
 /*
  *  从服务器返回的错误码
  */

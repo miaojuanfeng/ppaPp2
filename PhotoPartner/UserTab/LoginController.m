@@ -94,7 +94,7 @@
         [boxView addSubview:loginButton];
     
         UILabel *forgetLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(loginButton)+GET_LAYOUT_HEIGHT(loginButton), 150, 44)];
-        forgetLabel.text = @"forget";
+        forgetLabel.text = NSLocalizedString(@"ResetLabel", nil);
         forgetLabel.textAlignment = NSTextAlignmentLeft;
         forgetLabel.textColor = RGBA_COLOR(27, 163, 232, 1);
         forgetLabel.userInteractionEnabled = YES;
