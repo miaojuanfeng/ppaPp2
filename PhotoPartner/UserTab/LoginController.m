@@ -132,6 +132,8 @@
 }
 
 -(void)clickLoginButton{
+    [self.view endEditing:YES];
+    
     if( [self.usernameField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"usernameEmpty", nil));
         return;

@@ -152,6 +152,8 @@
 }
 
 -(void)clickSendEmailButton{
+    [self.view endEditing:YES];
+
     if( [self.emailField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"userEmailEmpty", nil));
         return;
@@ -190,6 +192,8 @@
 }
 
 -(void)clickRegisterButton{
+    [self.view endEditing:YES];
+    
     if( [self.usernameField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"usernameEmpty", nil));
         return;

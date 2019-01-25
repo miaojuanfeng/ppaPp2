@@ -111,7 +111,9 @@
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                @"device_token":self.deviceTokenField.text,
-                               @"device_name":[self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                               @"device_name":[self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                               @"type":@"mydevice",
+                               @"companyName":COMPANY_NAME
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
     [manager POST:BASE_URL(@"device/bind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {

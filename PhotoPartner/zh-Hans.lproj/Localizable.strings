@@ -68,8 +68,8 @@ deviceAddRightBarButtonItemTitle = "绑定";
 deviceScanRightBarButtonItemTitle = "扫描";
 deviceAddBindSuccess = "绑定成功";
 deviceAddBindFailed = "绑定失败";
-deviceAddDeviceName = "请输入设备昵称";
-deviceAddDeviceNumber = "请输入设备编号";
+deviceAddDeviceName = "设备名";
+deviceAddDeviceNumber = "相框ID";
 deviceScanNavigationItemTitle = "二维码";
 deviceScanNoticeText = "请把二维码放在镜头范围内进行扫描";
 
@@ -135,6 +135,14 @@ ResetLabel = "忘记密码？";
 ResetButton = "提交";
 
 ChangePassword = "修改密码";
+
+UploadAvaLoading = "上传中";
+UploadAvaSuccess = "上传成功";
+UploadAvaFailure = "上传失败";
+
+MyDeviceLabel = "我的设备";
+AvaDeviceLabel = "可用设备";
+
 
 /*
  *  从服务器返回的错误码

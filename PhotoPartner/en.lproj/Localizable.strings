@@ -68,8 +68,8 @@ deviceAddRightBarButtonItemTitle = "Bind";
 deviceScanRightBarButtonItemTitle = "Scan";
 deviceAddBindSuccess = "Bind Success";
 deviceAddBindFailed = "Bind Failed";
-deviceAddDeviceName = "Please enter the device's nickname";
-deviceAddDeviceNumber = "Please enter smart device ID number";
+deviceAddDeviceName = "Device name";
+deviceAddDeviceNumber = "Frame ID";
 deviceScanNavigationItemTitle = "QR Code";
 deviceScanNoticeText = "Please put the QR code in the lens range for scanning";
 
@@ -137,6 +137,13 @@ ResetLabel = "Forgot Password?";
 ResetButton = "Submit";
 
 ChangePassword = "Change password";
+
+UploadAvaLoading = "Uploading";
+UploadAvaSuccess = "Upload success";
+UploadAvaFailure = "Upload failure";
+
+MyDeviceLabel = "My Devices";
+AvaDeviceLabel = "Bound Devices";
 
 /*
  *  从服务器返回的错误码

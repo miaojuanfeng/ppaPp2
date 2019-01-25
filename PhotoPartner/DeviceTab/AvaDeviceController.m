@@ -26,7 +26,7 @@
     self.view.backgroundColor = RGBA_COLOR(239, 239, 239, 1);
     self.navigationItem.title = NSLocalizedString(@"deviceAddNavigationItemTitle", nil);
     
-    INIT_RightBarButtonItem(ICON_SCAN, clickDeviceScanButton);
+    //INIT_RightBarButtonItem(ICON_SCAN, clickDeviceScanButton);
     
 //    UIBarButtonItem *deviceAddButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"deviceAddRightBarButtonItemTitle", nil) style:UIBarButtonItemStylePlain target:self action:@selector(clickDeviceAddButtonButton)];
 //    self.navigationItem.rightBarButtonItem = deviceAddButton;
@@ -91,7 +91,10 @@
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
-                               @"device_token":self.deviceTokenField.text
+                               @"device_token":self.deviceTokenField.text,
+                               @"device_name":@"",
+                               @"type":@"bounddevice",
+                               @"companyName":COMPANY_NAME
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
     [manager POST:BASE_URL(@"device/bind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {

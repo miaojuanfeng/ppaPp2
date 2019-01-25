@@ -24,7 +24,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.navigationItem.title = NSLocalizedString(@"messageNavigationItemTitle", nil);
+    self.navigationItem.title = NSLocalizedString(@"deviceListNavigationItemTitle", nil);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     

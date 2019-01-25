@@ -27,7 +27,7 @@
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
     
-    self.navigationItem.title = NSLocalizedString(@"messageNavigationItemTitle", nil);
+    self.navigationItem.title = NSLocalizedString(@"deviceListNavigationItemTitle", nil);
     
     INIT_RightBarButtonItem(ICON_REFRESH, clickRefreshButton);
     
@@ -55,7 +55,7 @@
     UIView *myDeviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 36)];
         UILabel *myDeviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceView), GET_LAYOUT_HEIGHT(myDeviceView))];
         myDeviceLabel.font = [UIFont systemFontOfSize:fontSize];
-        myDeviceLabel.text = @"My Devices";
+        myDeviceLabel.text = NSLocalizedString(@"MyDeviceLabel", nil);
         myDeviceLabel.textColor = [UIColor blueColor];
         [myDeviceView addSubview:myDeviceLabel];
         UIButton *myDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(myDeviceView)-20, 8, 20, 20)];
@@ -114,7 +114,7 @@
     UIView *boundDeviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 36)];
         UILabel *boundDeviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceView), GET_LAYOUT_HEIGHT(myDeviceView))];
         boundDeviceLabel.font = [UIFont systemFontOfSize:fontSize];
-        boundDeviceLabel.text = @"My Devices";
+        boundDeviceLabel.text = NSLocalizedString(@"AvaDeviceLabel", nil);
         boundDeviceLabel.textColor = [UIColor blueColor];
         [boundDeviceView addSubview:boundDeviceLabel];
         UIButton *boundDeviceButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(myDeviceView)-20, 8, 20, 20)];

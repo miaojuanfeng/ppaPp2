@@ -407,7 +407,6 @@
 }
 
 - (void)imagePickerController:(TZImagePickerController *)picker didFinishPickingPhotos:(NSArray<UIImage *> *)photos sourceAssets:(NSArray *)assets isSelectOriginalPhoto:(BOOL)isSelectOriginalPhoto{
-    HUD_WAITING_SHOW(NSLocalizedString(@"loadingSignin", nil));
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentPath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
@@ -442,7 +441,7 @@
     
     NSLog(@"测试数据输出，%@", parameters);
     
-    HUD_WAITING_SHOW(NSLocalizedString(@"hudLoading", nil));
+    HUD_WAITING_SHOW(NSLocalizedString(@"UploadAvaLoading", nil));
     [manager POST:BASE_URL(@"upload/tokenUserImage") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -454,21 +453,24 @@
         
         int status = [[dic objectForKey:@"status"] intValue];
         
-        HUD_WAITING_HIDE;
+        //HUD_WAITING_HIDE;
         if( status == 200 ){
             NSDictionary *data = [dic objectForKey:@"data"];
             
             [self ossUpload:[data objectForKey:@"upToken"] withFile:filePath withFileName:fileName];
         }else{
+            HUD_WAITING_HIDE;
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
         }
+        self.isHideBar = true;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"失败.%@",error);
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
         
         HUD_WAITING_HIDE;
-        HUD_TOAST_SHOW(NSLocalizedString(@"uploadSendFailed", nil));
+        HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaFailure", nil));
+        self.isHideBar = true;
     }];
 
 }
@@ -489,7 +491,7 @@
         });
     }
     params:@{
-    
+        @"x:type":@"userImage"
     }
     checkCrc:NO
     cancellationSignal:^BOOL() {
@@ -502,16 +504,17 @@
         
         NSInteger statusCode = [info statusCode];
         
+        HUD_WAITING_HIDE;
         if( [[resp objectForKey:@"status"] intValue] == 200 ){
             NSLog(resp);
             
             HUD_LOADING_HIDE;
-            HUD_TOAST_SHOW(NSLocalizedString(@"uploadSendSuccess", nil));
+            HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaSuccess", nil));
         }else{
-            HUD_TOAST_SHOW(NSLocalizedString(@"uploadSendFailed", nil));
+            HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaFailure", nil));
             HUD_LOADING_HIDE;
         }
-        // 删除zip文件
+        // 删除文件
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:filePath error:nil];
     } option:uploadOption];
