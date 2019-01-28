@@ -159,6 +159,21 @@ e109 = "Unable to find the user";
 e110 = "Update device name failed, please try again later";
 e112 = "Unable to find the device";
 e117 = "The number of binding users of the device exceeds the limit";
+
+e121 = "Device does not exist";
+e122 = "Not sufficient funds";
+e125 = "Device restriction binding new users";
+e126 = "Device already binding the user";
+e127 = "Bind type error";
+e128 = "Company name error";
+e129 = "Accept bind failed";
+e130 = "Accept bind type error";
+e131 = "Device already binding the user";
+e132 = "Device inactivated";
+e133 = "Device has been bound";
+e134 = "Device name already exists";
+e135 = "Device has been bound";
+
 e301 = "File-MD5 property is not set or format error";
 e302 = "File-Size property format error";
 e303 = "File-Size property is not set";

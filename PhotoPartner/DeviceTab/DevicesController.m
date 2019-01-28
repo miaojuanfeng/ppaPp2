@@ -11,6 +11,7 @@
 #import "DevicesController.h"
 #import "AddDeviceController.h"
 #import "AvaDeviceController.h"
+#import "DetailController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 
@@ -46,6 +47,39 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)clickRefreshButton {
+
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"]
+                               };
+    [manager POST:BASE_URL(@"user/user_device") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
+            [self.appDelegate saveDeviceList];
+            
+            NSLog(@"%@", dic);
+            //[self.tableView reloadData];
+            
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+    }];
+}
+
 - (void)updateLayout{
     long offsetTop = GAP_HEIGHT;
     long messageWidth = GET_LAYOUT_WIDTH(self.scrollView)-GAP_WIDTH*4;
@@ -68,9 +102,11 @@
     offsetTop+=GET_LAYOUT_HEIGHT(myDeviceView);
     self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
     [self.scrollView addSubview:myDeviceView];
-    for(int i=0;i<20;i++){
+    for(int i=0;i<2;i++){
         long messageHeight = 0;
-        UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
+        UIButton *devicesView = [[UIButton alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
+        [devicesView addTarget:self action:@selector(clickDeviceDetailButton) forControlEvents:UIControlEventTouchUpInside];
+        
         UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
         lineView.backgroundColor = lineColor;
         [devicesView addSubview:lineView];
@@ -127,7 +163,7 @@
     offsetTop+=GET_LAYOUT_HEIGHT(boundDeviceView);
     self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
     [self.scrollView addSubview:boundDeviceView];
-    for(int i=0;i<20;i++){
+    for(int i=0;i<2;i++){
         long messageHeight = 0;
         UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 50)];
         UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
@@ -157,7 +193,8 @@
     [self.navigationController pushViewController:avaDeviceController animated:YES];
 }
 
--(void)clickRefreshButton{
-    NSLog(@"refresh");
+-(void)clickDeviceDetailButton{
+    DetailController *detailController = [[DetailController alloc] init];
+    [self.navigationController pushViewController:detailController animated:YES];
 }
 @end
