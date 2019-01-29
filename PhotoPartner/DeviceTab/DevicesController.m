@@ -19,6 +19,8 @@
 @property UIScrollView *scrollView;
 
 @property AppDelegate *appDelegate;
+
+@property NSInteger marginTop;
 @end
 
 @implementation DevicesController
@@ -33,6 +35,8 @@
     INIT_RightBarButtonItem(ICON_REFRESH, clickRefreshButton);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    self.marginTop = MARGIN_TOP;
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, MARGIN_TOP, GET_LAYOUT_WIDTH(self.view), GET_LAYOUT_HEIGHT(self.view)-MARGIN_TOP)];
     
@@ -72,6 +76,7 @@
             
             NSLog(@"%@", dic);
             //[self.tableView reloadData];
+            [self updateLayout];
             
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -80,11 +85,21 @@
     }];
 }
 
+-(void)clearView{
+    NSArray *views = [self.scrollView subviews];
+    for(UIView *view in views){
+        [view removeFromSuperview];
+    }
+    self.scrollView.frame = CGRectMake(0, self.marginTop, GET_LAYOUT_WIDTH(self.view), GET_LAYOUT_HEIGHT(self.view)-self.marginTop);
+}
+
 - (void)updateLayout{
     long offsetTop = GAP_HEIGHT;
     long messageWidth = GET_LAYOUT_WIDTH(self.scrollView)-GAP_WIDTH*4;
     float fontSize = 14;
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
+    
+    [self clearView];
  
     UIView *myDeviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 36)];
         UILabel *myDeviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(myDeviceView), GET_LAYOUT_HEIGHT(myDeviceView))];
@@ -102,10 +117,11 @@
     offsetTop+=GET_LAYOUT_HEIGHT(myDeviceView);
     self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
     [self.scrollView addSubview:myDeviceView];
-    for(int i=0;i<2;i++){
+    for(int i=0;i<self.appDelegate.deviceList.count;i++){
         long messageHeight = 0;
         UIButton *devicesView = [[UIButton alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
-        [devicesView addTarget:self action:@selector(clickDeviceDetailButton) forControlEvents:UIControlEventTouchUpInside];
+        devicesView.tag = [[[self.appDelegate.deviceList objectAtIndex:i] objectForKey:@"device_id"] intValue];
+        [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
         
         UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
         lineView.backgroundColor = lineColor;
@@ -134,8 +150,8 @@
         self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
         [self.scrollView addSubview:devicesView];
     }
-    if(false){
-        for(int i=0;i<4;i++){
+    if(self.appDelegate.deviceList.count<4){
+        for(int i=0;i<(4-self.appDelegate.deviceList.count);i++){
             long messageHeight = 0;
             UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
             
@@ -193,8 +209,10 @@
     [self.navigationController pushViewController:avaDeviceController animated:YES];
 }
 
--(void)clickDeviceDetailButton{
+-(void)clickDeviceDetailButton:(UIButton *)btn{
     DetailController *detailController = [[DetailController alloc] init];
+    detailController.isAcceptNewUsers = true;
+    detailController.deviceId = btn.tag;
     [self.navigationController pushViewController:detailController animated:YES];
 }
 @end

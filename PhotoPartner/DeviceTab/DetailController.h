@@ -10,5 +10,6 @@
 
 @interface DetailController : UIViewController
 
-
+@property Boolean isAcceptNewUsers;
+@property NSInteger *deviceId;
 @end

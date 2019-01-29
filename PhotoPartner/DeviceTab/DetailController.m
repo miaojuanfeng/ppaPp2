@@ -32,6 +32,8 @@
     
     [self.view addSubview:self.scrollView];
     
+    [self loadData];
+    
     [self updateLayout];
     
 }
@@ -86,6 +88,7 @@
         [usersView addSubview:usersLabel];
         UISwitch *acceptSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(usersView)-43, 5, 43, 10)];
         acceptSwitch.transform = CGAffineTransformMakeScale(0.7, 0.7);
+        [acceptSwitch setOn:self.isAcceptNewUsers];
         [acceptSwitch addTarget:self action:@selector(clickAcceptSwitch:) forControlEvents:UIControlEventValueChanged];
         [usersView addSubview:acceptSwitch];
         UILabel *acceptLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(acceptSwitch)-150-GAP_WIDTH, 10, 150, 20)];
@@ -181,18 +184,52 @@
     
 }
 
+- (void)loadData {
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"device_id":[NSString stringWithFormat:@"%d", self.deviceId]
+                               };
+    [manager POST:BASE_URL(@"device/waitForAccept") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
+            [self.appDelegate saveDeviceList];
+            
+            NSLog(@"%@", dic);
+            //[self.tableView reloadData];
+            
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+    }];
+}
+
 -(void)clickAcceptSwitch:(UISwitch *)swi{
+    NSString *ifAccept = @"false";
     if(swi.isOn){
-        NSLog(@"switch on");
+        ifAccept = @"1";
     }else{
-        NSLog(@"switch off");
+        ifAccept = @"2";
     }
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"device_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
-                               @"ifAccept":@"1"
+                               @"ifAccept":ifAccept
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
     [manager POST:BASE_URL(@"device/updateDeviceAcceptUser") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
@@ -231,7 +268,8 @@
             NSString *desc = @"";
             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
             
-            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+            HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+            
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
@@ -254,10 +292,70 @@
 }
 
 -(void)clickRefuseButton{
-    NSLog(@"refuse");
+    [self doAcceptOrRefuse:@"no"];
 }
 
 -(void)clickAcceptButton{
-    NSLog(@"accept");
+    [self doAcceptOrRefuse:@"yes"];
+}
+
+-(void)doAcceptOrRefuse:(NSString*)acceptBind{
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                               @"device_id":[NSString stringWithFormat:@"%d", self.deviceId],
+                               @"acceptBind":acceptBind
+                               };
+    HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
+    [manager POST:BASE_URL(@"device/acceptBind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            //NSDictionary *data = [dic objectForKey:@"data"];
+            //NSLog(data);
+            /*NSString *device_id = [data objectForKey:@"device_id"];
+             
+             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
+             [device setObject:device_id forKey:@"device_id"];
+             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
+             [device setObject:self.deviceNameField.text forKey:@"device_name"];
+             [device setObject:@0 forKey:@"isSelected"];
+             [self.appDelegate.deviceList addObject:device];
+             
+             NSLog(@"%@", self.appDelegate.deviceList);
+             [self.appDelegate addDeviceList:device];
+             
+             
+             NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+             NSString *time = [dateFormatter stringFromDate:date];
+             NSString *deviceName = self.deviceNameField.text;
+             NSString *desc = @"";
+             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
+            
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+        }else{
+            NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+    }];
 }
 @end
