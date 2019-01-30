@@ -15,6 +15,9 @@ saveSuccess = "Save Success";
 saveFailed = "Save Failed";
 refresh = "Pull to refresh";
 refreshing = "Refreshing";
+saving = "Saving";
+Success = "Success";
+Failed = "Failed";
 
 loadingSignin = "Login";
 loadingDeviceList = "Loading Device";
@@ -144,6 +147,12 @@ UploadAvaFailure = "Upload failure";
 
 MyDeviceLabel = "My Devices";
 AvaDeviceLabel = "Bound Devices";
+
+EditNameNavigationItemTitle = "Edit Name";
+EditNameEmpty = "Please enter name";
+EditNameLabel = "Name";
+EditNameButton = "Submit";
+Submitting = "Submitting";
 
 /*
  *  从服务器返回的错误码

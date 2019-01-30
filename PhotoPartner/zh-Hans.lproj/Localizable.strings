@@ -15,6 +15,9 @@ saveSuccess = "保存成功";
 saveFailed = "保存失败";
 refresh = "下拉刷新";
 refreshing = "正在刷新";
+saving = "保存中";
+Success = "成功";
+Failed = "失败";
 
 loadingSignin = "登录中";
 loadingDeviceList = "读取设备";
@@ -143,6 +146,11 @@ UploadAvaFailure = "上传失败";
 MyDeviceLabel = "我的设备";
 AvaDeviceLabel = "可用设备";
 
+EditNameNavigationItemTitle = "编辑名称";
+EditNameEmpty = "请输入名称";
+EditNameLabel = "名称";
+EditNameButton = "提交";
+Submitting = "提交中";
 
 /*
  *  从服务器返回的错误码

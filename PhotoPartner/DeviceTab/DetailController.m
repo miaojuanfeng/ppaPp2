@@ -9,6 +9,7 @@
 #import "MacroDefine.h"
 #import "AppDelegate.h"
 #import "DetailController.h"
+#import "DeviceUserNameController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 
@@ -204,8 +205,8 @@
         
         HUD_WAITING_HIDE;
         if( status == 200 ){
-            self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
-            [self.appDelegate saveDeviceList];
+            //self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
+            //[self.appDelegate saveDeviceList];
             
             NSLog(@"%@", dic);
             //[self.tableView reloadData];
@@ -231,7 +232,7 @@
                                @"device_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                @"ifAccept":ifAccept
                                };
-    HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
+    HUD_WAITING_SHOW(NSLocalizedString(@"saving", nil));
     [manager POST:BASE_URL(@"device/updateDeviceAcceptUser") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -268,7 +269,7 @@
             NSString *desc = @"";
             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
             
-            HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+            HUD_TOAST_SHOW(NSLocalizedString(@"Success", nil));
             
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
@@ -279,7 +280,7 @@
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
         
         HUD_WAITING_HIDE;
-        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+        HUD_TOAST_SHOW(NSLocalizedString(@"Failed", nil));
     }];
 }
 
@@ -288,7 +289,9 @@
 }
 
 -(void)clickSettingButton{
-    NSLog(@"setting");
+    DeviceUserNameController *deviceUserNameController = [[DeviceUserNameController alloc] init];
+    deviceUserNameController.deviceId = self.deviceId;
+    [self.navigationController pushViewController:deviceUserNameController animated:YES];
 }
 
 -(void)clickRefuseButton{
@@ -308,7 +311,7 @@
                                @"device_id":[NSString stringWithFormat:@"%d", self.deviceId],
                                @"acceptBind":acceptBind
                                };
-    HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
+    HUD_WAITING_SHOW(NSLocalizedString(@"Saving", nil));
     [manager POST:BASE_URL(@"device/acceptBind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -345,7 +348,7 @@
              NSString *desc = @"";
              [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
             
-            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
@@ -355,7 +358,7 @@
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
         
         HUD_WAITING_HIDE;
-        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+        HUD_TOAST_SHOW(NSLocalizedString(@"Failed", nil));
     }];
 }
 @end
