@@ -17,6 +17,8 @@
 @property UIScrollView *scrollView;
 
 @property AppDelegate *appDelegate;
+
+@property UILabel *avaLabel;
 @end
 
 @implementation DetailController
@@ -62,18 +64,18 @@
         topUpLabel.textAlignment = NSTextAlignmentRight;
         [infoView addSubview:topUpLabel];
     
-        UILabel *totalLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(infoView)/2-5, GET_LAYOUT_WIDTH(infoView)/2, GET_LAYOUT_HEIGHT(infoView)/2)];
+        /*UILabel *totalLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(infoView)/2-5, GET_LAYOUT_WIDTH(infoView)/2, GET_LAYOUT_HEIGHT(infoView)/2)];
         totalLabel.font = [UIFont systemFontOfSize:fontSize];
         totalLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
         totalLabel.text = @"Total 10.00GB";
-        [infoView addSubview:totalLabel];
+        [infoView addSubview:totalLabel];*/
     
-        UILabel *avaLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(infoView)/2, GET_LAYOUT_HEIGHT(infoView)/2-5, GET_LAYOUT_WIDTH(infoView)/2, GET_LAYOUT_HEIGHT(infoView)/2)];
-        avaLabel.font = [UIFont systemFontOfSize:fontSize];
-        avaLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
-        avaLabel.textAlignment = NSTextAlignmentRight;
-        avaLabel.text = @"Available 9.66GB";
-        [infoView addSubview:avaLabel];
+        self.avaLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(infoView)/2, GET_LAYOUT_HEIGHT(infoView)/2-5, GET_LAYOUT_WIDTH(infoView)/2, GET_LAYOUT_HEIGHT(infoView)/2)];
+        self.avaLabel.font = [UIFont systemFontOfSize:fontSize];
+        self.avaLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
+        self.avaLabel.textAlignment = NSTextAlignmentRight;
+        self.avaLabel.text = [NSString stringWithFormat:@"%@ %@GB", NSLocalizedString(@"AvailableLabel", nil), @"0.00"];
+        [infoView addSubview:self.avaLabel];
     
         UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(infoView)-1, GET_LAYOUT_WIDTH(infoView), 1)];
         lineView.backgroundColor = lineColor;
@@ -186,14 +188,14 @@
 }
 
 - (void)loadData {
-    
+    HUD_WAITING_SHOW(NSLocalizedString(@"Loading", nil));
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"device_id":[NSString stringWithFormat:@"%d", self.deviceId]
                                };
-    [manager POST:BASE_URL(@"device/waitForAccept") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+    [manager POST:BASE_URL(@"device/device_user") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -205,16 +207,19 @@
         
         HUD_WAITING_HIDE;
         if( status == 200 ){
-            //self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
-            //[self.appDelegate saveDeviceList];
+            NSDictionary *data = [dic objectForKey:@"data"];
             
             NSLog(@"%@", dic);
+            
+            self.avaLabel.text = [NSString stringWithFormat:@"%@ %@GB", NSLocalizedString(@"AvailableLabel", nil), [data objectForKey:@"deviceFlow"]];
             //[self.tableView reloadData];
             
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"失败.%@",error);
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
     }];
 }
 
@@ -229,7 +234,7 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
-                               @"device_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                               @"device_id":[NSString stringWithFormat:@"%d", self.deviceId],
                                @"ifAccept":ifAccept
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"saving", nil));

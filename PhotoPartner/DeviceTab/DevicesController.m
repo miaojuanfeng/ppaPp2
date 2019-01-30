@@ -52,7 +52,7 @@
 }
 
 - (void)clickRefreshButton {
-
+    HUD_WAITING_SHOW(NSLocalizedString(@"Loading", nil));
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
@@ -82,6 +82,8 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"失败.%@",error);
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
     }];
 }
 
@@ -120,7 +122,7 @@
     for(int i=0;i<self.appDelegate.deviceList.count;i++){
         long messageHeight = 0;
         UIButton *devicesView = [[UIButton alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
-        devicesView.tag = [[[self.appDelegate.deviceList objectAtIndex:i] objectForKey:@"device_id"] intValue];
+        devicesView.tag = i;
         [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
         
         UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
@@ -210,9 +212,14 @@
 }
 
 -(void)clickDeviceDetailButton:(UIButton *)btn{
+    NSMutableDictionary *device = [self.appDelegate.deviceList objectAtIndex:btn.tag];
     DetailController *detailController = [[DetailController alloc] init];
-    detailController.isAcceptNewUsers = true;
-    detailController.deviceId = btn.tag;
+    if( [[device objectForKey:@"isAcceptNewUsers"] isEqualToString:@"1"] ){
+        detailController.isAcceptNewUsers = true;
+    }else{
+        detailController.isAcceptNewUsers = false;
+    }
+    detailController.deviceId = [[device objectForKey:@"device_id"] integerValue];
     [self.navigationController pushViewController:detailController animated:YES];
 }
 @end

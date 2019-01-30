@@ -33,6 +33,8 @@
 @property Boolean isHideBar;
 
 @property TZImagePickerController *imagePickerVc;
+
+@property UILabel *usernameLabel;
 @end
 
 @implementation HomeController
@@ -67,11 +69,11 @@
         headImage.image = [UIImage imageNamed:@"ic_profile_black"];
         [headButton addSubview:headImage];
         [accountBoxView addSubview:headButton];
-        UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
-        usernameLabel.font = [UIFont systemFontOfSize:18];
-        usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
+        self.usernameLabel.font = [UIFont systemFontOfSize:18];
+        self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         //usernameLabel.backgroundColor = [UIColor yellowColor];
-        [accountBoxView addSubview:usernameLabel];
+        [accountBoxView addSubview:self.usernameLabel];
     
         UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(accountBoxView)-35-GAP_WIDTH*2, (GET_LAYOUT_HEIGHT(accountBoxView)-40)/2, 35, 35)];
         UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-15, 0-15, GET_LAYOUT_WIDTH(settingButton)+30, GET_LAYOUT_HEIGHT(settingButton)+30)];
@@ -385,6 +387,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
@@ -473,6 +476,10 @@
         self.isHideBar = true;
     }];
 
+}
+
+- (void)tz_imagePickerControllerDidCancel:(TZImagePickerController *)picker {
+    self.isHideBar = true;
 }
 
 - (void)ossUpload:(NSString*) upToken withFile:(NSString*) filePath withFileName:(NSString*) fileName{

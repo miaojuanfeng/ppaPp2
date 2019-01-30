@@ -18,6 +18,7 @@ refreshing = "Refreshing";
 saving = "Saving";
 Success = "Success";
 Failed = "Failed";
+Loading = "Loading";
 
 loadingSignin = "Login";
 loadingDeviceList = "Loading Device";
@@ -153,6 +154,8 @@ EditNameEmpty = "Please enter name";
 EditNameLabel = "Name";
 EditNameButton = "Submit";
 Submitting = "Submitting";
+
+AvailableLabel = "Available";
 
 /*
  *  从服务器返回的错误码

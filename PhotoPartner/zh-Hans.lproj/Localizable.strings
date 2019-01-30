@@ -18,6 +18,7 @@ refreshing = "正在刷新";
 saving = "保存中";
 Success = "成功";
 Failed = "失败";
+Loading = "加载中";
 
 loadingSignin = "登录中";
 loadingDeviceList = "读取设备";
@@ -151,6 +152,8 @@ EditNameEmpty = "请输入名称";
 EditNameLabel = "名称";
 EditNameButton = "提交";
 Submitting = "提交中";
+
+AvailableLabel = "可用";
 
 /*
  *  从服务器返回的错误码
