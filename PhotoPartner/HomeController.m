@@ -498,6 +498,7 @@
         });
     }
     params:@{
+        @"x:user_id":[[self.appDelegate.userInfo objectForKey:@"user_id"] stringValue],
         @"x:type":@"userImage"
     }
     checkCrc:NO
@@ -513,7 +514,6 @@
         
         HUD_WAITING_HIDE;
         if( [[resp objectForKey:@"status"] intValue] == 200 ){
-            NSLog(resp);
             
             HUD_LOADING_HIDE;
             HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaSuccess", nil));
