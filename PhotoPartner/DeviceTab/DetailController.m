@@ -290,7 +290,91 @@
 }
 
 -(void)clickDeleteButton{
-    NSLog(@"delete");
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"deviceListUnbindConfirmTitle", nil)
+                                                                             message:NSLocalizedString(@"deviceListUnbindConfirmSubtitle", nil)
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = 30.0f;
+        NSDictionary *parameters=@{
+                                   @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                                   @"device_id":[NSString stringWithFormat:@"%d", self.deviceId],
+                                   @"status":@"unbind"
+                                   };
+        HUD_WAITING_SHOW(NSLocalizedString(@"loadingUnbinding", nil));
+        [manager POST:BASE_URL(@"device/status") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+            
+        } progress:^(NSProgress * _Nonnull uploadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                float progress = 1.0 * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
+                
+                HUD_LOADING_PROGRESS(progress);
+            });
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"成功.%@",responseObject);
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+            NSLog(@"results: %@", dic);
+            
+            int status = [[dic objectForKey:@"status"] intValue];
+            
+            HUD_WAITING_HIDE;
+            if( status == 200 ){
+                /*NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
+                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+                NSString *time = [dateFormatter stringFromDate:date];
+                long device_id = btn.tag;
+                NSString *deviceName = @"";
+                for(int k=0;k<self.appDelegate.deviceList.count;k++){
+                    NSLog(@"%@", [[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_id"] );
+                    NSLog(@"%ld", device_id);
+                    NSLog(@"%d", [[[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_id"] longValue] == device_id);
+                    if( [[[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_id"] longValue] == device_id ){
+                        deviceName = [[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_name"];
+                        break;
+                    }
+                }
+                [self.appDelegate addMessageList:@"unbind" withTime:time withTitle:deviceName withDesc:@"" withData:nil];
+                
+                
+                for (NSDictionary *device in self.appDelegate.deviceList) {
+                    if( [[device objectForKey:@"device_id"] intValue] == btn.tag ){
+                        [self.appDelegate.deviceList removeObject:device];
+                        break;
+                    }
+                }
+                [self.appDelegate saveDeviceList];
+                [self isEmptyDeviceList];
+                [self.tableView reloadData];*/
+                
+                if( self.appDelegate.deviceList.count == 0 ){
+                    //AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
+                    //HUD_TOAST_PUSH_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil), addDeviceController);
+                }else{
+                    HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil));
+                }
+            }else{
+                NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+                HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"失败.%@",error);
+            NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+            
+            HUD_WAITING_HIDE;
+            HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindFailed", nil));
+        }];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmCancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    [alertController addAction:okAction];           // A
+    [alertController addAction:cancelAction];       // B
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 -(void)clickSettingButton{
