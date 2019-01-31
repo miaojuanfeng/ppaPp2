@@ -97,8 +97,8 @@ clearMessageListSubtitle = "该操作不可恢复";
 clearMessageListDone = "消息记录已清空";
 
 userInfoNavigationItemTitle = "个人信息";
-userInfoUserName = "名称：";
-userInfoUserAccount = "账号：";
+userInfoUserName = "名称";
+userInfoUserEmail = "邮箱";
 userInfoUserNameTextFiledTitle = "请输入用户名称";
 
 messageNavigationItemTitle = "消息";

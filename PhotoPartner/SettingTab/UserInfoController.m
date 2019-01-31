@@ -63,10 +63,10 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:nil];
     //cell.selectionStyle = UITableViewCellSelectionStyleNone;
     if( indexPath.row == 0 ){
-        self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
+        /*self.userNameField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
         self.userNameField.text = self.userNickname;
         self.userNameField.backgroundColor = [UIColor whiteColor];
         [self setTextFieldLeftPadding:self.userNameField forWidth:110 forText:NSLocalizedString(@"userInfoUserName", nil)];
@@ -74,17 +74,23 @@
         self.userNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.userNameField.delegate = self;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.contentView addSubview:self.userNameField];
+        [cell.contentView addSubview:self.userNameField];*/
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.text = NSLocalizedString(@"userInfoUserName", nil);
+        cell.detailTextLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }else if( indexPath.row == 1 ){
-        self.userAccountField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
+        /*self.userAccountField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
         self.userAccountField.backgroundColor = [UIColor whiteColor];
         [self setTextFieldLeftPadding:self.userAccountField forWidth:110 forText:NSLocalizedString(@"userInfoUserAccount", nil)];
         self.userAccountField.text = [[self.appDelegate.userInfo objectForKey:@"user_account"] stringValue];
         self.userAccountField.enabled = NO;
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.contentView addSubview:self.userAccountField];
+        [cell.contentView addSubview:self.userAccountField];*/
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.textLabel.text = NSLocalizedString(@"userInfoUserEmail", nil);
+        cell.detailTextLabel.text = [[self.appDelegate.userInfo objectForKey:@"userEmail"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }else if( indexPath.row == 2 ){
-        //cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.text = NSLocalizedString(@"ChangePassword", nil);
     }
     return cell;

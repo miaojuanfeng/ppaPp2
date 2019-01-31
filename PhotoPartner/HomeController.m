@@ -289,7 +289,7 @@
         /**
          *  向服务器提交登录信息
          */
-        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        /*AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = 30.0f;
         NSDictionary *parameters = @{@"user_imei":self.appDelegate.deviceUUID};
@@ -363,9 +363,11 @@
             
             HUD_WAITING_HIDE;
             [self closeAlart];
-        }];
-    }else if( self.appDelegate.deviceList.count == 0 && [self.appDelegate isNilDeviceList] ){
-        AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
+        }];*/
+        LoginController *loginController = [[LoginController alloc] init];
+        [self.navigationController pushViewController:loginController animated:YES];
+    //}else if( self.appDelegate.deviceList.count == 0 && [self.appDelegate isNilDeviceList] ){
+       // AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
         //[self.navigationController pushViewController:addDeviceController animated:YES];
     }
 }

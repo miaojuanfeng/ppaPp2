@@ -97,8 +97,8 @@ clearMessageListSubtitle = "This operation is not recoverable";
 clearMessageListDone = "All messages deleted";
 
 userInfoNavigationItemTitle = "Account";
-userInfoUserName = "Username：";
-userInfoUserAccount = "Account：";
+userInfoUserName = "Username";
+userInfoUserEmail = "Email";
 userInfoUserNameTextFiledTitle = "Please enter the user's nickname";
 
 messageNavigationItemTitle = "Messages";

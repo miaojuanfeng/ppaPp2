@@ -163,6 +163,7 @@
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"userEmail":self.emailField.text,
+                               @"type":@"1",
                                @"companyName":COMPANY_NAME
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"SendingEmail", nil));
