@@ -242,7 +242,7 @@
              NSString *desc = @"";
              [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
             
-            HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
@@ -252,7 +252,7 @@
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
         
         HUD_WAITING_HIDE;
-        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddBindFailed", nil));
+        HUD_TOAST_SHOW(NSLocalizedString(@"Failed", nil));
     }];
     
 }

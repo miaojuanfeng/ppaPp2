@@ -161,12 +161,39 @@
         
         int status = [[dic objectForKey:@"status"] intValue];
         
-        HUD_WAITING_HIDE;
+        //HUD_WAITING_HIDE;
         if( status == 200 ){
             self.appDelegate.userInfo =  [NSMutableDictionary dictionaryWithDictionary:[dic objectForKey:@"data"]];
             [self.appDelegate saveUserInfo];
             
-            HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
+            NSDictionary *parameters=@{
+                                       @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"]
+                                       };
+            [manager POST:BASE_URL(@"user/user_device") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+                
+            } progress:^(NSProgress * _Nonnull uploadProgress) {
+                
+            } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                NSLog(@"成功.%@",responseObject);
+                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+                
+                int status = [[dic objectForKey:@"status"] intValue];
+                
+                HUD_WAITING_HIDE;
+                if( status == 200 ){
+                    self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
+                    [self.appDelegate saveDeviceList];
+                    
+
+                    HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
+                }
+            } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+                NSLog(@"失败.%@",error);
+                NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+                
+                HUD_WAITING_HIDE;
+            }];
+            
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));

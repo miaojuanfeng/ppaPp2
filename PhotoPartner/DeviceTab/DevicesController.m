@@ -44,11 +44,17 @@
     
     [self updateLayout];
     
+    NSLog(@"%@", self.appDelegate.deviceList);
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [self updateLayout];
 }
 
 - (void)clickRefreshButton {
@@ -120,37 +126,40 @@
     self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
     [self.scrollView addSubview:myDeviceView];
     for(int i=0;i<self.appDelegate.deviceList.count;i++){
-        long messageHeight = 0;
-        UIButton *devicesView = [[UIButton alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
-        devicesView.tag = i;
-        [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
-        
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
-        lineView.backgroundColor = lineColor;
-        [devicesView addSubview:lineView];
-        UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView)/2)];
-        deviceLabel.text = @"Device 1";
-        deviceLabel.font = [UIFont systemFontOfSize:15];
-        [devicesView addSubview:deviceLabel];
-        
-        UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
-        nameLabel.text = @"ZS5FLV";
-        nameLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
-        nameLabel.font = [UIFont systemFontOfSize:fontSize];
-        [devicesView addSubview:nameLabel];
-        
-        UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
-        emailLabel.text = @"Allen@bsimb.com";
-        emailLabel.textAlignment = NSTextAlignmentRight;
-        emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
-        emailLabel.font = [UIFont systemFontOfSize:fontSize];
-        [devicesView addSubview:emailLabel];
-        
-        messageHeight = GET_LAYOUT_HEIGHT(devicesView);
-   
-        offsetTop+=messageHeight;
-        self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
-        [self.scrollView addSubview:devicesView];
+        NSMutableDictionary *device = [self.appDelegate.deviceList objectAtIndex:i];
+        if( [[device objectForKey:@"isAdmin"] isEqualToString:@"mydevice"] ){
+            long messageHeight = 0;
+            UIButton *devicesView = [[UIButton alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
+            devicesView.tag = i;
+            [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
+            
+            UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
+            lineView.backgroundColor = lineColor;
+            [devicesView addSubview:lineView];
+            UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView)/2)];
+            deviceLabel.text = [device objectForKey:@"device_name"];
+            deviceLabel.font = [UIFont systemFontOfSize:15];
+            [devicesView addSubview:deviceLabel];
+            
+            UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
+            nameLabel.text = [device objectForKey:@"device_token"];;
+            nameLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
+            nameLabel.font = [UIFont systemFontOfSize:fontSize];
+            [devicesView addSubview:nameLabel];
+            
+            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
+            emailLabel.text = [self.appDelegate.userInfo objectForKey:@"userEmail"];
+            emailLabel.textAlignment = NSTextAlignmentRight;
+            emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
+            emailLabel.font = [UIFont systemFontOfSize:fontSize];
+            [devicesView addSubview:emailLabel];
+            
+            messageHeight = GET_LAYOUT_HEIGHT(devicesView);
+       
+            offsetTop+=messageHeight;
+            self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
+            [self.scrollView addSubview:devicesView];
+        }
     }
     if(self.appDelegate.deviceList.count<4){
         for(int i=0;i<(4-self.appDelegate.deviceList.count);i++){
@@ -181,22 +190,25 @@
     offsetTop+=GET_LAYOUT_HEIGHT(boundDeviceView);
     self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
     [self.scrollView addSubview:boundDeviceView];
-    for(int i=0;i<2;i++){
-        long messageHeight = 0;
-        UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 50)];
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
-        lineView.backgroundColor = lineColor;
-        [devicesView addSubview:lineView];
-        UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView))];
-        deviceLabel.text = @"Device 1";
-        deviceLabel.font = [UIFont systemFontOfSize:15];
-        [devicesView addSubview:deviceLabel];
-        
-        messageHeight = GET_LAYOUT_HEIGHT(devicesView);
-        
-        offsetTop+=messageHeight;
-        self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
-        [self.scrollView addSubview:devicesView];
+    for(int i=0;i<self.appDelegate.deviceList.count;i++){
+        NSMutableDictionary *device = [self.appDelegate.deviceList objectAtIndex:i];
+        if( [[device objectForKey:@"isAdmin"] isEqualToString:@"bounddevice"] ){
+            long messageHeight = 0;
+            UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 50)];
+            UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
+            lineView.backgroundColor = lineColor;
+            [devicesView addSubview:lineView];
+            UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView))];
+            deviceLabel.text = @"Device 1";
+            deviceLabel.font = [UIFont systemFontOfSize:15];
+            [devicesView addSubview:deviceLabel];
+            
+            messageHeight = GET_LAYOUT_HEIGHT(devicesView);
+            
+            offsetTop+=messageHeight;
+            self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
+            [self.scrollView addSubview:devicesView];
+        }
     }
     
 }
@@ -220,6 +232,6 @@
         detailController.isAcceptNewUsers = false;
     }
     detailController.deviceId = [[device objectForKey:@"device_id"] integerValue];
-    [self.navigationController pushViewController:detailController animated:YES];
+    //[self.navigationController pushViewController:detailController animated:YES];
 }
 @end

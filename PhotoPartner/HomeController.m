@@ -80,7 +80,7 @@
         settingImageView.image = [UIImage imageNamed:@"ic_settings_black"];
         [settingButton addSubview:settingImageView];
         [settingButton addTarget:self action:@selector(clickSettingButton) forControlEvents:UIControlEventTouchUpInside];
-        [accountBoxView addSubview:settingButton];
+        //[accountBoxView addSubview:settingButton];
     
     
     [self.view addSubview:accountBoxView];
@@ -389,7 +389,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_name"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
 
@@ -580,8 +580,8 @@
 }
 
 - (void)clickHeadButton {
-    self.isHideBar = false;
-    [self showImagePickerVc:1];
+    //self.isHideBar = false;
+    //[self showImagePickerVc:1];
 }
 
 - (void)clickTakeVideoButton{
@@ -605,10 +605,10 @@
 }
 
 - (void)clickMessageButton {
-    //MessageController *messageController = [[MessageController alloc] init];
-    //[self.navigationController pushViewController:messageController animated:YES];
-    LoginController *loginController = [[LoginController alloc] init];
-    [self.navigationController pushViewController:loginController animated:YES];
+    MessageController *messageController = [[MessageController alloc] init];
+    [self.navigationController pushViewController:messageController animated:YES];
+    //LoginController *loginController = [[LoginController alloc] init];
+    //[self.navigationController pushViewController:loginController animated:YES];
 }
 
 - (void)clickSettingButton {

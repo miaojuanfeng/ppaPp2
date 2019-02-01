@@ -161,6 +161,10 @@
         }
         
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        
+        if( ![[deviceItem objectForKey:@"isAccepted"] isEqualToString:@"1"] ){
+            cell.hidden = YES;
+        }
     }
     return cell;
 }
@@ -1075,7 +1079,7 @@
         manager.requestSerializer.timeoutInterval = 30.0f;
         NSDictionary *parameters=@{
                                    @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
-                                   @"user_imei":self.appDelegate.deviceUUID,
+                                   @"user_imei":[self.appDelegate.userInfo objectForKey:@"user_name"],
                                    @"video_data":videoData,
 //                                   @"file_size":[NSString stringWithFormat:@"%f", fileSize]
 //                                   @"file_size":@"1"
