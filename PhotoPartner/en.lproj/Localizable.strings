@@ -157,6 +157,13 @@ Submitting = "Submitting";
 
 AvailableLabel = "Available";
 
+EditUserNameNavigationItemTitle = "Edit Username";
+EditUserNameEmpty = "Please enter username";
+EditUserNameLabel = "Username";
+EditUserNameButton = "Submit";
+
+EditUserEmailNavigationItemTitle = "Edit Email";
+
 /*
  *  从服务器返回的错误码
  */

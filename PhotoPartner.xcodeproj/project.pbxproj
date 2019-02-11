@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		70E7C446704F348E198D3D9E /* libPods-PhotoPartnerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A4E528F6CED615309D47372 /* libPods-PhotoPartnerUITests.a */; };
 		77850B570925FA5D8AFD693E /* libPods-PhotoPartnerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A7F0A91C75906489B2EF215 /* libPods-PhotoPartnerTests.a */; };
+		9924C58E22116A5400B5014C /* SettingUserNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9924C58C22116A5400B5014C /* SettingUserNameController.m */; };
+		9924C5912211713200B5014C /* ResetEmailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9924C58F2211713200B5014C /* ResetEmailController.m */; };
 		99E6AADB21E8890D00A575CC /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AADA21E8890D00A575CC /* LoginController.m */; };
 		99E6AAE121E8BB7500A575CC /* ResetPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AADF21E8BB7500A575CC /* ResetPasswordController.m */; };
 		99E6AAE221E8BB7500A575CC /* SignUpController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AAE021E8BB7500A575CC /* SignUpController.m */; };
@@ -64,6 +66,10 @@
 		411AED00D1AC2261C24E98BE /* Pods-PhotoPartnerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoPartnerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoPartnerUITests/Pods-PhotoPartnerUITests.release.xcconfig"; sourceTree = "<group>"; };
 		5DF083557A9DF8F98D6DE818 /* libPods-PhotoPartner.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PhotoPartner.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97425E2E19AC274BB7F0847F /* Pods-PhotoPartnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PhotoPartnerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PhotoPartnerTests/Pods-PhotoPartnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		9924C58C22116A5400B5014C /* SettingUserNameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingUserNameController.m; sourceTree = "<group>"; };
+		9924C58D22116A5400B5014C /* SettingUserNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingUserNameController.h; sourceTree = "<group>"; };
+		9924C58F2211713200B5014C /* ResetEmailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetEmailController.m; sourceTree = "<group>"; };
+		9924C5902211713200B5014C /* ResetEmailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetEmailController.h; sourceTree = "<group>"; };
 		99E6AADA21E8890D00A575CC /* LoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
 		99E6AADC21E8892C00A575CC /* LoginController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
 		99E6AADD21E8BB7500A575CC /* SignUpController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpController.h; sourceTree = "<group>"; };
@@ -191,6 +197,10 @@
 		CE70A45F204F953300470A16 /* SettingTab */ = {
 			isa = PBXGroup;
 			children = (
+				9924C5902211713200B5014C /* ResetEmailController.h */,
+				9924C58F2211713200B5014C /* ResetEmailController.m */,
+				9924C58D22116A5400B5014C /* SettingUserNameController.h */,
+				9924C58C22116A5400B5014C /* SettingUserNameController.m */,
 				CE70A462204F962D00470A16 /* SettingController.m */,
 				CE70A464204F963900470A16 /* SettingController.h */,
 				CE759CF62064F5950034EA46 /* UserInfoController.m */,
@@ -538,7 +548,9 @@
 				CEB8E2C7205117C400655887 /* DeviceController.m in Sources */,
 				CEB8E2C12050E1A900655887 /* UploadPhotoController.m in Sources */,
 				CEB95ED0207A08750012DB52 /* ScanDeviceController.m in Sources */,
+				9924C5912211713200B5014C /* ResetEmailController.m in Sources */,
 				CEC978EE204E38F800AE8CB3 /* HomeController.m in Sources */,
+				9924C58E22116A5400B5014C /* SettingUserNameController.m in Sources */,
 				CE70A468204FC3CD00470A16 /* MessageController.m in Sources */,
 				CEB8E2C92051229000655887 /* AddDeviceController.m in Sources */,
 				CEC978F9204E38F800AE8CB3 /* main.m in Sources */,

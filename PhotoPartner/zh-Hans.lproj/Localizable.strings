@@ -155,6 +155,13 @@ Submitting = "提交中";
 
 AvailableLabel = "可用";
 
+EditUserNameNavigationItemTitle = "编辑用户名";
+EditUserNameEmpty = "请输入用户名";
+EditUserNameLabel = "用户名";
+EditUserNameButton = "提交";
+
+EditUserEmailNavigationItemTitle = "编辑邮箱";
+
 /*
  *  从服务器返回的错误码
  */

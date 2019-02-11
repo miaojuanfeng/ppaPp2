@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "UserInfoController.h"
 #import "ResetPasswordController.h"
+#import "SettingUserNameController.h"
+#import "ResetEmailController.h"
 #import <AFNetworking/AFNetworking.h>
 
 @interface UserInfoController () <UITableViewDataSource, UITableViewDelegate, UIGestureRecognizerDelegate, UITextFieldDelegate>
@@ -30,8 +32,8 @@
     COMMON_MACRO;
     self.navigationItem.title = NSLocalizedString(@"userInfoNavigationItemTitle", nil);
     
-    UIBarButtonItem *userSaveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"saveButton", nil) style:UIBarButtonItemStylePlain target:self action:@selector(clickUserSaveButton)];
-    self.navigationItem.rightBarButtonItem = userSaveButton;
+    //UIBarButtonItem *userSaveButton = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"saveButton", nil) style:UIBarButtonItemStylePlain target:self action:@selector(clickUserSaveButton)];
+    //self.navigationItem.rightBarButtonItem = userSaveButton;
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, MARGIN_TOP, VIEW_WIDTH, VIEW_HEIGHT) style:UITableViewStyleGrouped];
     self.tableView.dataSource = self;
@@ -52,6 +54,12 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self.tableView reloadData];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -77,7 +85,7 @@
         [cell.contentView addSubview:self.userNameField];*/
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.textLabel.text = NSLocalizedString(@"userInfoUserName", nil);
-        cell.detailTextLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        cell.detailTextLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_name"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }else if( indexPath.row == 1 ){
         /*self.userAccountField = [[UITextField alloc] initWithFrame:CGRectMake(15, 0, GET_LAYOUT_WIDTH(self.tableView)-30, 44)];
         self.userAccountField.backgroundColor = [UIColor whiteColor];
@@ -108,8 +116,18 @@
     //    VideoDetailController *videoDetailController = [[VideoDetailController alloc] init];
     //    [self.navigationController pushViewController:videoDetailController animated:YES];
     ResetPasswordController *resetPasswordController;
+    SettingUserNameController *settingUserNameController;
+    ResetEmailController *resetEmailController;
     if( indexPath.section == 0 ){
         switch (indexPath.row) {
+            case 0:
+                settingUserNameController = [[SettingUserNameController alloc] init];
+                [self.navigationController pushViewController:settingUserNameController animated:YES];
+                break;
+            case 1:
+                resetEmailController = [[ResetEmailController alloc] init];
+                [self.navigationController pushViewController:resetEmailController animated:YES];
+                break;
             case 2:
                 resetPasswordController = [[ResetPasswordController alloc] init];
                 [self.navigationController pushViewController:resetPasswordController animated:YES];

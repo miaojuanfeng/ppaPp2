@@ -8,93 +8,36 @@
 
 #import "MacroDefine.h"
 #import "AppDelegate.h"
-#import "SignUpController.h"
+#import "ResetEmailController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 
-@interface SignUpController ()
+@interface ResetEmailController ()
 @property UIScrollView *scrollView;
 
 @property AppDelegate *appDelegate;
 
-@property UITextField *usernameField;
-@property UITextField *passwordField;
-@property UITextField *VPField;
 @property UITextField *emailField;
 @property UITextField *VCField;
 @end
 
-@implementation SignUpController
+@implementation ResetEmailController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.navigationItem.title = NSLocalizedString(@"RegisterNavigationItemTitle", nil);
+    self.navigationItem.title = NSLocalizedString(@"EditUserEmailNavigationItemTitle", nil);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
     UIView *boxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP, GET_LAYOUT_WIDTH(self.view)-GAP_WIDTH*4, GET_LAYOUT_HEIGHT(self.view)-MARGIN_TOP)];
     
-        self.usernameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
-        self.usernameField.backgroundColor = [UIColor whiteColor];
-        self.usernameField.delegate = self;
-        self.usernameField.placeholder = NSLocalizedString(@"username", nil);
-        UIImageView *usernameImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
-        usernameImageViewPwd.image=[UIImage imageNamed:@"ic_account_black"];
-        self.usernameField.leftView=usernameImageViewPwd;
-        self.usernameField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        self.usernameField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        self.usernameField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    
-        UIView *usernameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.usernameField)-1, GET_LAYOUT_WIDTH(self.usernameField), 1)];
-        usernameLineView.backgroundColor = lineColor;
-        [self.usernameField addSubview:usernameLineView];
-    
-        [boxView addSubview:self.usernameField];
-    
-        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        self.passwordField.backgroundColor = [UIColor whiteColor];
-        self.passwordField.delegate = self;
-        self.passwordField.placeholder = NSLocalizedString(@"password", nil);
-        UIImageView *newPwdImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
-        newPwdImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        self.passwordField.leftView=newPwdImageViewPwd;
-        self.passwordField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        self.passwordField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [self.passwordField setSecureTextEntry:YES];
-        self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    
-        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
-        newPwdLineView.backgroundColor = lineColor;
-        [self.passwordField addSubview:newPwdLineView];
-    
-        [boxView addSubview:self.passwordField];
-    
-        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.passwordField)+GET_LAYOUT_HEIGHT(self.passwordField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
-        self.VPField.backgroundColor = [UIColor whiteColor];
-        self.VPField.delegate = self;
-        self.VPField.placeholder = NSLocalizedString(@"verifyCode", nil);
-        UIImageView *VPImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
-        VPImageViewPwd.image=[UIImage imageNamed:@"ic_lock_black"];
-        self.VPField.leftView=VPImageViewPwd;
-        self.VPField.leftViewMode=UITextFieldViewModeAlways; //此处用来设置leftview现实时机
-        self.VPField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        [self.VPField setSecureTextEntry:YES];
-        self.VPField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    
-        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VPField)-1, GET_LAYOUT_WIDTH(self.VPField), 1)];
-        VPLineView.backgroundColor = lineColor;
-        [self.VPField addSubview:VPLineView];
-    
-        [boxView addSubview:self.VPField];
-    
-    
-    
-        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.VPField)+GET_LAYOUT_HEIGHT(self.VPField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView)-20, 44)];
+        self.emailField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView)-20, 44)];
         self.emailField.backgroundColor = [UIColor whiteColor];
         self.emailField.delegate = self;
+        self.emailField.text = [self.appDelegate.userInfo objectForKey:@"userEmail"];
         self.emailField.placeholder = NSLocalizedString(@"email", nil);
         UIImageView *emailImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         emailImageViewPwd.image=[UIImage imageNamed:@"ic_email_black"];
@@ -140,7 +83,7 @@
         loginButton.layer.cornerRadius = 5;
         loginButton.layer.masksToBounds = YES;
         [loginButton setTitle:NSLocalizedString(@"RegisterButton", nil) forState:UIControlStateNormal];
-        [loginButton addTarget:self action:@selector(clickRegisterButton) forControlEvents:UIControlEventTouchUpInside];
+        [loginButton addTarget:self action:@selector(clickSubmitButton) forControlEvents:UIControlEventTouchUpInside];
         [boxView addSubview:loginButton];
     
     [self.view addSubview:boxView];
@@ -163,7 +106,7 @@
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
                                @"userEmail":self.emailField.text,
-                               @"type":@"1",
+                               @"type":@"3",
                                @"companyName":COMPANY_NAME
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"SendingEmail", nil));
@@ -192,25 +135,9 @@
     }];
 }
 
--(void)clickRegisterButton{
+-(void)clickSubmitButton{
     [self.view endEditing:YES];
     
-    if( [self.usernameField.text isEqualToString:@""] ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"usernameEmpty", nil));
-        return;
-    }
-    if( [self.passwordField.text isEqualToString:@""] ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordEmpty", nil));
-        return;
-    }
-    if( ![self.passwordField.text isEqualToString:self.VPField.text] ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"userPasswordNotEqual", nil));
-        return;
-    }
-    if( [self.VPField.text isEqualToString:@""] ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"userVerifyPasswordEmpty", nil));
-        return;
-    }
     if( [self.emailField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"userEmailEmpty", nil));
         return;
@@ -223,13 +150,12 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
-                               @"userName":self.usernameField.text,
-                               @"userPassword":self.passwordField.text,
-                               @"userEmail":self.emailField.text,
+                               @"userId":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                               @"userNewEmail":self.emailField.text,
                                @"userEmailCode":self.VCField.text
                                };
     HUD_WAITING_SHOW(NSLocalizedString(@"Registering", nil));
-    [manager POST:BASE_URL(@"user/userRegister") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+    [manager POST:BASE_URL(@"user/userModUserEmail") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
@@ -242,30 +168,10 @@
         
         HUD_WAITING_HIDE;
         if( status == 200 ){
-            //NSDictionary *data = [dic objectForKey:@"data"];
-            //NSLog(data);
-            /*NSString *device_id = [data objectForKey:@"device_id"];
-             
-             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
-             [device setObject:device_id forKey:@"device_id"];
-             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
-             [device setObject:self.deviceNameField.text forKey:@"device_name"];
-             [device setObject:@0 forKey:@"isSelected"];
-             [self.appDelegate.deviceList addObject:device];
-             
-             NSLog(@"%@", self.appDelegate.deviceList);
-             [self.appDelegate addDeviceList:device];
-             
-             
-             NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
-             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-             [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-             NSString *time = [dateFormatter stringFromDate:date];
-             NSString *deviceName = self.deviceNameField.text;
-             NSString *desc = @"";
-             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];*/
+            [self.appDelegate.userInfo setObject:self.emailField.text forKey:@"userEmail"];
+            [self.appDelegate saveUserInfo];
             
-            HUD_TOAST_POP_SHOW(NSLocalizedString(@"RegisterSuccess", nil));
+            HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
@@ -275,7 +181,7 @@
         NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
         
         HUD_WAITING_HIDE;
-        HUD_TOAST_SHOW(NSLocalizedString(@"RegisterFailed", nil));
+        HUD_TOAST_SHOW(NSLocalizedString(@"Failed", nil));
     }];
     
 }

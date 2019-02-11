@@ -80,7 +80,7 @@
         settingImageView.image = [UIImage imageNamed:@"ic_settings_black"];
         [settingButton addSubview:settingImageView];
         [settingButton addTarget:self action:@selector(clickSettingButton) forControlEvents:UIControlEventTouchUpInside];
-        //[accountBoxView addSubview:settingButton];
+        [accountBoxView addSubview:settingButton];
     
     
     [self.view addSubview:accountBoxView];

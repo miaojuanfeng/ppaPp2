@@ -232,6 +232,6 @@
         detailController.isAcceptNewUsers = false;
     }
     detailController.deviceId = [[device objectForKey:@"device_id"] integerValue];
-    //[self.navigationController pushViewController:detailController animated:YES];
+    [self.navigationController pushViewController:detailController animated:YES];
 }
 @end
