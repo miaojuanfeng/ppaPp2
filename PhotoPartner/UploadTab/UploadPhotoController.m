@@ -89,6 +89,8 @@
 
     self.mediaView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(self.view), IMAGE_VIEW_SIZE+PHOTO_NUM_HEIGHT+GAP_HEIGHT+2*GAP_HEIGHT)];
     
+    [self updateDeviceList];
+    
     if( self.appDelegate.photos.count == 0 ){
         [self showImagePickerVc:MAX_PHOTO_COUNT];
     }
@@ -128,6 +130,39 @@
 //        return tableView.sectionHeaderHeight;
         return 12;
     }
+}
+
+-(void)updateDeviceList{
+    //HUD_WAITING_SHOW(NSLocalizedString(@"Loading", nil));
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"]
+                               };
+    [manager POST:BASE_URL(@"user/user_device") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        //HUD_WAITING_HIDE;
+        if( status == 200 ){
+            self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
+            [self.appDelegate saveDeviceList];
+            
+            [self.tableView reloadData];
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        //HUD_WAITING_HIDE;
+    }];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
