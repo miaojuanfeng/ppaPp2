@@ -11,4 +11,5 @@
 @interface DeviceUserNameController : UIViewController
 
 @property NSInteger *deviceId;
+@property NSString *deviceName;
 @end

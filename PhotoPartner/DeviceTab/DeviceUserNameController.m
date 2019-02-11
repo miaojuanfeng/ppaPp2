@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.view.backgroundColor = RGBA_COLOR(239, 239, 239, 1);
+    //self.view.backgroundColor = RGBA_COLOR(239, 239, 239, 1);
     self.navigationItem.title = NSLocalizedString(@"EditNameNavigationItemTitle", nil);
     
     //INIT_RightBarButtonItem(ICON_SCAN, clickDeviceScanButton);
@@ -41,6 +41,7 @@
     UIView *tokenLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserNameField)-1, GET_LAYOUT_WIDTH(self.deviceUserNameField), 1)];
     tokenLineView.backgroundColor = lineColor;
     [self.deviceUserNameField addSubview:tokenLineView];
+    self.deviceUserNameField.text = self.deviceName;
     self.deviceUserNameField.placeholder = NSLocalizedString(@"EditNameLabel", nil);
     UIImageView *usernameImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
     usernameImageViewPwd.image=[UIImage imageNamed:@"ic_account_black"];

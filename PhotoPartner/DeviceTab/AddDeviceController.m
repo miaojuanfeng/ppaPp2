@@ -24,7 +24,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     COMMON_MACRO;
-    self.view.backgroundColor = RGBA_COLOR(239, 239, 239, 1);
+    //self.view.backgroundColor = RGBA_COLOR(239, 239, 239, 1);
     self.navigationItem.title = NSLocalizedString(@"deviceAddNavigationItemTitle", nil);
     
     //INIT_RightBarButtonItem(ICON_SCAN, clickDeviceScanButton);
@@ -130,12 +130,15 @@
         HUD_WAITING_HIDE;
         if( status == 200 ){
             NSDictionary *data = [dic objectForKey:@"data"];
-            NSString *device_id = [data objectForKey:@"device_id"];
             
             NSMutableDictionary *device = [[NSMutableDictionary alloc] init];
-            [device setObject:device_id forKey:@"device_id"];
+            [device setObject:[data objectForKey:@"device_id"] forKey:@"device_id"];
             [device setObject:self.deviceTokenField.text forKey:@"device_token"];
             [device setObject:self.deviceNameField.text forKey:@"device_name"];
+            [device setObject:[data objectForKey:@"device_fcm_token"] forKey:@"device_fcm_token"];
+            [device setObject:[data objectForKey:@"create_date"] forKey:@"create_date"];
+            [device setObject:[data objectForKey:@"modify_date"] forKey:@"modify_date"];
+            [device setObject:@"mydevice" forKey:@"isAdmin"];
             [device setObject:@0 forKey:@"isSelected"];
             [self.appDelegate.deviceList addObject:device];
             

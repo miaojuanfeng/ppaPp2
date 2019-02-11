@@ -162,6 +162,12 @@ EditUserNameButton = "提交";
 
 EditUserEmailNavigationItemTitle = "编辑邮箱";
 
+WirelessDataLabel = "无线数据";
+AvailableLabel = "可用";
+DeviceUsersLabel = "用户";
+DeviceNewUsersLabel = "新用户";
+AcceptNewUsersLabel = "接受新用户";
+
 /*
  *  从服务器返回的错误码
  */

@@ -106,6 +106,7 @@
     long messageWidth = GET_LAYOUT_WIDTH(self.scrollView)-GAP_WIDTH*4;
     float fontSize = 14;
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
+    int count = 0;
     
     [self clearView];
  
@@ -142,7 +143,7 @@
             [devicesView addSubview:deviceLabel];
             
             UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
-            nameLabel.text = [device objectForKey:@"device_token"];;
+            nameLabel.text = [device objectForKey:@"device_token"];
             nameLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
             nameLabel.font = [UIFont systemFontOfSize:fontSize];
             [devicesView addSubview:nameLabel];
@@ -159,10 +160,12 @@
             offsetTop+=messageHeight;
             self.scrollView.contentSize = CGSizeMake(GET_LAYOUT_WIDTH(self.view), offsetTop);
             [self.scrollView addSubview:devicesView];
+            
+            count++;
         }
     }
-    if(self.appDelegate.deviceList.count<4){
-        for(int i=0;i<(4-self.appDelegate.deviceList.count);i++){
+    if(count<4){
+        for(int i=0;i<(4-count);i++){
             long messageHeight = 0;
             UIView *devicesView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
             
@@ -199,7 +202,7 @@
             lineView.backgroundColor = lineColor;
             [devicesView addSubview:lineView];
             UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView))];
-            deviceLabel.text = @"Device 1";
+            deviceLabel.text = [device objectForKey:@"device_token"];
             deviceLabel.font = [UIFont systemFontOfSize:15];
             [devicesView addSubview:deviceLabel];
             

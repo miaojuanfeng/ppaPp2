@@ -164,6 +164,12 @@ EditUserNameButton = "Submit";
 
 EditUserEmailNavigationItemTitle = "Edit Email";
 
+WirelessDataLabel = "Wireless Data";
+AvailableLabel = "Available";
+DeviceUsersLabel = "Users";
+DeviceNewUsersLabel = "New Users";
+AcceptNewUsersLabel = "Accept new users";
+
 /*
  *  从服务器返回的错误码
  */
