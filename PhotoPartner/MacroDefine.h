@@ -217,5 +217,7 @@
 #define ICON_FORWARD @"\U0000e607"
 #define ICON_CANCEL @"\U0000e666"
 #define ICON_REFRESH @"\U0000e7d1"
+#define ICON_EYE_ON @"\U0000e6de"
+#define ICON_EYE_OFF @"\U0000e6df"
 
 #endif /* MacroDefine_h */
