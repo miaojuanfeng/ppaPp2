@@ -138,6 +138,7 @@
             UIImageView *headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 10, 40, 40)];
             headImage.layer.masksToBounds = YES;
             headImage.layer.cornerRadius = 20;
+            headImage.contentMode = UIViewContentModeScaleAspectFill;
             if( ![[users objectForKey:@"avatar"] isEqualToString:@""] ){
                 headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[users objectForKey:@"avatar"]]]];
             }else{
@@ -202,6 +203,7 @@
             UIImageView *headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 10, 40, 40)];
             headImage.layer.masksToBounds = YES;
             headImage.layer.cornerRadius = 20;
+            headImage.contentMode = UIViewContentModeScaleAspectFill;
             if( ![[users objectForKey:@"avatar"] isEqualToString:@""] ){
                 headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[users objectForKey:@"avatar"]]]];
             }else{

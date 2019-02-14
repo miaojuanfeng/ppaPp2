@@ -27,6 +27,8 @@
     [UINavigationBar appearance].tintColor = [UIColor whiteColor];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
+    self.isUpdateAvatar = false;
+    
     // Init Global Varables
     self.deviceId = [[NSMutableArray alloc] init];
     self.fileDesc = [[NSMutableArray alloc] init];

@@ -13,6 +13,8 @@
 
 @property (strong, nonatomic) UIWindow *window;
 //
+@property Boolean isUpdateAvatar;
+//
 @property NSMutableDictionary *userInfo;
 @property NSMutableArray *deviceList;
 @property NSMutableArray *messageList;

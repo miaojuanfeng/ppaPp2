@@ -35,6 +35,7 @@
 @property TZImagePickerController *imagePickerVc;
 
 @property UILabel *usernameLabel;
+@property UIImageView *headImage;
 @end
 
 @implementation HomeController
@@ -65,11 +66,16 @@
         headButton.layer.masksToBounds = YES;
         headButton.layer.cornerRadius = 30;
         [headButton addTarget:self action:@selector(clickHeadButton) forControlEvents:UIControlEventTouchUpInside];
-        UIImageView *headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(headButton), GET_LAYOUT_HEIGHT(headButton))];
-        headImage.image = [UIImage imageNamed:@"ic_profile_black"];
-        [headButton addSubview:headImage];
+        self.headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(headButton), GET_LAYOUT_HEIGHT(headButton))];
+        self.headImage.contentMode = UIViewContentModeScaleAspectFill;
+        if( ![[self.appDelegate.userInfo objectForKey:@"profileImageUrl"] isEqualToString:@""] ){
+            self.headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[self.appDelegate.userInfo objectForKey:@"profileImageUrl"]]]];
+        }else{
+            self.headImage.image = [UIImage imageNamed:@"ic_profile_black"];
+        }
+        [headButton addSubview:self.headImage];
         [accountBoxView addSubview:headButton];
-        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
+        self.usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(self.headImage)+GET_LAYOUT_WIDTH(self.headImage)+GAP_WIDTH*2, 0, GET_LAYOUT_WIDTH(accountBoxView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(accountBoxView))];
         self.usernameLabel.font = [UIFont systemFontOfSize:18];
         self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_nickname"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         //usernameLabel.backgroundColor = [UIColor yellowColor];
@@ -389,6 +395,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    if( self.appDelegate.isUpdateAvatar && ![[self.appDelegate.userInfo objectForKey:@"profileImageUrl"] isEqualToString:@""] ){
+        self.headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[self.appDelegate.userInfo objectForKey:@"profileImageUrl"]]]];
+        self.appDelegate.isUpdateAvatar = false;
+    }
+    
     self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_name"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
 }
@@ -507,26 +518,69 @@
     cancellationSignal:^BOOL() {
         return false;
     }];
-
-    [upManager putFile:filePath key:[NSString stringWithFormat:@"upload/ava/%@", fileName] token:upToken complete: ^(QNResponseInfo *info, NSString *key, NSDictionary *resp) {
+    
+    NSString *ossPath = [NSString stringWithFormat:@"upload/ava/%@", fileName];
+    [upManager putFile:filePath key:ossPath token:upToken complete: ^(QNResponseInfo *info, NSString *key, NSDictionary *resp) {
         NSLog(@"oss: %@", info);
         NSLog(@"oss: %@", resp);
         
         NSInteger statusCode = [info statusCode];
         
-        HUD_WAITING_HIDE;
+        //HUD_WAITING_HIDE;
         if( [[resp objectForKey:@"status"] intValue] == 200 ){
             
-            HUD_LOADING_HIDE;
-            HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaSuccess", nil));
+            [self updateAvatarPath:ossPath];
         }else{
             HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaFailure", nil));
             HUD_LOADING_HIDE;
+            
+            HUD_WAITING_HIDE;
         }
         // 删除文件
         NSFileManager *fileManager = [NSFileManager defaultManager];
         [fileManager removeItemAtPath:filePath error:nil];
     } option:uploadOption];
+    
+}
+
+-(void)updateAvatarPath:(NSString *)ossPath{
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    manager.requestSerializer.timeoutInterval = 30.0f;
+    NSDictionary *parameters=@{
+                               @"userId":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                               @"profileImage":ossPath
+                               };
+    [manager POST:BASE_URL(@"user/userModUserImage") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+        
+    } progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSLog(@"成功.%@",responseObject);
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+        NSLog(@"results: %@", dic);
+        
+        int status = [[dic objectForKey:@"status"] intValue];
+        
+        HUD_WAITING_HIDE;
+        if( status == 200 ){
+            NSDictionary *data = [dic objectForKey:@"data"];
+            
+            NSString *profileImageUrl = [data objectForKey:@"profileImageUrl"];
+            [self.appDelegate.userInfo setObject:profileImageUrl forKey:@"profileImageUrl"];
+            [self.appDelegate saveUserInfo];
+            
+            self.headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:profileImageUrl]]];
+            
+            HUD_LOADING_HIDE;
+            HUD_TOAST_SHOW(NSLocalizedString(@"UploadAvaSuccess", nil));
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        NSLog(@"失败.%@",error);
+        NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        
+        HUD_WAITING_HIDE;
+    }];
     
 }
 
@@ -580,8 +634,8 @@
 }
 
 - (void)clickHeadButton {
-    //self.isHideBar = false;
-    //[self showImagePickerVc:1];
+    self.isHideBar = false;
+    [self showImagePickerVc:1];
 }
 
 - (void)clickTakeVideoButton{

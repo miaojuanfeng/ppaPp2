@@ -161,7 +161,7 @@
         
         int status = [[dic objectForKey:@"status"] intValue];
         
-        //HUD_WAITING_HIDE;
+        HUD_WAITING_HIDE;
         if( status == 200 ){
             self.appDelegate.userInfo =  [NSMutableDictionary dictionaryWithDictionary:[dic objectForKey:@"data"]];
             [self.appDelegate saveUserInfo];
@@ -184,7 +184,7 @@
                     self.appDelegate.deviceList = [[dic objectForKey:@"data"] mutableCopy];
                     [self.appDelegate saveDeviceList];
                     
-
+                    self.appDelegate.isUpdateAvatar = true;
                     HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
                 }
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
