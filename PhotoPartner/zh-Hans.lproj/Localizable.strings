@@ -89,7 +89,7 @@ versionNewDesc = "将前往App Store下载";
 versionAlreadyLastVersion = "当前已经是最新版本";
 
 aboutUsTitle = "版本";
-aboutUsContent = "版本：1.0.7";
+aboutUsContent = "版本：1.0.8";
 aboutUsVersion = "版本";
 
 clearMessageListTitle = "确认要清空全部消息记录？";
