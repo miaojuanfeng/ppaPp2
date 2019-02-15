@@ -21,6 +21,9 @@
 @property UITextField *VPField;
 @property UITextField *emailField;
 @property UITextField *VCField;
+
+@property Boolean isPwdSecureText;
+@property Boolean isCfmPwdSecureText;
 @end
 
 @implementation ResetPasswordController
@@ -33,10 +36,13 @@
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
+    self.isPwdSecureText = YES;
+    self.isCfmPwdSecureText = YES;
+    
     UIColor *lineColor = RGBA_COLOR(200, 200, 200, 1);
     UIView *boxView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP, GET_LAYOUT_WIDTH(self.view)-GAP_WIDTH*4, GET_LAYOUT_HEIGHT(self.view)-MARGIN_TOP)];
     
-        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, 80, GET_LAYOUT_WIDTH(boxView)-20, 44)];
         self.passwordField.backgroundColor = [UIColor whiteColor];
         self.passwordField.delegate = self;
         self.passwordField.placeholder = NSLocalizedString(@"newPassword", nil);
@@ -48,13 +54,20 @@
         [self.passwordField setSecureTextEntry:YES];
         self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
+        UIButton *pwdSecButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(self.passwordField)+GET_LAYOUT_WIDTH(self.passwordField), GET_LAYOUT_OFFSET_Y(self.passwordField)+12, 20, 20)];
+        pwdSecButton.titleLabel.font = [UIFont fontWithName:@"iconfont" size:20.0f];
+        [pwdSecButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [pwdSecButton setTitle:ICON_EYE_OFF forState:UIControlStateNormal];
+        [pwdSecButton addTarget:self action:@selector(clickPwdSecButton:) forControlEvents:UIControlEventTouchUpInside];
+        [boxView addSubview:pwdSecButton];
+    
+        UIView *newPwdLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField)+20, 1)];
         newPwdLineView.backgroundColor = lineColor;
         [self.passwordField addSubview:newPwdLineView];
     
         [boxView addSubview:self.passwordField];
     
-        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.passwordField)+GET_LAYOUT_HEIGHT(self.passwordField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.VPField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.passwordField)+GET_LAYOUT_HEIGHT(self.passwordField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView)-20, 44)];
         self.VPField.backgroundColor = [UIColor whiteColor];
         self.VPField.delegate = self;
         self.VPField.placeholder = NSLocalizedString(@"verifyPassword", nil);
@@ -66,7 +79,14 @@
         [self.VPField setSecureTextEntry:YES];
         self.VPField.clearButtonMode = UITextFieldViewModeWhileEditing;
     
-        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VPField)-1, GET_LAYOUT_WIDTH(self.VPField), 1)];
+        UIButton *pwdCfmSecButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(self.VPField)+GET_LAYOUT_WIDTH(self.VPField), GET_LAYOUT_OFFSET_Y(self.VPField)+12, 20, 20)];
+        pwdCfmSecButton.titleLabel.font = [UIFont fontWithName:@"iconfont" size:20.0f];
+        [pwdCfmSecButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [pwdCfmSecButton setTitle:ICON_EYE_OFF forState:UIControlStateNormal];
+        [pwdCfmSecButton addTarget:self action:@selector(clickCfmPwdSecButton:) forControlEvents:UIControlEventTouchUpInside];
+        [boxView addSubview:pwdCfmSecButton];
+    
+        UIView *VPLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.VPField)-1, GET_LAYOUT_WIDTH(self.VPField)+20, 1)];
         VPLineView.backgroundColor = lineColor;
         [self.VPField addSubview:VPLineView];
     
@@ -131,6 +151,26 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)clickPwdSecButton:(UIButton*)btn{
+    self.isPwdSecureText = !self.isPwdSecureText;
+    [self.passwordField setSecureTextEntry:self.isPwdSecureText];
+    if( self.isPwdSecureText ){
+        [btn setTitle:ICON_EYE_OFF forState:UIControlStateNormal];
+    }else{
+        [btn setTitle:ICON_EYE_ON forState:UIControlStateNormal];
+    }
+}
+
+-(void)clickCfmPwdSecButton:(UIButton*)btn{
+    self.isCfmPwdSecureText = !self.isCfmPwdSecureText;
+    [self.VPField setSecureTextEntry:self.isCfmPwdSecureText];
+    if( self.isCfmPwdSecureText ){
+        [btn setTitle:ICON_EYE_OFF forState:UIControlStateNormal];
+    }else{
+        [btn setTitle:ICON_EYE_ON forState:UIControlStateNormal];
+    }
 }
 
 -(void)clickSendEmailButton{

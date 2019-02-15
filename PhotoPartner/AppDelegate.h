@@ -14,6 +14,7 @@
 @property (strong, nonatomic) UIWindow *window;
 //
 @property Boolean isUpdateAvatar;
+@property Boolean isLogout;
 //
 @property NSMutableDictionary *userInfo;
 @property NSMutableArray *deviceList;
@@ -72,6 +73,7 @@
 
 - (void)saveUserInfo;
 - (void)loadUserInfo;
+- (void)deleteUserInfo;
 
 - (NSString *)typeForImageData:(NSData *)data;
 

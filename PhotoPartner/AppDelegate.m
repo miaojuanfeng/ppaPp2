@@ -28,6 +28,7 @@
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
     
     self.isUpdateAvatar = false;
+    self.isLogout = false;
     
     // Init Global Varables
     self.deviceId = [[NSMutableArray alloc] init];
@@ -164,7 +165,7 @@
 - (void)addFailedBlock:(NSMutableArray *) failedBlock withMD5:(NSString *)md5 {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"failedBlock.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"failedBlock-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSMutableDictionary *newDic = nil;
@@ -180,7 +181,7 @@
 - (void)saveFailedBlock {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"failedBlock.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"failedBlock-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:plistPath error:nil];
@@ -193,14 +194,14 @@
 - (void)loadFailedBlock {
     NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [pathArray objectAtIndex:0];
-    NSString *plistPath = [path stringByAppendingPathComponent:@"failedBlock.plist"];
+    NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"failedBlock-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     self.failedBlock = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
 }
 
 - (void)addDeviceList:(NSMutableDictionary *) device {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"deviceList.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSMutableArray *newDic = nil;
@@ -216,7 +217,7 @@
 - (void)saveDeviceList {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"deviceList.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:plistPath error:nil];
@@ -229,14 +230,14 @@
 - (void)loadDeviceList {
     NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [pathArray objectAtIndex:0];
-    NSString *plistPath = [path stringByAppendingPathComponent:@"deviceList.plist"];
+    NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     self.deviceList = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 }
 
 - (Boolean)isNilDeviceList {
     NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [pathArray objectAtIndex:0];
-    NSString *plistPath = [path stringByAppendingPathComponent:@"deviceList.plist"];
+    NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     return ![fileManager fileExistsAtPath:plistPath];
 }
@@ -244,7 +245,7 @@
 - (void)addMessageList:(NSString *)type withTime:(NSString *) time withTitle:(NSString *) title withDesc:(NSString *) desc withData:(NSData *) data {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"messageList.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"messageList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSMutableArray *newDic = nil;
@@ -294,10 +295,21 @@
     self.userInfo = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
 }
 
+- (void)deleteUserInfo {
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [path objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"userInfo.plist"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:plistPath error:nil];
+    
+    self.userInfo = nil;
+}
+
 - (void)saveMessageList {
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"messageList.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"messageList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:plistPath error:nil];
@@ -310,14 +322,14 @@
 - (void)loadMessageList {
     NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [pathArray objectAtIndex:0];
-    NSString *plistPath = [path stringByAppendingPathComponent:@"messageList.plist"];
+    NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"messageList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     self.messageList = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 }
 
 - (void)clearMessageList{
     NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsPath = [path objectAtIndex:0];
-    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"messageList.plist"];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"messageList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:plistPath error:nil];

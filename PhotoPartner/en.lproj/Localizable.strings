@@ -170,6 +170,9 @@ DeviceUsersLabel = "Users";
 DeviceNewUsersLabel = "New Users";
 AcceptNewUsersLabel = "Accept new users";
 
+LogoutLabel = "Logout";
+NotLoggedIn = "Not logged in";
+
 /*
  *  从服务器返回的错误码
  */

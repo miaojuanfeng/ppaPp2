@@ -11,6 +11,7 @@
 #import "UserInfoController.h"
 #import "AboutUsController.h"
 #import "AppDelegate.h"
+#import "HomeController.h"
 #import <AFNetworking/AFNetworking.h>
 
 @interface SettingController () <UITableViewDataSource, UITableViewDelegate>
@@ -42,7 +43,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    return 4;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -74,6 +75,9 @@
                 cell.detailTextLabel.text = @"1.0.7";
                 cell.textLabel.text = NSLocalizedString(@"aboutUsVersion", nil);
                 break;
+            case 3:
+                cell.textLabel.text = NSLocalizedString(@"LogoutLabel", nil);
+                break;
         }
     }
     return cell;
@@ -101,9 +105,30 @@
                 aboutUsController = [[AboutUsController alloc] init];
                 [self.navigationController pushViewController:aboutUsController animated:YES];*/
                 break;
+            case 3:
+                [self doLogout];
+                break;
         }
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)doLogout{
+    //UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"clearMessageListTitle", nil) message:NSLocalizedString(@"clearMessageListSubtitle", nil) preferredStyle:UIAlertControllerStyleAlert];
+    
+    //UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self.appDelegate deleteUserInfo];
+        self.appDelegate.isLogout = true;
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    //}];
+    //UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmCancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    //}];
+    
+    //[alertController addAction:okAction];           // A
+    //[alertController addAction:cancelAction];       // B
+    
+    //[self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)versionUpdate{

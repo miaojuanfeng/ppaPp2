@@ -147,16 +147,23 @@
             [usersView addSubview:headImage];
             UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH, 0, GET_LAYOUT_WIDTH(usersView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(usersView))];
             usernameLabel.font = [UIFont systemFontOfSize:fontSize];
-            usernameLabel.text = [users objectForKey:@"name"];
+            if( ![[users objectForKey:@"remarkname"] isEqualToString:@""] ){
+                usernameLabel.text = [users objectForKey:@"remarkname"];
+            }else{
+                usernameLabel.text = [users objectForKey:@"name"];
+            }
             [usersView addSubview:usernameLabel];
-            UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(usersView)-40, 15, 30, 30)];
-            //deleteButton.backgroundColor = [UIColor blueColor];
-            [deleteButton addTarget:self action:@selector(clickDeleteButton) forControlEvents:UIControlEventTouchUpInside];
-            UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
-            deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
-            [deleteButton addSubview:deleteImageView];
-            [usersView addSubview:deleteButton];
-            UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(deleteButton)-30-GAP_WIDTH*2, 15, 30, 30)];
+            int deleteButtonOffsetX = GET_LAYOUT_WIDTH(usersView)-40;
+            if( ![[users objectForKey:@"isAdmin"] isEqualToString:@"mydevice"] ){
+                UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(deleteButtonOffsetX, 15, 30, 30)];
+                //deleteButton.backgroundColor = [UIColor blueColor];
+                [deleteButton addTarget:self action:@selector(clickDeleteButton) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
+                deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
+                [deleteButton addSubview:deleteImageView];
+                [usersView addSubview:deleteButton];
+            }
+            UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(deleteButtonOffsetX-30-GAP_WIDTH*2, 15, 30, 30)];
             //deleteButton.backgroundColor = [UIColor blueColor];
             settingButton.tag = i;
             [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -212,7 +219,11 @@
             [usersView addSubview:headImage];
             UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(headImage)+GET_LAYOUT_WIDTH(headImage)+GAP_WIDTH, 0, GET_LAYOUT_WIDTH(usersView)/2-GAP_WIDTH*2, GET_LAYOUT_HEIGHT(usersView))];
             usernameLabel.font = [UIFont systemFontOfSize:fontSize];
-            usernameLabel.text = @"UserName";
+            if( ![[users objectForKey:@"remarkname"] isEqualToString:@""] ){
+                usernameLabel.text = [users objectForKey:@"remarkname"];
+            }else{
+                usernameLabel.text = [users objectForKey:@"name"];
+            }
             [usersView addSubview:usernameLabel];
             UIButton *acceptButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(usersView)-60, 10, 60, 40)];
             [acceptButton setTitle:@"Accept" forState:UIControlStateNormal];
@@ -220,7 +231,8 @@
             acceptButton.layer.cornerRadius = 5;
             acceptButton.titleLabel.font = [UIFont systemFontOfSize:fontSize];
             acceptButton.backgroundColor = RGBA_COLOR(35, 160, 235, 1);
-            [acceptButton addTarget:self action:@selector(clickAcceptButton) forControlEvents:UIControlEventTouchUpInside];
+            acceptButton.tag = i;
+            [acceptButton addTarget:self action:@selector(clickAcceptButton:) forControlEvents:UIControlEventTouchUpInside];
 
             [usersView addSubview:acceptButton];
             UIButton *refuseButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(acceptButton)-60-GAP_WIDTH, 10, 60, 40)];
@@ -229,7 +241,8 @@
             refuseButton.layer.masksToBounds = YES;
             refuseButton.layer.cornerRadius = 5;
             refuseButton.titleLabel.font = [UIFont systemFontOfSize:fontSize];
-            [refuseButton addTarget:self action:@selector(clickRefuseButton) forControlEvents:UIControlEventTouchUpInside];
+            refuseButton.tag = i;
+            [refuseButton addTarget:self action:@selector(clickRefuseButton:) forControlEvents:UIControlEventTouchUpInside];
 
             [usersView addSubview:refuseButton];
             messageHeight = GET_LAYOUT_HEIGHT(usersView);
@@ -436,27 +449,35 @@
 }
 
 -(void)clickSettingButton:(UIButton *)btn{
-    NSMutableDictionary *device = [self.deviceUsers objectAtIndex:btn.tag];
+    NSMutableDictionary *users = [self.deviceUsers objectAtIndex:btn.tag];
     DeviceUserNameController *deviceUserNameController = [[DeviceUserNameController alloc] init];
     deviceUserNameController.deviceId = self.deviceId;
-    deviceUserNameController.deviceName = [device objectForKey:@"name"];
+    NSString *userName = @"";
+    if( ![[users objectForKey:@"remarkname"] isEqualToString:@""] ){
+        userName = [users objectForKey:@"remarkname"];
+    }else{
+        userName = [users objectForKey:@"name"];
+    }
+    deviceUserNameController.deviceName = userName;
     [self.navigationController pushViewController:deviceUserNameController animated:YES];
 }
 
--(void)clickRefuseButton{
-    [self doAcceptOrRefuse:@"no"];
+-(void)clickRefuseButton:(UIButton *)btn{
+    NSMutableDictionary *users = [self.deviceUsers objectAtIndex:btn.tag];
+    [self doAcceptOrRefuse:@"no" withUserId:[users objectForKey:@"id"]];
 }
 
--(void)clickAcceptButton{
-    [self doAcceptOrRefuse:@"yes"];
+-(void)clickAcceptButton:(UIButton *)btn{
+    NSMutableDictionary *users = [self.deviceUsers objectAtIndex:btn.tag];
+    [self doAcceptOrRefuse:@"yes" withUserId:[users objectForKey:@"id"]];
 }
 
--(void)doAcceptOrRefuse:(NSString*)acceptBind{
+-(void)doAcceptOrRefuse:(NSString*)acceptBind withUserId:(NSString*)userId{
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
     NSDictionary *parameters=@{
-                               @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                               @"user_id":userId,
                                @"device_id":[NSString stringWithFormat:@"%d", self.deviceId],
                                @"acceptBind":acceptBind
                                };

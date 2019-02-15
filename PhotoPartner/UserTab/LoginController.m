@@ -21,6 +21,8 @@
 
 @property UITextField *usernameField;
 @property UITextField *passwordField;
+
+@property Boolean isPwdSecureText;
 @end
 
 @implementation LoginController
@@ -32,6 +34,8 @@
     self.navigationItem.title = NSLocalizedString(@"LoginNavigationItemTitle", nil);
     
     self.appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    self.isPwdSecureText = YES;
     
     [self.navigationItem setHidesBackButton:YES];
     self.navigationController.delegate = self;
@@ -67,7 +71,7 @@
     
         [boxView addSubview:self.usernameField];
     
-        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView), 44)];
+        self.passwordField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.usernameField)+GET_LAYOUT_HEIGHT(self.usernameField)+GAP_HEIGHT*2, GET_LAYOUT_WIDTH(boxView)-20, 44)];
         self.passwordField.backgroundColor = [UIColor whiteColor];
         self.passwordField.delegate = self;
         self.passwordField.placeholder = NSLocalizedString(@"password", nil);
@@ -79,7 +83,14 @@
         self.passwordField.clearButtonMode = UITextFieldViewModeWhileEditing;
         [self.passwordField setSecureTextEntry:YES];
     
-        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField), 1)];
+        UIButton *pwdSecButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(self.passwordField)+GET_LAYOUT_WIDTH(self.passwordField), GET_LAYOUT_OFFSET_Y(self.passwordField)+12, 20, 20)];
+        pwdSecButton.titleLabel.font = [UIFont fontWithName:@"iconfont" size:20.0f];
+        [pwdSecButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [pwdSecButton setTitle:ICON_EYE_OFF forState:UIControlStateNormal];
+        [pwdSecButton addTarget:self action:@selector(clickPwdSecButton:) forControlEvents:UIControlEventTouchUpInside];
+        [boxView addSubview:pwdSecButton];
+    
+        UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.passwordField)-1, GET_LAYOUT_WIDTH(self.passwordField)+20, 1)];
         lineView.backgroundColor = lineColor;
         [self.passwordField addSubview:lineView];
     
@@ -129,6 +140,16 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)clickPwdSecButton:(UIButton*)btn{
+    self.isPwdSecureText = !self.isPwdSecureText;
+    [self.passwordField setSecureTextEntry:self.isPwdSecureText];
+    if( self.isPwdSecureText ){
+        [btn setTitle:ICON_EYE_OFF forState:UIControlStateNormal];
+    }else{
+        [btn setTitle:ICON_EYE_ON forState:UIControlStateNormal];
+    }
 }
 
 -(void)clickLoginButton{

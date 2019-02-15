@@ -168,6 +168,9 @@ DeviceUsersLabel = "用户";
 DeviceNewUsersLabel = "新用户";
 AcceptNewUsersLabel = "接受新用户";
 
+LogoutLabel = "退出登录";
+NotLoggedIn = "未登录";
+
 /*
  *  从服务器返回的错误码
  */

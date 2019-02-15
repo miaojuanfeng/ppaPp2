@@ -68,7 +68,7 @@
         [headButton addTarget:self action:@selector(clickHeadButton) forControlEvents:UIControlEventTouchUpInside];
         self.headImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(headButton), GET_LAYOUT_HEIGHT(headButton))];
         self.headImage.contentMode = UIViewContentModeScaleAspectFill;
-        if( ![[self.appDelegate.userInfo objectForKey:@"profileImageUrl"] isEqualToString:@""] ){
+        if( self.appDelegate.userInfo != nil && ![[self.appDelegate.userInfo objectForKey:@"profileImageUrl"] isEqualToString:@""] ){
             self.headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[self.appDelegate.userInfo objectForKey:@"profileImageUrl"]]]];
         }else{
             self.headImage.image = [UIImage imageNamed:@"ic_profile_black"];
@@ -402,6 +402,14 @@
     
     self.usernameLabel.text = [[self.appDelegate.userInfo objectForKey:@"user_name"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
+    
+    if( self.appDelegate.isLogout ){
+        self.appDelegate.isLogout = false;
+        self.headImage.image = [UIImage imageNamed:@"ic_profile_black"];
+        self.usernameLabel.text = NSLocalizedString(@"NotLoggedIn", nil);
+        LoginController *loginController = [[LoginController alloc] init];
+        [self.navigationController pushViewController:loginController animated:YES];
+    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
