@@ -18,6 +18,7 @@
 //
 @property NSMutableDictionary *userInfo;
 @property NSMutableArray *deviceList;
+@property NSMutableArray *deviceSent;
 @property NSMutableArray *messageList;
 @property int appVersion;
 @property NSString *deviceUUID;
@@ -55,6 +56,8 @@
 - (void)addDeviceList:(NSMutableDictionary *) device;
 - (void)saveDeviceList;
 - (void)loadDeviceList;
+- (void)saveDeviceSent;
+- (void)loadDeviceSent;
 - (Boolean)isNilDeviceList;
 - (void)addMessageList:(NSString *)type withTime:(NSString *) time withTitle:(NSString *) title withDesc:(NSString *) desc withData:(NSData *) data;
 - (void)saveMessageList;

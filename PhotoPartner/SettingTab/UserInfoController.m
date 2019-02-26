@@ -9,7 +9,7 @@
 #import "MacroDefine.h"
 #import "AppDelegate.h"
 #import "UserInfoController.h"
-#import "ResetPasswordController.h"
+#import "ChangePasswordController.h"
 #import "SettingUserNameController.h"
 #import "ResetEmailController.h"
 #import <AFNetworking/AFNetworking.h>
@@ -115,7 +115,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     //    VideoDetailController *videoDetailController = [[VideoDetailController alloc] init];
     //    [self.navigationController pushViewController:videoDetailController animated:YES];
-    ResetPasswordController *resetPasswordController;
+    ChangePasswordController *changePasswordController;
     SettingUserNameController *settingUserNameController;
     ResetEmailController *resetEmailController;
     if( indexPath.section == 0 ){
@@ -129,8 +129,8 @@
                 [self.navigationController pushViewController:resetEmailController animated:YES];
                 break;
             case 2:
-                resetPasswordController = [[ResetPasswordController alloc] init];
-                [self.navigationController pushViewController:resetPasswordController animated:YES];
+                changePasswordController = [[ChangePasswordController alloc] init];
+                [self.navigationController pushViewController:changePasswordController animated:YES];
                 break;
         }
     }

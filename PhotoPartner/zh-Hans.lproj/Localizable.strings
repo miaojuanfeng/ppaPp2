@@ -113,11 +113,13 @@ messageHourAgo = "小时前";
 username = "用户名";
 password = "密码";
 verifyPassword = "确认密码";
+currentPassword = "当前密码";
 newPassword = "新密码";
 email = "邮箱";
 verifyCode = "验证码";
 
 usernameEmpty = "请输入用户名";
+userCurrentPasswordEmpty = "请输入当前密码";
 userPasswordEmpty = "请输入密码";
 userVerifyPasswordEmpty = "请输入确认密码";
 userPasswordNotEqual = "密码输入不一致";
@@ -170,6 +172,8 @@ AcceptNewUsersLabel = "接受新用户";
 
 LogoutLabel = "退出登录";
 NotLoggedIn = "未登录";
+
+confirmLogoutTitle = "确认登出？";
 
 /*
  *  从服务器返回的错误码

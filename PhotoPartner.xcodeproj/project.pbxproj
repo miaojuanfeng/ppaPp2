@@ -11,6 +11,7 @@
 		77850B570925FA5D8AFD693E /* libPods-PhotoPartnerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A7F0A91C75906489B2EF215 /* libPods-PhotoPartnerTests.a */; };
 		9924C58E22116A5400B5014C /* SettingUserNameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9924C58C22116A5400B5014C /* SettingUserNameController.m */; };
 		9924C5912211713200B5014C /* ResetEmailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9924C58F2211713200B5014C /* ResetEmailController.m */; };
+		993DCA9F2221436700BEB668 /* ChangePasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 993DCA9E2221436700BEB668 /* ChangePasswordController.m */; };
 		99E6AADB21E8890D00A575CC /* LoginController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AADA21E8890D00A575CC /* LoginController.m */; };
 		99E6AAE121E8BB7500A575CC /* ResetPasswordController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AADF21E8BB7500A575CC /* ResetPasswordController.m */; };
 		99E6AAE221E8BB7500A575CC /* SignUpController.m in Sources */ = {isa = PBXBuildFile; fileRef = 99E6AAE021E8BB7500A575CC /* SignUpController.m */; };
@@ -70,6 +71,9 @@
 		9924C58D22116A5400B5014C /* SettingUserNameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingUserNameController.h; sourceTree = "<group>"; };
 		9924C58F2211713200B5014C /* ResetEmailController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResetEmailController.m; sourceTree = "<group>"; };
 		9924C5902211713200B5014C /* ResetEmailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResetEmailController.h; sourceTree = "<group>"; };
+		993DCA9C221A8B4E00BEB668 /* PhotoPartner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PhotoPartner.entitlements; sourceTree = "<group>"; };
+		993DCA9D2221436700BEB668 /* ChangePasswordController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePasswordController.h; sourceTree = "<group>"; };
+		993DCA9E2221436700BEB668 /* ChangePasswordController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePasswordController.m; sourceTree = "<group>"; };
 		99E6AADA21E8890D00A575CC /* LoginController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginController.m; sourceTree = "<group>"; };
 		99E6AADC21E8892C00A575CC /* LoginController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginController.h; sourceTree = "<group>"; };
 		99E6AADD21E8BB7500A575CC /* SignUpController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpController.h; sourceTree = "<group>"; };
@@ -197,6 +201,8 @@
 		CE70A45F204F953300470A16 /* SettingTab */ = {
 			isa = PBXGroup;
 			children = (
+				993DCA9D2221436700BEB668 /* ChangePasswordController.h */,
+				993DCA9E2221436700BEB668 /* ChangePasswordController.m */,
 				9924C5902211713200B5014C /* ResetEmailController.h */,
 				9924C58F2211713200B5014C /* ResetEmailController.m */,
 				9924C58D22116A5400B5014C /* SettingUserNameController.h */,
@@ -281,6 +287,7 @@
 		CEC978E8204E38F800AE8CB3 /* PhotoPartner */ = {
 			isa = PBXGroup;
 			children = (
+				993DCA9C221A8B4E00BEB668 /* PhotoPartner.entitlements */,
 				99E6AAD921E887D500A575CC /* UserTab */,
 				CEB8E2C4205117A300655887 /* DeviceTab */,
 				CEB8E2BE2050E11700655887 /* UploadTab */,
@@ -391,6 +398,11 @@
 					CEC978E5204E38F800AE8CB3 = {
 						CreatedOnToolsVersion = 9.2;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					CEC978FD204E38F800AE8CB3 = {
 						CreatedOnToolsVersion = 9.2;
@@ -551,6 +563,7 @@
 				9924C5912211713200B5014C /* ResetEmailController.m in Sources */,
 				CEC978EE204E38F800AE8CB3 /* HomeController.m in Sources */,
 				9924C58E22116A5400B5014C /* SettingUserNameController.m in Sources */,
+				993DCA9F2221436700BEB668 /* ChangePasswordController.m in Sources */,
 				CE70A468204FC3CD00470A16 /* MessageController.m in Sources */,
 				CEB8E2C92051229000655887 /* AddDeviceController.m in Sources */,
 				CEC978F9204E38F800AE8CB3 /* main.m in Sources */,
@@ -724,6 +737,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = PhotoPartner/PhotoPartner.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 6AW8E2DRMG;
@@ -745,6 +759,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_ENTITLEMENTS = PhotoPartner/PhotoPartner.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 6AW8E2DRMG;

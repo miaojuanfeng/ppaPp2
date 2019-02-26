@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "HomeController.h"
 #import <CommonCrypto/CommonDigest.h>
+#import <CloudPushSDK/CloudPushSDK.h>
 
 @interface AppDelegate ()
 
@@ -43,11 +44,15 @@
     self.completedUnitPercent = [[NSMutableArray alloc] init];
     self.md5 = @"";
     
+    [self loadUserInfo];
     [self loadDeviceList];
     if( self.deviceList == nil ){
         self.deviceList = [[NSMutableArray alloc] init];
     }
-    [self loadUserInfo];
+    [self loadDeviceSent];
+    if( self.deviceSent == nil ){
+        self.deviceSent = [[NSMutableArray alloc] init];
+    }
     self.appVersion = 11;
     self.isSending = false;
     
@@ -92,6 +97,15 @@
 //            NSLog(@"  name: %@",name);
 //        }
 //    }
+    
+    //open push notiification
+    [self initCloudPush];
+    
+    [self registerAPNS:application];
+    
+    [CloudPushSDK sendNotificationAck:launchOptions];
+    
+    [self registerMessageReceive];
     
     return YES;
 }
@@ -230,8 +244,29 @@
 - (void)loadDeviceList {
     NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [pathArray objectAtIndex:0];
+    NSLog(@"%@",[NSString stringWithFormat:@"deviceListuid%@.plist", [self.userInfo objectForKey:@"user_id"]]);
     NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
     self.deviceList = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
+}
+
+- (void)saveDeviceSent {
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [path objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceSent-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:plistPath error:nil];
+    
+    if( self.deviceSent.count ){
+        [self.deviceSent writeToFile:plistPath atomically:YES];
+    }
+}
+
+- (void)loadDeviceSent {
+    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [pathArray objectAtIndex:0];
+    NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"deviceSent-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];
+    self.deviceSent = [[NSMutableArray alloc] initWithContentsOfFile:plistPath];
 }
 
 - (Boolean)isNilDeviceList {
@@ -572,5 +607,104 @@
     }
     return nil;
 }
+
+- (void)initCloudPush {
+    // SDK初始化
+    [CloudPushSDK asyncInit:@"25664801" appSecret:@"957b056911f38bd97b0c342a6619008a" callback:^(CloudPushCallbackResult *res) {
+        if (res.success) {
+            NSLog(@"Push SDK init success, deviceId: %@.", [CloudPushSDK getDeviceId]);
+        } else {
+            NSLog(@"Push SDK init failed, error: %@", res.error);
+        }
+    }];
+}
+
+/**
+ *    注册苹果推送，获取deviceToken用于推送
+ *
+ *    @param     application
+ */
+- (void)registerAPNS:(UIApplication *)application {
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        // iOS 8 Notifications
+        [application registerUserNotificationSettings:
+         [UIUserNotificationSettings settingsForTypes:
+          (UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge)
+                                           categories:nil]];
+        [application registerForRemoteNotifications];
+    }
+    else {
+        // iOS < 8 Notifications
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:
+         (UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound)];
+    }
+}
+/*
+ *  苹果推送注册成功回调，将苹果返回的deviceToken上传到CloudPush服务器
+ */
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    [CloudPushSDK registerDevice:deviceToken withCallback:^(CloudPushCallbackResult *res) {
+        if (res.success) {
+            NSLog(@"Register deviceToken success.");
+            NSString *deviceTokenString = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""]
+                                            stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+            NSLog(@"deviceToken: %@", deviceTokenString);
+            
+        } else {
+            NSLog(@"Register deviceToken failed, error: %@", res.error);
+        }
+    }];
+}
+/*
+ *  苹果推送注册失败回调
+ */
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"didFailToRegisterForRemoteNotificationsWithError %@", error);
+}
+
+/**
+ *    注册推送消息到来监听
+ */
+- (void)registerMessageReceive {
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onMessageReceived:)
+                                                 name:@"CCPDidReceiveMessageNotification"
+                                               object:nil];
+}
+/**
+ *    处理到来推送消息
+ *
+ *    @param notification
+ */
+- (void)onMessageReceived:(NSNotification *)notification {
+    CCPSysMessage *message = [notification object];
+    NSString *title = [[NSString alloc] initWithData:message.title encoding:NSUTF8StringEncoding];
+    NSString *body = [[NSString alloc] initWithData:message.body encoding:NSUTF8StringEncoding];
+    NSLog(@"Receive message title: %@, content: %@.", title, body);
+}
+
+/*
+ *  App处于启动状态时，通知打开回调
+ */
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo {
+    NSLog(@"Receive one notification.");
+    // 取得APNS通知内容
+    NSDictionary *aps = [userInfo valueForKey:@"aps"];
+    // 内容
+    NSString *content = [aps valueForKey:@"alert"];
+    // badge数量
+    NSInteger badge = [[aps valueForKey:@"badge"] integerValue];
+    // 播放声音
+    NSString *sound = [aps valueForKey:@"sound"];
+    // 取得Extras字段内容
+    NSString *Extras = [userInfo valueForKey:@"Extras"]; //服务端中Extras字段，key是自己定义的
+    NSLog(@"content = [%@], badge = [%ld], sound = [%@], Extras = [%@]", content, (long)badge, sound, Extras);
+    // iOS badge 清0
+    application.applicationIconBadgeNumber = 0;
+    // 通知打开回执上报
+    // [CloudPushSDK handleReceiveRemoteNotification:userInfo];(Deprecated from v1.8.1)
+    [CloudPushSDK sendNotificationAck:userInfo];
+}
+
 
 @end

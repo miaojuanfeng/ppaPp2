@@ -96,6 +96,9 @@
     }
     
     self.isDeleteSignals = false;
+    
+    NSLog(@"%@", self.appDelegate.deviceSent);
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -188,12 +191,18 @@
     }else{
         self.tableView.rowHeight = 44;
     
-        NSMutableDictionary *deviceItem = self.appDelegate.deviceList[indexPath.row];
+        NSMutableDictionary *deviceItem = [self.appDelegate.deviceList[indexPath.row] mutableCopy];
         cell.textLabel.text = [NSString stringWithFormat:@"%@", [[deviceItem objectForKey:@"device_name"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         
-        if( [[deviceItem objectForKey:@"isSelected"] boolValue] ){
+        NSString *deviceId = [deviceItem objectForKey:@"device_id"];
+        if( ![self.appDelegate.deviceSent containsObject:deviceId] ){
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            [deviceItem setObject:@0 forKey:@"isSelected"];
+        }else{
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [deviceItem setObject:@1 forKey:@"isSelected"];
         }
+        [self.appDelegate.deviceList replaceObjectAtIndex:indexPath.row withObject:deviceItem];
         
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         
@@ -304,11 +313,14 @@
     if( indexPath.section == 1 ){
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         NSMutableDictionary *device = [[self.appDelegate.deviceList objectAtIndex:indexPath.row] mutableCopy];
-        if( [[device objectForKey:@"isSelected"] boolValue] ){
+        NSString *deviceId = [device objectForKey:@"device_id"];
+        if( [self.appDelegate.deviceSent containsObject:deviceId] ){
             cell.accessoryType = UITableViewCellAccessoryNone;
+            [self.appDelegate.deviceSent removeObject:deviceId];
             [device setObject:@0 forKey:@"isSelected"];
         }else{
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [self.appDelegate.deviceSent addObject:deviceId];
             [device setObject:@1 forKey:@"isSelected"];
         }
         [self.appDelegate.deviceList replaceObjectAtIndex:indexPath.row withObject:device];
@@ -982,6 +994,8 @@
                 NSData *data = [self.appDelegate compressQualityWithMaxLength:PHOTO_MAX_SIZE withSourceImage:[self.appDelegate imageByScalingAndCroppingForSize:imageSize withSourceImage:self.appDelegate.photos[i]]];
                 [self.appDelegate addMessageList:@"image" withTime:time withTitle:deviceName withDesc:desc withData:data];
             }
+            
+            [self.appDelegate saveDeviceSent];
             
             DO_FINISH_UPLOAD;
             NAV_UPLOAD_END;

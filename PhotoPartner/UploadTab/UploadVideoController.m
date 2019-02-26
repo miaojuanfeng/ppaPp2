@@ -188,12 +188,18 @@
     }else{
         self.tableView.rowHeight = 44;
         
-        NSMutableDictionary *deviceItem = self.appDelegate.deviceList[indexPath.row];
+        NSMutableDictionary *deviceItem = [self.appDelegate.deviceList[indexPath.row] mutableCopy];
         cell.textLabel.text = [NSString stringWithFormat:@"%@", [[deviceItem objectForKey:@"device_name"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         
-        if( [[deviceItem objectForKey:@"isSelected"] boolValue] ){
+        NSString *deviceId = [deviceItem objectForKey:@"device_id"];
+        if( ![self.appDelegate.deviceSent containsObject:deviceId] ){
+            cell.accessoryType = UITableViewCellAccessoryNone;
+            [deviceItem setObject:@0 forKey:@"isSelected"];
+        }else{
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [deviceItem setObject:@1 forKey:@"isSelected"];
         }
+        [self.appDelegate.deviceList replaceObjectAtIndex:indexPath.row withObject:deviceItem];
         
         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         
@@ -304,11 +310,14 @@
     if( indexPath.section == 1 ){
         UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
         NSMutableDictionary *device = [[self.appDelegate.deviceList objectAtIndex:indexPath.row] mutableCopy];
-        if( [[device objectForKey:@"isSelected"] boolValue] ){
+        NSString *deviceId = [device objectForKey:@"device_id"];
+        if( [self.appDelegate.deviceSent containsObject:deviceId] ){
             cell.accessoryType = UITableViewCellAccessoryNone;
+            [self.appDelegate.deviceSent removeObject:deviceId];
             [device setObject:@0 forKey:@"isSelected"];
         }else{
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            [self.appDelegate.deviceSent addObject:deviceId];
             [device setObject:@1 forKey:@"isSelected"];
         }
         [self.appDelegate.deviceList replaceObjectAtIndex:indexPath.row withObject:device];
@@ -1401,7 +1410,7 @@
     //文件管理  文件路径可以自定义
     NSString *document = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     //upprogress 文件夹用来存储上传进度 七牛云自动实现记录 无需别的操作
-    NSString* fileurl = [document stringByAppendingPathComponent:@"qiniu"];
+    NSString* fileurl = [document stringByAppendingPathComponent:[NSString stringWithFormat:@"qiniu_uid_%@", [self.appDelegate.userInfo objectForKey:@"user_id"]]];
     // 传入断点记录的代理
     NSError *error;
     QNFileRecorder *file = [QNFileRecorder fileRecorderWithFolder:fileurl error:&error];
@@ -1419,6 +1428,8 @@
         
         if( [[resp objectForKey:@"status"] intValue] == 200 ){
             [self doMessage];
+            
+            [self.appDelegate saveDeviceSent];
             
             DO_FINISH_UPLOAD;
             NAV_UPLOAD_END;

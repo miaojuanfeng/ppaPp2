@@ -168,13 +168,14 @@
         // Allow user picking original photo and video, you also can set No after this method
         // 默认准许用户选择原图和视频, 你也可以在这个方法后置为NO
         self.allowPickingOriginalPhoto = YES;
+//        self.isSelectOriginalPhoto = YES;  //默认选中原图，钜弘不使用，aluratek使用
         self.allowPickingVideo = YES;
         self.allowPickingImage = YES;
         self.allowTakePicture = YES;
         self.sortAscendingByModificationDate = YES;
         self.autoDismiss = YES;
         self.columnNumber = columnNumber;
-        [self configDefaultSetting];
+        [self configDefaultSetting]; 
         
         if (![[TZImageManager manager] authorizationStatusAuthorized]) {
             _tipLabel = [[UILabel alloc] init];
@@ -293,7 +294,7 @@
     self.doneBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Done"];
     self.cancelBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Cancel"];
     self.previewBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Preview"];
-    self.fullImageBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Full image"];
+    self.fullImageBtnTitleStr = [NSBundle tz_localizedStringForKey:@"UnComPressed Image"];
     self.settingBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Setting"];
     self.processHintStr = [NSBundle tz_localizedStringForKey:@"Processing..."];
 }

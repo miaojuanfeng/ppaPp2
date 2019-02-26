@@ -113,11 +113,13 @@ messageHourAgo = " hour ago";
 username = "Username";
 password = "Password";
 verifyPassword = "Verify password";
+currentPassword = "Current password";
 newPassword = "New password";
 email = "Email";
 verifyCode = "Verify Code";
 
 usernameEmpty = "Please enter username";
+userCurrentPasswordEmpty = "Please enter current password";
 userPasswordEmpty = "Please enter password";
 userVerifyPasswordEmpty = "Please enter verify password";
 userPasswordNotEqual = "Inconsistent password input";
@@ -172,6 +174,8 @@ AcceptNewUsersLabel = "Accept new users";
 
 LogoutLabel = "Logout";
 NotLoggedIn = "Not logged in";
+
+confirmLogoutTitle = "Confirm logout?";
 
 /*
  *  从服务器返回的错误码

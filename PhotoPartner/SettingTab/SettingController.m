@@ -72,7 +72,7 @@
                 break;
             case 2:
 //                cell.textLabel.text = NSLocalizedString(@"settingCellVersionTitle", nil);;
-                cell.detailTextLabel.text = @"1.0.7";
+                cell.detailTextLabel.text = @"1.0.9";
                 cell.textLabel.text = NSLocalizedString(@"aboutUsVersion", nil);
                 break;
             case 3:
@@ -114,21 +114,21 @@
 }
 
 - (void)doLogout{
-    //UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"clearMessageListTitle", nil) message:NSLocalizedString(@"clearMessageListSubtitle", nil) preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"confirmLogoutTitle", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
     
-    //UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self.appDelegate deleteUserInfo];
         self.appDelegate.isLogout = true;
         [self.navigationController popToRootViewControllerAnimated:YES];
-    //}];
-    //UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmCancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmCancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
         
-    //}];
+    }];
     
-    //[alertController addAction:okAction];           // A
-    //[alertController addAction:cancelAction];       // B
+    [alertController addAction:okAction];           // A
+    [alertController addAction:cancelAction];       // B
     
-    //[self presentViewController:alertController animated:YES completion:nil];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (void)versionUpdate{

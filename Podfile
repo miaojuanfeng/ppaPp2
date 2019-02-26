@@ -8,6 +8,7 @@ target 'PhotoPartner' do
   # Pods for PhotoPartner
 
   source 'https://github.com/CocoaPods/Specs.git'
+  source 'https://github.com/aliyun/aliyun-specs.git'
   platform :ios, '8.0'
   pod 'AFNetworking', '~> 3.0'
   pod 'TZImagePickerController'
@@ -15,6 +16,7 @@ target 'PhotoPartner' do
   pod 'ZWPlaceHolder'
   pod 'Qiniu', '~> 7.1'
   pod 'ZipArchive'
+  pod 'AlicloudPush', '~> 1.9.8'
 
   target 'PhotoPartnerTests' do
     inherit! :search_paths
