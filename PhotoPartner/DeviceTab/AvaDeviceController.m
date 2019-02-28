@@ -11,10 +11,12 @@
 #import "AppDelegate.h"
 #import "AvaDeviceController.h"
 #import "ScanDeviceController.h"
+#import "LoginController.h"
 
 @interface AvaDeviceController () <UIGestureRecognizerDelegate, ScanDeviceControllerDelegate, UITextFieldDelegate>
 @property AppDelegate *appDelegate;
 @property UITextField *deviceTokenField;
+@property UITextField *deviceUserTokenField;
 @end
 
 @implementation AvaDeviceController
@@ -36,7 +38,16 @@
     
     UIView *deviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP+GAP_HEIGHT*2+64, VIEW_WIDTH-4*GAP_WIDTH, VIEW_HEIGHT)];
     
-    self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(deviceView), 44)];
+    self.deviceUserTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(deviceView), 44)];
+    self.deviceUserTokenField.delegate = self;
+    UIView *tokenLineView2 = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserTokenField)-1, GET_LAYOUT_WIDTH(self.deviceUserTokenField), 1)];
+    tokenLineView2.backgroundColor = lineColor;
+    [self.deviceUserTokenField addSubview:tokenLineView2];
+    self.deviceUserTokenField.placeholder = NSLocalizedString(@"deviceAddUserDeviceNumber", nil);
+    self.deviceUserTokenField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [deviceView addSubview:self.deviceUserTokenField];
+    
+    self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserTokenField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
     self.deviceTokenField.delegate = self;
     UIView *tokenLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceTokenField)-1, GET_LAYOUT_WIDTH(self.deviceTokenField), 1)];
     tokenLineView.backgroundColor = lineColor;
@@ -92,10 +103,14 @@
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                @"device_token":self.deviceTokenField.text,
+                               @"deviceUserName":self.deviceUserTokenField.text,
                                @"device_name":@"",
                                @"type":@"bounddevice",
                                @"companyName":COMPANY_NAME
                                };
+    NSLog(@"AvaDevicePush:%@", parameters);
+    //加入header参数
+    [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
     [manager POST:BASE_URL(@"device/bind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
@@ -136,6 +151,32 @@
             //[self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];
             
             HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+        } else if ( status == 418 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ( status == 405 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));

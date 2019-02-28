@@ -14,6 +14,7 @@
 #import "DetailController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
+#import "LoginController.h"
 
 @interface DevicesController ()
 @property UIScrollView *scrollView;
@@ -65,6 +66,9 @@
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"]
                                };
+    
+    //加入header参数
+    [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
     [manager POST:BASE_URL(@"user/user_device") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -84,6 +88,32 @@
             //[self.tableView reloadData];
             [self updateLayout];
             
+        } else if ( status == 418 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ( status == 405 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"失败.%@",error);
@@ -148,12 +178,21 @@
             nameLabel.font = [UIFont systemFontOfSize:fontSize];
             [devicesView addSubview:nameLabel];
             
-            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
+            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2-50, GET_LAYOUT_HEIGHT(devicesView)/2)];
             emailLabel.text = [self.appDelegate.userInfo objectForKey:@"userEmail"];
             emailLabel.textAlignment = NSTextAlignmentRight;
             emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
             emailLabel.font = [UIFont systemFontOfSize:fontSize];
             [devicesView addSubview:emailLabel];
+            
+            UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
+            //deleteButton.backgroundColor = [UIColor blueColor];
+            deleteButton.tag = i;
+            [deleteButton addTarget:self action:@selector(clickDeleteDeviceButton:) forControlEvents:UIControlEventTouchUpInside];
+            UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(-5, 0, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
+            deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
+            [deleteButton addSubview:deleteImageView];
+            [devicesView addSubview:deleteButton];
             
             messageHeight = GET_LAYOUT_HEIGHT(devicesView);
        
@@ -206,6 +245,15 @@
             deviceLabel.font = [UIFont systemFontOfSize:15];
             [devicesView addSubview:deviceLabel];
             
+            UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
+            //deleteButton.backgroundColor = [UIColor blueColor];
+            deleteButton.tag = i;
+            [deleteButton addTarget:self action:@selector(clickDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
+            UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
+            deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
+            [deleteButton addSubview:deleteImageView];
+            [devicesView addSubview:deleteButton];
+            
             messageHeight = GET_LAYOUT_HEIGHT(devicesView);
             
             offsetTop+=messageHeight;
@@ -236,5 +284,154 @@
     }
     detailController.deviceId = [[device objectForKey:@"device_id"] integerValue];
     [self.navigationController pushViewController:detailController animated:YES];
+}
+
+-(void)clickDeleteButton:(UIButton *)btn{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"deviceListUnbindConfirmTitle", nil)
+                                                                             message:NSLocalizedString(@"deviceListUnbindConfirmSubtitle", nil)
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSMutableDictionary *device = [self.appDelegate.deviceList objectAtIndex:btn.tag];
+        
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = 30.0f;
+        NSDictionary *parameters=@{
+                                   @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                                   @"device_id":[device objectForKey:@"device_id"],
+                                   @"status":@"unbind"
+                                   };
+        HUD_WAITING_SHOW(NSLocalizedString(@"loadingUnbinding", nil));
+        [manager POST:BASE_URL(@"device/status") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+            
+        } progress:^(NSProgress * _Nonnull uploadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                float progress = 1.0 * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
+                
+                HUD_LOADING_PROGRESS(progress);
+            });
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"成功.%@",responseObject);
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+            NSLog(@"results: %@", dic);
+            
+            int status = [[dic objectForKey:@"status"] intValue];
+            
+            HUD_WAITING_HIDE;
+            if( status == 200 ){
+                [self.appDelegate.deviceList removeObjectAtIndex:btn.tag];
+                [self.appDelegate saveDeviceList];
+                [self updateLayout];
+                HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil));
+            }else{
+                NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+                HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"失败.%@",error);
+            NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+            
+            HUD_WAITING_HIDE;
+            HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindFailed", nil));
+        }];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmCancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    [alertController addAction:okAction];           // A
+    [alertController addAction:cancelAction];       // B
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
+-(void)clickDeleteDeviceButton:(UIButton *)btn{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"deviceListUnbindConfirmTitle", nil)
+                                                                             message:NSLocalizedString(@"deviceListUnbindConfirmSubtitle", nil)
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSMutableDictionary *device = [self.appDelegate.deviceList objectAtIndex:btn.tag];
+        
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = 30.0f;
+        NSDictionary *parameters=@{
+                                   @"userId":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                                   @"device_id":[device objectForKey:@"device_id"],
+//                                   @"status":@"unbind"
+                                   };
+        //加入header参数
+        [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
+//        [manager.requestSerializer setValue:@"qweq" forHTTPHeaderField:@"user_token"];
+        HUD_WAITING_SHOW(NSLocalizedString(@"loadingUnbinding", nil));
+        [manager POST:BASE_URL(@"user/deleteMydevice") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+            
+        } progress:^(NSProgress * _Nonnull uploadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                float progress = 1.0 * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
+                
+                HUD_LOADING_PROGRESS(progress);
+            });
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            NSLog(@"成功.%@",responseObject);
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+            NSLog(@"results: %@", dic);
+            
+            int status = [[dic objectForKey:@"status"] intValue];
+            
+            HUD_WAITING_HIDE;
+            if( status == 200 ){
+                [self.appDelegate.deviceList removeObjectAtIndex:btn.tag];
+                [self.appDelegate saveDeviceList];
+                [self updateLayout];
+                HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil));
+            } else if ( status == 418 ) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.appDelegate deleteUserInfo];
+                    self.appDelegate.isLogout = true;
+                    LoginController *loginController = [[LoginController alloc] init];
+                    [self.navigationController pushViewController:loginController animated:YES];
+                }];
+                
+                [alertController addAction:okAction];           // A
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            } else if ( status == 405 ) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.appDelegate deleteUserInfo];
+                    self.appDelegate.isLogout = true;
+                    LoginController *loginController = [[LoginController alloc] init];
+                    [self.navigationController pushViewController:loginController animated:YES];
+                }];
+                
+                [alertController addAction:okAction];           // A
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            }else{
+                NSString *eCode = [NSString stringWithFormat:@"e%d", status];
+                HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"失败.%@",error);
+            NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+            
+            HUD_WAITING_HIDE;
+            HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindFailed", nil));
+        }];
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmCancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    
+    [alertController addAction:okAction];           // A
+    [alertController addAction:cancelAction];       // B
+    
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 @end

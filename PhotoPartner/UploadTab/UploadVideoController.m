@@ -16,6 +16,7 @@
 #import <QiniuSDK.h>
 #import <ZipArchive.h>
 #import "AddDeviceController.h"
+#import "LoginController.h"
 
 //#define FileHashDefaultChunkSizeForReadingData 1024*8
 #include <CommonCrypto/CommonDigest.h>
@@ -140,6 +141,8 @@
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"]
                                };
+    //加入header参数
+    [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
     [manager POST:BASE_URL(@"user/user_device") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
     } progress:^(NSProgress * _Nonnull uploadProgress) {
@@ -156,6 +159,32 @@
             [self.appDelegate saveDeviceList];
             
             [self.tableView reloadData];
+        } else if ( status == 418 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ( status == 405 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"失败.%@",error);
@@ -1121,6 +1150,9 @@
         AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = 30.0f;
+        //加入header参数
+        [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
+//        [manager.requestSerializer setValue:@"hello" forHTTPHeaderField:@"user_token"];
         NSDictionary *parameters=@{
                                    @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                    @"user_imei":[self.appDelegate.userInfo objectForKey:@"user_name"],
@@ -1183,6 +1215,8 @@
                 NSDictionary *parameters=@{
                                            @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"]
                                            };
+                //加入header参数
+                [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
                 
                 HUD_WAITING_SHOW(NSLocalizedString(@"loadingDeviceList", nil));
                 [manager POST:BASE_URL(@"user/user_device") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
@@ -1212,6 +1246,32 @@
                         }else{
                             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
                         }
+                    } else if ( status == 418 ) {
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                            [self.appDelegate deleteUserInfo];
+                            self.appDelegate.isLogout = true;
+                            LoginController *loginController = [[LoginController alloc] init];
+                            [self.navigationController pushViewController:loginController animated:YES];
+                        }];
+                        
+                        [alertController addAction:okAction];           // A
+                        
+                        [self presentViewController:alertController animated:YES completion:nil];
+                    } else if ( status == 405 ) {
+                        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                        
+                        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                            [self.appDelegate deleteUserInfo];
+                            self.appDelegate.isLogout = true;
+                            LoginController *loginController = [[LoginController alloc] init];
+                            [self.navigationController pushViewController:loginController animated:YES];
+                        }];
+                        
+                        [alertController addAction:okAction];           // A
+                        
+                        [self presentViewController:alertController animated:YES completion:nil];
                     }
                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
                     NSLog(@"失败.%@",error);
@@ -1222,7 +1282,33 @@
                     NSString *eCode = @"e327";
                     HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
                 }];
-            }else{
+            } else if ( status == 418 ) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.appDelegate deleteUserInfo];
+                    self.appDelegate.isLogout = true;
+                    LoginController *loginController = [[LoginController alloc] init];
+                    [self.navigationController pushViewController:loginController animated:YES];
+                }];
+                
+                [alertController addAction:okAction];           // A
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            } else if ( status == 405 ) {
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.appDelegate deleteUserInfo];
+                    self.appDelegate.isLogout = true;
+                    LoginController *loginController = [[LoginController alloc] init];
+                    [self.navigationController pushViewController:loginController animated:YES];
+                }];
+                
+                [alertController addAction:okAction];           // A
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+            } else{
                 NAV_UPLOAD_END;
                 ENABLE_RightBarButtonItem;
                 NSString *eCode = [NSString stringWithFormat:@"e%d", status];

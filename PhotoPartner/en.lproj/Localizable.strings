@@ -73,7 +73,9 @@ deviceScanRightBarButtonItemTitle = "Scan";
 deviceAddBindSuccess = "Bind Success";
 deviceAddBindFailed = "Bind Failed";
 deviceAddDeviceName = "Device name";
+deviceAddEmailDeviceName = "Device email address";
 deviceAddDeviceNumber = "Frame ID";
+deviceAddUserDeviceNumber = "Frame Name";
 deviceScanNavigationItemTitle = "QR Code";
 deviceScanNoticeText = "Please put the QR code in the lens range for scanning";
 

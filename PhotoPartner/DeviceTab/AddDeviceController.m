@@ -11,10 +11,12 @@
 #import "AppDelegate.h"
 #import "AddDeviceController.h"
 #import "ScanDeviceController.h"
+#import "LoginController.h"
 
 @interface AddDeviceController () <UIGestureRecognizerDelegate, ScanDeviceControllerDelegate, UITextFieldDelegate>
 @property AppDelegate *appDelegate;
 @property UITextField *deviceNameField;
+@property UITextField *deviceUserNameField;
 @property UITextField *deviceTokenField;
 @end
 
@@ -37,15 +39,32 @@
     
     UIView *deviceView = [[UIView alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, MARGIN_TOP+GAP_HEIGHT*2+64, VIEW_WIDTH-4*GAP_WIDTH, VIEW_HEIGHT)];
     
-    self.deviceNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(deviceView), 44)];
+    self.deviceUserNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(deviceView), 44)];
+    self.deviceUserNameField.delegate = self;
+    UIView *nameLineView2 = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserNameField)-1, GET_LAYOUT_WIDTH(self.deviceUserNameField), 1)];
+    nameLineView2.backgroundColor = lineColor;
+    [self.deviceUserNameField addSubview:nameLineView2];
+    self.deviceUserNameField.placeholder = NSLocalizedString(@"deviceAddDeviceName", nil);
+    self.deviceUserNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    [deviceView addSubview:self.deviceUserNameField];
+    
+    self.deviceNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserNameField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
     self.deviceNameField.delegate = self;
     UIView *nameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceNameField)-1, GET_LAYOUT_WIDTH(self.deviceNameField), 1)];
     nameLineView.backgroundColor = lineColor;
     [self.deviceNameField addSubview:nameLineView];
-    self.deviceNameField.placeholder = NSLocalizedString(@"deviceAddDeviceName", nil);
+    
+    UILabel *meilSuffix = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(self.deviceNameField)-100, GET_LAYOUT_HEIGHT(self.deviceNameField)-44, 100, 44)];
+    meilSuffix.text = COMPANY_EMAIL(@"");
+    [self.deviceNameField addSubview:meilSuffix];
+    
+    self.deviceNameField.placeholder = NSLocalizedString(@"deviceAddEmailDeviceName", nil);
     self.deviceNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [deviceView addSubview:self.deviceNameField];
     
+    
+    
+//    self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.deviceNameField)+GET_LAYOUT_HEIGHT(self.deviceNameField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
     self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.deviceNameField)+GET_LAYOUT_HEIGHT(self.deviceNameField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
     self.deviceTokenField.delegate = self;
     UIView *tokenLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceTokenField)-1, GET_LAYOUT_WIDTH(self.deviceTokenField), 1)];
@@ -55,7 +74,8 @@
     self.deviceTokenField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [deviceView addSubview:self.deviceTokenField];
     
-    UIButton *deviceAddButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.deviceTokenField)+GET_LAYOUT_HEIGHT(self.deviceTokenField)+40, GET_LAYOUT_WIDTH(deviceView), 44)];
+//    UIButton *deviceAddButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_OFFSET_Y(self.deviceTokenField)+GET_LAYOUT_HEIGHT(self.deviceTokenField)+40, GET_LAYOUT_WIDTH(deviceView), 44)];
+    UIButton *deviceAddButton = [[UIButton alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserNameField)+GET_LAYOUT_OFFSET_Y(self.deviceTokenField)+GET_LAYOUT_HEIGHT(self.deviceTokenField)+40, GET_LAYOUT_WIDTH(deviceView), 44)];
     deviceAddButton.backgroundColor = RGBA_COLOR(27, 163, 232, 1);
     deviceAddButton.layer.cornerRadius = 5;
     deviceAddButton.layer.masksToBounds = YES;
@@ -90,6 +110,10 @@
 
 - (void)clickDeviceAddButton {
     [self.view endEditing:YES];
+    if( [self.deviceUserNameField.text isEqualToString:@""] ){
+        HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddEmailDeviceName", nil));
+        return;
+    }
     
     if( [self.deviceNameField.text isEqualToString:@""] ){
         HUD_TOAST_SHOW(NSLocalizedString(@"deviceAddDeviceName", nil));
@@ -111,10 +135,14 @@
     NSDictionary *parameters=@{
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                @"device_token":self.deviceTokenField.text,
-                               @"device_name":[self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                               @"deviceUserName":[self.deviceUserNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                               @"device_name":COMPANY_EMAIL([self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]),
                                @"type":@"mydevice",
                                @"companyName":COMPANY_NAME
                                };
+    NSLog(@"AddDevicePush:%@",parameters);
+    //加入header参数
+    [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
     HUD_WAITING_SHOW(NSLocalizedString(@"loadingBinding", nil));
     [manager POST:BASE_URL(@"device/bind") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
         
@@ -155,6 +183,32 @@
             [self.appDelegate addMessageList:@"bind" withTime:time withTitle:deviceName withDesc:desc withData:nil];
             
             HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
+        } else if ( status == 418 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ( status == 405 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));

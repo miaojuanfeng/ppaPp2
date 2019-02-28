@@ -392,40 +392,7 @@
             
             HUD_WAITING_HIDE;
             if( status == 200 ){
-                /*NSDate* date = [NSDate dateWithTimeIntervalSinceNow:0];
-                NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-                NSString *time = [dateFormatter stringFromDate:date];
-                long device_id = btn.tag;
-                NSString *deviceName = @"";
-                for(int k=0;k<self.appDelegate.deviceList.count;k++){
-                    NSLog(@"%@", [[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_id"] );
-                    NSLog(@"%ld", device_id);
-                    NSLog(@"%d", [[[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_id"] longValue] == device_id);
-                    if( [[[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_id"] longValue] == device_id ){
-                        deviceName = [[self.appDelegate.deviceList objectAtIndex:k] objectForKey:@"device_name"];
-                        break;
-                    }
-                }
-                [self.appDelegate addMessageList:@"unbind" withTime:time withTitle:deviceName withDesc:@"" withData:nil];
-                
-                
-                for (NSDictionary *device in self.appDelegate.deviceList) {
-                    if( [[device objectForKey:@"device_id"] intValue] == btn.tag ){
-                        [self.appDelegate.deviceList removeObject:device];
-                        break;
-                    }
-                }
-                [self.appDelegate saveDeviceList];
-                [self isEmptyDeviceList];
-                [self.tableView reloadData];*/
-                
-                if( self.appDelegate.deviceList.count == 0 ){
-                    //AddDeviceController *addDeviceController = [[AddDeviceController alloc] init];
-                    //HUD_TOAST_PUSH_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil), addDeviceController);
-                }else{
-                    HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil));
-                }
+                HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil));
             }else{
                 NSString *eCode = [NSString stringWithFormat:@"e%d", status];
                 HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));

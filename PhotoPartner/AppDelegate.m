@@ -11,6 +11,8 @@
 #import "HomeController.h"
 #import <CommonCrypto/CommonDigest.h>
 #import <CloudPushSDK/CloudPushSDK.h>
+#import <AFNetworking/AFNetworking.h>
+#import <MBProgressHUD.h>
 
 @interface AppDelegate ()
 
@@ -69,6 +71,24 @@
 //    [self saveFailedBlock];
     NSLog(@"self.failedBlock: %@", self.failedBlock);
     
+    // init data
+    [self loadFcmToken];
+    if ( self.FcmDeviceToken == nil ) {
+        self.FcmDeviceToken = @"";
+    }
+//    NSLog(@"FcmDeviceToken:%@", self.FcmDeviceToken);
+    
+    //open push notiification
+    [self initCloudPush];
+    
+    [self registerAPNS:application];
+    
+    [CloudPushSDK sendNotificationAck:launchOptions];
+    
+    [self registerMessageReceive];
+    
+//    NSLog(@"FcmDeviceToken2:%@", self.FcmDeviceToken);
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     HomeController *homeController = [[HomeController alloc] init];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:homeController];
@@ -97,15 +117,6 @@
 //            NSLog(@"  name: %@",name);
 //        }
 //    }
-    
-    //open push notiification
-    [self initCloudPush];
-    
-    [self registerAPNS:application];
-    
-    [CloudPushSDK sendNotificationAck:launchOptions];
-    
-    [self registerMessageReceive];
     
     return YES;
 }
@@ -610,7 +621,7 @@
 
 - (void)initCloudPush {
     // SDK初始化
-    [CloudPushSDK asyncInit:@"25664801" appSecret:@"957b056911f38bd97b0c342a6619008a" callback:^(CloudPushCallbackResult *res) {
+    [CloudPushSDK asyncInit:ALiYunPush_APPKEY appSecret:ALiYunPush_APPSECRET callback:^(CloudPushCallbackResult *res) {
         if (res.success) {
             NSLog(@"Push SDK init success, deviceId: %@.", [CloudPushSDK getDeviceId]);
         } else {
@@ -645,11 +656,11 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     [CloudPushSDK registerDevice:deviceToken withCallback:^(CloudPushCallbackResult *res) {
         if (res.success) {
-            NSLog(@"Register deviceToken success.");
+//            NSLog(@"Register deviceToken success.");
             NSString *deviceTokenString = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""]
                                             stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
-            NSLog(@"deviceToken: %@", deviceTokenString);
-            
+            [self pushALiYunToken:deviceTokenString];
+//            NSLog(@"deviceToken: %@", self.FcmDeviceToken);
         } else {
             NSLog(@"Register deviceToken failed, error: %@", res.error);
         }
@@ -706,5 +717,87 @@
     [CloudPushSDK sendNotificationAck:userInfo];
 }
 
+/*
+ * 阿里云推送token提交
+ */
+- (void) pushALiYunToken:(NSString *) FcmToken {
+    if (self.userInfo != nil) {
+        AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+        manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+        manager.requestSerializer.timeoutInterval = 30.0f;
+        
+        NSDictionary *parameters=@{
+                                   @"userName": [self.userInfo objectForKey:@"user_name"],
+                                   @"oldFcmToken": self.FcmDeviceToken,
+                                   @"newFcmToken": FcmToken
+                                   };
+        NSLog(@"PushInfo:%@", parameters);
+        //    HUD_WAITING_SHOW(NSLocalizedString(@"Loging", nil));
+        [manager POST:BASE_URL(@"user/updateFcmToken") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
+            
+        } progress:^(NSProgress * _Nonnull uploadProgress) {
+            
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            
+            NSLog(@"成功.%@",responseObject);
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
+            NSLog(@"results: %@", dic);
+            
+            int status = [[dic objectForKey:@"status"] intValue];
+            
+            //        HUD_WAITING_HIDE;
+            if( status == 200 ){
+                self.FcmDeviceToken = FcmToken;
+                [self saveFcmToken];
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            NSLog(@"失败.%@",error);
+            NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+            
+            //        HUD_WAITING_HIDE;
+            //        HUD_TOAST_SHOW(NSLocalizedString(@"Failed", nil));
+        }];
+    } else {
+        self.FcmDeviceToken = FcmToken;
+    }
+}
+
+
+
+- (void)saveFcmToken {
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [path objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"FcmToken.plist"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:plistPath error:nil];
+    
+    if( self.FcmDeviceToken != nil ){
+        NSMutableDictionary *fileData = [NSMutableDictionary dictionaryWithCapacity:1];
+        [fileData setObject:self.FcmDeviceToken forKey:@"token"];
+        NSLog(@"SaveFcmTokenData:%@", fileData);
+        [fileData writeToFile:plistPath atomically:YES];
+    }
+}
+
+- (void)loadFcmToken {
+    NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *path = [pathArray objectAtIndex:0];
+    NSString *plistPath = [path stringByAppendingPathComponent:@"FcmToken.plist"];
+    NSMutableDictionary *fileData = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
+    NSLog(@"LoadFcmTokenData:%@", fileData);
+    self.FcmDeviceToken = [fileData objectForKey:@"token"];
+}
+
+- (void)deleteFcmToken {
+    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [path objectAtIndex:0];
+    NSString *plistPath = [documentsPath stringByAppendingPathComponent:@"FcmToken.plist"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:plistPath error:nil];
+    
+    self.userInfo = nil;
+}
 
 @end

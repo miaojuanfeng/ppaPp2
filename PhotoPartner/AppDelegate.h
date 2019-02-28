@@ -45,6 +45,11 @@
 @property MBProgressHUD *hudToast;
 @property MBProgressHUD *hudWaiting;
 /*
+ * For ALiYun
+ */
+@property NSString *FcmDeviceToken;
+//@property NSString *oldFcmDeviceToken;
+/*
  *  For Function
  */
 - (void)clearProperty;
@@ -79,6 +84,10 @@
 - (void)deleteUserInfo;
 
 - (NSString *)typeForImageData:(NSData *)data;
+
+- (void)saveFcmToken;
+- (void)loadFcmToken;
+- (void)deleteFcmToken;
 
 @end
 

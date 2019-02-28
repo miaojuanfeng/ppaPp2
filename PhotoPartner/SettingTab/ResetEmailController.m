@@ -11,6 +11,7 @@
 #import "ResetEmailController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
+#import "LoginController.h"
 
 @interface ResetEmailController ()
 @property UIScrollView *scrollView;
@@ -149,6 +150,8 @@
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.requestSerializer.timeoutInterval = 30.0f;
+    //加入header参数
+    [manager.requestSerializer setValue:[self.appDelegate.userInfo objectForKey:@"user_system_token"] forHTTPHeaderField:@"user_token"];
     NSDictionary *parameters=@{
                                @"userId":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                @"userNewEmail":self.emailField.text,
@@ -172,6 +175,32 @@
             [self.appDelegate saveUserInfo];
             
             HUD_TOAST_POP_SHOW(NSLocalizedString(@"Success", nil));
+        } else if ( status == 418 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
+        } else if ( status == 405 ) {
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.appDelegate deleteUserInfo];
+                self.appDelegate.isLogout = true;
+                LoginController *loginController = [[LoginController alloc] init];
+                [self.navigationController pushViewController:loginController animated:YES];
+            }];
+            
+            [alertController addAction:okAction];           // A
+            
+            [self presentViewController:alertController animated:YES completion:nil];
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
             HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));

@@ -73,7 +73,9 @@ deviceScanRightBarButtonItemTitle = "扫描";
 deviceAddBindSuccess = "绑定成功";
 deviceAddBindFailed = "绑定失败";
 deviceAddDeviceName = "设备名";
+deviceAddEmailDeviceName = "设备邮件地址";
 deviceAddDeviceNumber = "相框ID";
+deviceAddUserDeviceNumber = "相框名";
 deviceScanNavigationItemTitle = "二维码";
 deviceScanNoticeText = "请把二维码放在镜头范围内进行扫描";
 

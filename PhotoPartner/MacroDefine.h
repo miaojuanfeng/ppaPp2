@@ -9,7 +9,6 @@
 #ifndef MacroDefine_h
 #define MacroDefine_h
 
-#define COMPANY_NAME @"Joyhong"
 
 #define IS_IPHONE_X ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
 #define SET_VIEW_BACKGROUND_COLOR self.view.backgroundColor = [UIColor whiteColor]
@@ -219,5 +218,17 @@
 #define ICON_REFRESH @"\U0000e7d1"
 #define ICON_EYE_ON @"\U0000e6de"
 #define ICON_EYE_OFF @"\U0000e6df"
+
+/*
+ */
+#define COMPANY_NAME @"Aluratek"
+#define COMPANY_EMAIL(email) [NSString stringWithFormat:@"%@@bsimb.cn", email]
+
+#define ALiYunPush_APPKEY @"25787812"
+#define ALiYunPush_APPSECRET @"fb8357475a66182c6ccaaadf4493a0a6"
+
+//Joyhong
+//#define ALiYunPush_APPKEY @"25664801"
+//#define ALiYunPush_APPSECRET @"957b056911f38bd97b0c342a6619008a"
 
 #endif /* MacroDefine_h */
