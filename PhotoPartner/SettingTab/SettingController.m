@@ -72,7 +72,7 @@
                 break;
             case 2:
 //                cell.textLabel.text = NSLocalizedString(@"settingCellVersionTitle", nil);;
-                cell.detailTextLabel.text = @"1.0.9";
+                cell.detailTextLabel.text = @"1.0.10";
                 cell.textLabel.text = NSLocalizedString(@"aboutUsVersion", nil);
                 break;
             case 3:
