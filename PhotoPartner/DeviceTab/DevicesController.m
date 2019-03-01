@@ -15,6 +15,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
 #import "LoginController.h"
+#import "DeviceNameController.h"
 
 @interface DevicesController ()
 @property UIScrollView *scrollView;
@@ -178,12 +179,20 @@
             nameLabel.font = [UIFont systemFontOfSize:fontSize];
             [devicesView addSubview:nameLabel];
             
-            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2-50, GET_LAYOUT_HEIGHT(devicesView)/2)];
+            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2-30, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2-70, GET_LAYOUT_HEIGHT(devicesView)/2)];
             emailLabel.text = [self.appDelegate.userInfo objectForKey:@"userEmail"];
             emailLabel.textAlignment = NSTextAlignmentRight;
             emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
             emailLabel.font = [UIFont systemFontOfSize:fontSize];
             [devicesView addSubview:emailLabel];
+            
+            UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-80, 15, 30, 30)];
+            settingButton.tag = i;
+            [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
+            UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(-5, 0, GET_LAYOUT_WIDTH(settingButton)+10, GET_LAYOUT_HEIGHT(settingButton)+10)];
+            settingImageView.image = [UIImage imageNamed:@"ic_edit_black"];
+            [settingButton addSubview:settingImageView];
+            [devicesView addSubview:settingButton];
             
             UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
             //deleteButton.backgroundColor = [UIColor blueColor];
@@ -241,9 +250,19 @@
             lineView.backgroundColor = lineColor;
             [devicesView addSubview:lineView];
             UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView))];
-            deviceLabel.text = [device objectForKey:@"device_token"];
+//            deviceLabel.text = [device objectForKey:@"device_token"];
+            deviceLabel.text = [device objectForKey:@"device_name"];
+
             deviceLabel.font = [UIFont systemFontOfSize:15];
             [devicesView addSubview:deviceLabel];
+            
+            UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-80, 15, 30, 30)];
+            settingButton.tag = i;
+            [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
+            UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(settingButton)+10, GET_LAYOUT_HEIGHT(settingButton)+10)];
+            settingImageView.image = [UIImage imageNamed:@"ic_edit_black"];
+            [settingButton addSubview:settingImageView];
+            [devicesView addSubview:settingButton];
             
             UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
             //deleteButton.backgroundColor = [UIColor blueColor];
@@ -433,5 +452,13 @@
     [alertController addAction:cancelAction];       // B
     
     [self presentViewController:alertController animated:YES completion:nil];
+}
+
+- (void) clickSettingButton: (UIButton *)btn{
+    NSMutableDictionary *device = [self.appDelegate.deviceList objectAtIndex:btn.tag];
+    DeviceNameController *deviceNameController = [[DeviceNameController alloc] init];
+//    NSLog(@"DeviceIdSetting:%@", [device objectForKey:@"device_id"]);
+    deviceNameController.deviceId = [[device objectForKey:@"device_id"] intValue];
+    [self.navigationController pushViewController:deviceNameController animated:YES];
 }
 @end
