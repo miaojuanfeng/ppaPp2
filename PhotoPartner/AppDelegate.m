@@ -659,8 +659,9 @@
 //            NSLog(@"Register deviceToken success.");
             NSString *deviceTokenString = [[[[deviceToken description] stringByReplacingOccurrencesOfString:@"<" withString:@""]
                                             stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
-            [self pushALiYunToken:deviceTokenString];
-//            NSLog(@"deviceToken: %@", self.FcmDeviceToken);
+//            [self pushALiYunToken:deviceTokenString];
+            [self pushALiYunToken:[CloudPushSDK getDeviceId]];
+            NSLog(@"deviceToken: %@", self.FcmDeviceToken);
         } else {
             NSLog(@"Register deviceToken failed, error: %@", res.error);
         }
