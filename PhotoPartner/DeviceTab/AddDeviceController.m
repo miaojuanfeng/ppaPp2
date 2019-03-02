@@ -13,12 +13,17 @@
 #import "ScanDeviceController.h"
 #import "LoginController.h"
 
+#define NUM @"0123456789"
+#define ALPHA @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define ALPHANUM @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
+
 @interface AddDeviceController () <UIGestureRecognizerDelegate, ScanDeviceControllerDelegate, UITextFieldDelegate>
 @property AppDelegate *appDelegate;
 @property UITextField *deviceNameField;
 @property UITextField *deviceUserNameField;
 @property UITextField *deviceTokenField;
 @end
+
 
 @implementation AddDeviceController
 
@@ -53,6 +58,8 @@
     UIView *nameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceNameField)-1, GET_LAYOUT_WIDTH(self.deviceNameField), 1)];
     nameLineView.backgroundColor = lineColor;
     [self.deviceNameField addSubview:nameLineView];
+    
+    self.deviceNameField.keyboardType = UIKeyboardTypeASCIICapable;
     
     UILabel *meilSuffix = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(self.deviceNameField)-100, GET_LAYOUT_HEIGHT(self.deviceNameField)-44, 100, 44)];
     meilSuffix.text = COMPANY_EMAIL(@"");
@@ -269,7 +276,13 @@
         HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
         return NO;
     }
-    return YES;
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:ALPHANUM] invertedSet];
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    return [string isEqualToString:filtered];
+    
+//    return YES;
 }
+
+
 
 @end

@@ -13,6 +13,10 @@
 #import "ScanDeviceController.h"
 #import "LoginController.h"
 
+#define NUM @"0123456789"
+#define ALPHA @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define ALPHANUM @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_"
+
 @interface AvaDeviceController () <UIGestureRecognizerDelegate, ScanDeviceControllerDelegate, UITextFieldDelegate>
 @property AppDelegate *appDelegate;
 @property UITextField *deviceTokenField;
@@ -45,6 +49,7 @@
     [self.deviceUserTokenField addSubview:tokenLineView2];
     self.deviceUserTokenField.placeholder = NSLocalizedString(@"deviceAddUserDeviceNumber", nil);
     self.deviceUserTokenField.clearButtonMode = UITextFieldViewModeWhileEditing;
+    self.deviceUserTokenField.keyboardType = UIKeyboardTypeASCIICapable;
     [deviceView addSubview:self.deviceUserTokenField];
     
     self.deviceTokenField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserTokenField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
@@ -237,7 +242,10 @@
     //    HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
     //    return NO;
     //}
-    return YES;
+    NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:ALPHANUM] invertedSet];
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+    return [string isEqualToString:filtered];
+//    return YES;
 }
 
 @end

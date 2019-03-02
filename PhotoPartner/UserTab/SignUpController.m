@@ -11,6 +11,9 @@
 #import "SignUpController.h"
 #import <AFNetworking/AFNetworking.h>
 #import <MBProgressHUD.h>
+#define NUM @"0123456789"
+#define ALPHA @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+#define ALPHANUM @"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-."
 
 @interface SignUpController ()
 @property UIScrollView *scrollView;
@@ -47,6 +50,8 @@
         self.usernameField.backgroundColor = [UIColor whiteColor];
         self.usernameField.delegate = self;
         self.usernameField.placeholder = NSLocalizedString(@"username", nil);
+        self.usernameField.keyboardType = UIKeyboardTypeASCIICapable;
+
         UIImageView *usernameImageViewPwd=[[UIImageView alloc]initWithFrame:CGRectMake(-20, 0, 48, 48)];
         usernameImageViewPwd.image=[UIImage imageNamed:@"ic_account_black"];
         self.usernameField.leftView=usernameImageViewPwd;
@@ -351,6 +356,31 @@
 
 -(void)fingerTapped:(UITapGestureRecognizer *)gestureRecognizer {
     [self.view endEditing:YES];
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    if(textField == self.usernameField)
+    {
+        if( (self.usernameField.text.length + string.length) > 60 ){
+            HUD_TOAST_SHOW(NSLocalizedString(@"No more than 60 characters", nil));
+            return NO;
+        }
+        
+        
+        NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:ALPHANUM] invertedSet];
+        NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        if([string isEqualToString:filtered]){
+            return true;
+        }else{
+            return false;
+        }
+        
+    }
+    return true;
+//    return [string isEqualToString:filtered];
+    
+    //    return YES;
 }
 
 @end
