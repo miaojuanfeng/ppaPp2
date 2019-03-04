@@ -15,6 +15,8 @@
 #import "UIView+Layout.h"
 #import "TZImageManager.h"
 #import <sys/utsname.h>
+//#import "/Users/dreamover/OC/Bitbucket/photopartnerapp_Flone20190218/PhotoPartner/MacroDefine.h"
+#import "../../../PhotoPartner/MacroDefine.h"
 
 @interface TZImagePickerController () {
     NSTimer *_timer;
@@ -168,7 +170,9 @@
         // Allow user picking original photo and video, you also can set No after this method
         // 默认准许用户选择原图和视频, 你也可以在这个方法后置为NO
         self.allowPickingOriginalPhoto = YES;
-        self.isSelectOriginalPhoto = YES;  //默认选中原图，钜弘不使用，aluratek使用
+        if (COMPANY_NAME != @"Joyhong") {
+            self.isSelectOriginalPhoto = YES;  //默认选中原图，钜弘不使用，aluratek使用
+        }
         self.allowPickingVideo = YES;
         self.allowPickingImage = YES;
         self.allowTakePicture = YES;

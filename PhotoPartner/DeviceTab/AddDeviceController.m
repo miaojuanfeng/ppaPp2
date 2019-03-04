@@ -143,7 +143,7 @@
                                @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
                                @"device_token":self.deviceTokenField.text,
                                @"deviceUserName":[self.deviceUserNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-                               @"device_name":COMPANY_EMAIL([self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]),
+                               @"device_name":[self.deviceNameField.text stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
                                @"type":@"mydevice",
                                @"companyName":COMPANY_NAME
                                };
