@@ -162,10 +162,11 @@
         if( [[device objectForKey:@"isAdmin"] isEqualToString:@"mydevice"] ){
             long messageHeight = 0;
             UIButton *devicesView = [[UIButton alloc] initWithFrame:CGRectMake(GAP_WIDTH*2, offsetTop, messageWidth, 60)];
-            devicesView.tag = i;
-            [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
             
             if ([[device objectForKey:@"isAccepted"] intValue] == 1) {
+                devicesView.tag = i;
+                [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
+                
                 UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
                 lineView.backgroundColor = lineColor;
                 [devicesView addSubview:lineView];

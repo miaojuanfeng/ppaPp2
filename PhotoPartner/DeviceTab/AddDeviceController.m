@@ -274,9 +274,17 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    if( (self.deviceNameField.text.length + string.length) > INPUT_MAX_TEXT ){
-        HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
-        return NO;
+//    if( (self.deviceNameField.text.length + string.length) > INPUT_MAX_TEXT ){
+//        HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
+//        return NO;
+//    }
+    if(textField == self.deviceNameField)
+    {
+        if( (self.deviceNameField.text.length + string.length) > INPUT_MAX_TEXT ){
+            HUD_TOAST_SHOW(NSLocalizedString(@"inputMaxText", nil));
+            return NO;
+        }
+        
     }
     NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:ALPHANUM] invertedSet];
     NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
