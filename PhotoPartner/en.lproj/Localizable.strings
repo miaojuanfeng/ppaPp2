@@ -181,6 +181,8 @@ confirmLogoutTitle = "Confirm logout?";
 
 waitingForConfirmation = "waiting for confirmation";
 
+UserSystemTokenError = "Your account has been logged in on another device,please log in again";
+
 /*
  *  从服务器返回的错误码
  */

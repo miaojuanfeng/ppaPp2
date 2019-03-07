@@ -157,7 +157,7 @@
             
             HUD_TOAST_POP_SHOW(NSLocalizedString(@"deviceAddBindSuccess", nil));
         } else if ( status == 418 ) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"UserSystemTokenError", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self.appDelegate deleteUserInfo];
@@ -170,7 +170,7 @@
             
             [self presentViewController:alertController animated:YES completion:nil];
         } else if ( status == 405 ) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Token Error,Please login again" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"UserSystemTokenError", nil) message:nil preferredStyle:UIAlertControllerStyleAlert];
             
             UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirmOK", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self.appDelegate deleteUserInfo];

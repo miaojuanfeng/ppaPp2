@@ -179,6 +179,8 @@ confirmLogoutTitle = "确认登出？";
 
 waitingForConfirmation = "等待确认";
 
+UserSystemTokenError = "您的帐户已在另一台设备上登录,请重新登录";
+
 /*
  *  从服务器返回的错误码
  */
