@@ -298,7 +298,7 @@
     self.doneBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Done"];
     self.cancelBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Cancel"];
     self.previewBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Preview"];
-    self.fullImageBtnTitleStr = [NSBundle tz_localizedStringForKey:@"UnComPressed Image"];
+    self.fullImageBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Original"];
     self.settingBtnTitleStr = [NSBundle tz_localizedStringForKey:@"Setting"];
     self.processHintStr = [NSBundle tz_localizedStringForKey:@"Processing..."];
 }

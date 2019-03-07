@@ -179,6 +179,8 @@ NotLoggedIn = "Not logged in";
 
 confirmLogoutTitle = "Confirm logout?";
 
+waitingForConfirmation = "waiting for confirmation";
+
 /*
  *  从服务器返回的错误码
  */

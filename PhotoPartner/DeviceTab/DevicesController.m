@@ -165,43 +165,73 @@
             devicesView.tag = i;
             [devicesView addTarget:self action:@selector(clickDeviceDetailButton:) forControlEvents:UIControlEventTouchUpInside];
             
-            UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
-            lineView.backgroundColor = lineColor;
-            [devicesView addSubview:lineView];
-            UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView)/2)];
-            deviceLabel.text = [device objectForKey:@"device_name"];
-            deviceLabel.font = [UIFont systemFontOfSize:15];
-            [devicesView addSubview:deviceLabel];
-            
-            UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
-            nameLabel.text = [device objectForKey:@"device_token"];
-            nameLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
-            nameLabel.font = [UIFont systemFontOfSize:fontSize];
-            [devicesView addSubview:nameLabel];
-            
-            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2-30, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2-70, GET_LAYOUT_HEIGHT(devicesView)/2)];
-            emailLabel.text = [self.appDelegate.userInfo objectForKey:@"userEmail"];
-            emailLabel.textAlignment = NSTextAlignmentRight;
-            emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
-            emailLabel.font = [UIFont systemFontOfSize:fontSize];
-            [devicesView addSubview:emailLabel];
-            
-            UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-80, 15, 30, 30)];
-            settingButton.tag = i;
-            [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
-            UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(-5, 0, GET_LAYOUT_WIDTH(settingButton)+10, GET_LAYOUT_HEIGHT(settingButton)+10)];
-            settingImageView.image = [UIImage imageNamed:@"ic_edit_black"];
-            [settingButton addSubview:settingImageView];
-            [devicesView addSubview:settingButton];
-            
-            UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
-            //deleteButton.backgroundColor = [UIColor blueColor];
-            deleteButton.tag = i;
-            [deleteButton addTarget:self action:@selector(clickDeleteDeviceButton:) forControlEvents:UIControlEventTouchUpInside];
-            UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(-5, 0, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
-            deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
-            [deleteButton addSubview:deleteImageView];
-            [devicesView addSubview:deleteButton];
+            if ([[device objectForKey:@"isAccepted"] intValue] == 1) {
+                UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
+                lineView.backgroundColor = lineColor;
+                [devicesView addSubview:lineView];
+                UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView)/2)];
+                NSString *device_token = [NSString stringWithFormat:@"(%@)", [device objectForKey:@"device_token"]];
+                NSString *deviceLabel_txt = [NSString stringWithFormat:@"%@%@",[device objectForKey:@"device_name"], device_token];
+                NSRange device_token_range = [deviceLabel_txt rangeOfString:device_token];
+                UIColor *device_token_color = RGBA_COLOR(128, 128, 128, 1);
+                NSMutableAttributedString *deviceLabel_txt_attributedStr = [[NSMutableAttributedString alloc] initWithString:deviceLabel_txt];
+                [deviceLabel_txt_attributedStr addAttributes:@{NSForegroundColorAttributeName:device_token_color} range:device_token_range];
+                deviceLabel.attributedText = deviceLabel_txt_attributedStr;
+                deviceLabel.font = [UIFont systemFontOfSize:15];
+                [devicesView addSubview:deviceLabel];
+                
+                UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)-60, GET_LAYOUT_HEIGHT(devicesView)/2)];
+                emailLabel.text = [device objectForKey:@"device_email"];
+                
+                emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
+                emailLabel.font = [UIFont systemFontOfSize:fontSize];
+                [devicesView addSubview:emailLabel];
+                
+    //            UILabel *nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2, GET_LAYOUT_HEIGHT(devicesView)/2)];
+    //            nameLabel.text = [device objectForKey:@"device_token"];
+    //
+    //            nameLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
+    //            nameLabel.font = [UIFont systemFontOfSize:fontSize];
+    //            [devicesView addSubview:nameLabel];
+                
+    //            UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)/2-30, GET_LAYOUT_HEIGHT(devicesView)/2-5, GET_LAYOUT_WIDTH(devicesView)/2-70, GET_LAYOUT_HEIGHT(devicesView)/2)];
+    //            emailLabel.text = [self.appDelegate.userInfo objectForKey:@"userEmail"];
+    //            emailLabel.textAlignment = NSTextAlignmentRight;
+    //            emailLabel.textColor = RGBA_COLOR(128, 128, 128, 1);
+    //            emailLabel.font = [UIFont systemFontOfSize:fontSize];
+    //            [devicesView addSubview:emailLabel];
+                
+                UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-80, 15, 30, 30)];
+                settingButton.tag = i;
+                [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(-5, 0, GET_LAYOUT_WIDTH(settingButton)+10, GET_LAYOUT_HEIGHT(settingButton)+10)];
+                settingImageView.image = [UIImage imageNamed:@"ic_edit_black"];
+                [settingButton addSubview:settingImageView];
+                [devicesView addSubview:settingButton];
+                
+                UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
+                //deleteButton.backgroundColor = [UIColor blueColor];
+                deleteButton.tag = i;
+                [deleteButton addTarget:self action:@selector(clickDeleteDeviceButton:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(-5, 0, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
+                deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
+                [deleteButton addSubview:deleteImageView];
+                [devicesView addSubview:deleteButton];
+            } else {
+                UIView *lineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(devicesView)-1, GET_LAYOUT_WIDTH(devicesView), 1)];
+                lineView.backgroundColor = lineColor;
+                [devicesView addSubview:lineView];
+                UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView)/2)];
+                NSString *device_token = [NSString stringWithFormat:@"(%@)", NSLocalizedString(@"waitingForConfirmation", nil)];
+                NSString *deviceLabel_txt = [NSString stringWithFormat:@"%@%@",[device objectForKey:@"device_name"], device_token];
+                NSRange device_token_range = [deviceLabel_txt rangeOfString:device_token];
+                UIColor *device_token_color = RGBA_COLOR(128, 128, 128, 1);
+                NSMutableAttributedString *deviceLabel_txt_attributedStr = [[NSMutableAttributedString alloc] initWithString:deviceLabel_txt];
+                [deviceLabel_txt_attributedStr addAttributes:@{NSForegroundColorAttributeName:device_token_color} range:device_token_range];
+                deviceLabel.attributedText = deviceLabel_txt_attributedStr;
+                deviceLabel.font = [UIFont systemFontOfSize:15];
+                [devicesView addSubview:deviceLabel];
+            }
             
             messageHeight = GET_LAYOUT_HEIGHT(devicesView);
        
@@ -251,27 +281,39 @@
             [devicesView addSubview:lineView];
             UILabel *deviceLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, GET_LAYOUT_WIDTH(devicesView), GET_LAYOUT_HEIGHT(devicesView))];
 //            deviceLabel.text = [device objectForKey:@"device_token"];
-            deviceLabel.text = [device objectForKey:@"device_name"];
+            if ([[device objectForKey:@"isAccepted"] intValue] == 1) {
+                deviceLabel.text = [device objectForKey:@"device_name"];
+            } else {
+                NSString *device_token = [NSString stringWithFormat:@"(%@)", NSLocalizedString(@"waitingForConfirmation", nil)];
+                NSString *deviceLabel_txt = [NSString stringWithFormat:@"%@%@",[device objectForKey:@"device_name"], device_token];
+                NSRange device_token_range = [deviceLabel_txt rangeOfString:device_token];
+                UIColor *device_token_color = RGBA_COLOR(128, 128, 128, 1);
+                NSMutableAttributedString *deviceLabel_txt_attributedStr = [[NSMutableAttributedString alloc] initWithString:deviceLabel_txt];
+                [deviceLabel_txt_attributedStr addAttributes:@{NSForegroundColorAttributeName:device_token_color} range:device_token_range];
+                deviceLabel.attributedText = deviceLabel_txt_attributedStr;
+            }
 
             deviceLabel.font = [UIFont systemFontOfSize:15];
             [devicesView addSubview:deviceLabel];
             
-            UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-80, 15, 30, 30)];
-            settingButton.tag = i;
-            [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
-            UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(settingButton)+10, GET_LAYOUT_HEIGHT(settingButton)+10)];
-            settingImageView.image = [UIImage imageNamed:@"ic_edit_black"];
-            [settingButton addSubview:settingImageView];
-            [devicesView addSubview:settingButton];
-            
-            UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
-            //deleteButton.backgroundColor = [UIColor blueColor];
-            deleteButton.tag = i;
-            [deleteButton addTarget:self action:@selector(clickDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
-            UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
-            deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
-            [deleteButton addSubview:deleteImageView];
-            [devicesView addSubview:deleteButton];
+            if ([[device objectForKey:@"isAccepted"] intValue] == 1) {
+                UIButton *settingButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-80, 15, 30, 30)];
+                settingButton.tag = i;
+                [settingButton addTarget:self action:@selector(clickSettingButton:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *settingImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(settingButton)+10, GET_LAYOUT_HEIGHT(settingButton)+10)];
+                settingImageView.image = [UIImage imageNamed:@"ic_edit_black"];
+                [settingButton addSubview:settingImageView];
+                [devicesView addSubview:settingButton];
+                
+                UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(devicesView)-40, 15, 30, 30)];
+                //deleteButton.backgroundColor = [UIColor blueColor];
+                deleteButton.tag = i;
+                [deleteButton addTarget:self action:@selector(clickDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
+                UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
+                deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
+                [deleteButton addSubview:deleteImageView];
+                [devicesView addSubview:deleteButton];
+            }
             
             messageHeight = GET_LAYOUT_HEIGHT(devicesView);
             

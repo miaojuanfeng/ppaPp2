@@ -53,17 +53,19 @@
     self.deviceUserNameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [deviceView addSubview:self.deviceUserNameField];
     
-    self.deviceNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserNameField)+30, GET_LAYOUT_WIDTH(deviceView), 44)];
+    self.deviceNameField = [[UITextField alloc] initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceUserNameField)+30, GET_LAYOUT_WIDTH(deviceView)/2, 44)];
     self.deviceNameField.delegate = self;
-    UIView *nameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceNameField)-1, GET_LAYOUT_WIDTH(self.deviceNameField), 1)];
+    UIView *nameLineView = [[UIView alloc]initWithFrame:CGRectMake(0, GET_LAYOUT_HEIGHT(self.deviceNameField)-1, GET_LAYOUT_WIDTH(deviceView), 1)];
     nameLineView.backgroundColor = lineColor;
     [self.deviceNameField addSubview:nameLineView];
     
     self.deviceNameField.keyboardType = UIKeyboardTypeASCIICapable;
     
-    UILabel *meilSuffix = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(self.deviceNameField)-100, GET_LAYOUT_HEIGHT(self.deviceNameField)-44, 100, 44)];
-    meilSuffix.text = COMPANY_EMAIL(@"");
-    [self.deviceNameField addSubview:meilSuffix];
+    UILabel *mailSuffix = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_WIDTH(self.deviceNameField), GET_LAYOUT_HEIGHT(self.deviceNameField)-44, GET_LAYOUT_WIDTH(self.deviceNameField)-5, 44)];
+    mailSuffix.text = COMPANY_EMAIL(@"");
+    mailSuffix.textAlignment = NSTextAlignmentRight;
+//    mailSuffix.backgroundColor = [UIColor yellowColor];
+    [self.deviceNameField addSubview:mailSuffix];
     
     self.deviceNameField.placeholder = NSLocalizedString(@"deviceAddEmailDeviceName", nil);
     self.deviceNameField.clearButtonMode = UITextFieldViewModeWhileEditing;

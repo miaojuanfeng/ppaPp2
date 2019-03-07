@@ -174,7 +174,8 @@
                                @"userName":self.usernameField.text,
                                @"userPassword":self.passwordField.text,
                                @"user_fcm_token":self.appDelegate.FcmDeviceToken,
-                               @"user_platform": @"0"
+                               @"user_platform": @"0",
+                               @"company_name": COMPANY_NAME
                                };
     NSLog(@"LoginUserInfo:%@", parameters);
     HUD_WAITING_SHOW(NSLocalizedString(@"Loging", nil));
