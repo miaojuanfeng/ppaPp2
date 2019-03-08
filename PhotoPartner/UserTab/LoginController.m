@@ -48,7 +48,8 @@
         logoImage.image = [UIImage imageNamed:@"ic_cloud_blue"];
         [logoView addSubview:logoImage];
         UILabel *logoLable = [[UILabel alloc] initWithFrame:CGRectMake(GET_LAYOUT_OFFSET_X(logoImage)+GET_LAYOUT_WIDTH(logoImage)+GAP_WIDTH, 0, GET_LAYOUT_WIDTH(logoView)-GET_LAYOUT_WIDTH(logoImage), GET_LAYOUT_HEIGHT(logoView))];
-        logoLable.text = @"Cloud Photo";
+//        logoLable.text = @"Cloud Photo";
+        logoLable.text = LOGIN_PAGE_TITLE;
         logoLable.textColor = RGBA_COLOR(95, 185, 245, 1);
         logoLable.font = [UIFont systemFontOfSize:18];
         [logoView addSubview:logoLable];
@@ -195,6 +196,7 @@
             self.appDelegate.userInfo =  [NSMutableDictionary dictionaryWithDictionary:[dic objectForKey:@"data"]];
             [self.appDelegate saveUserInfo];
             [self.appDelegate saveFcmToken];
+            [self.appDelegate loadMessageList];//登录的时候主动重新加载message
             self.appDelegate.isLogout = false;
             
             NSDictionary *parameters=@{
@@ -255,7 +257,8 @@
             
         }else{
             NSString *eCode = [NSString stringWithFormat:@"e%d", status];
-            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+//            HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
+            HUD_TOAST_SHOW(NSLocalizedString(@"LoginError", nil));
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         NSLog(@"失败.%@",error);

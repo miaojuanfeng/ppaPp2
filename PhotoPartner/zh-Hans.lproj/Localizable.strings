@@ -181,6 +181,8 @@ waitingForConfirmation = "等待确认";
 
 UserSystemTokenError = "您的帐户已在另一台设备上登录,请重新登录";
 
+LoginError = "用户名或密码错误";
+
 /*
  *  从服务器返回的错误码
  */

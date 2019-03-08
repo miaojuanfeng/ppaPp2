@@ -366,6 +366,7 @@
 }
 
 - (void)loadMessageList {
+//    NSLog(@"LoadMessage:%@", [self.userInfo objectForKey:@"user_id"]);
     NSArray *pathArray = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *path = [pathArray objectAtIndex:0];
     NSString *plistPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"messageList-uid%@.plist", [self.userInfo objectForKey:@"user_id"]]];

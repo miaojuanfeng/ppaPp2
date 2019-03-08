@@ -157,7 +157,9 @@
             if( ![[users objectForKey:@"isAdmin"] isEqualToString:@"mydevice"] ){
                 UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake(deleteButtonOffsetX, 15, 30, 30)];
                 //deleteButton.backgroundColor = [UIColor blueColor];
-                [deleteButton addTarget:self action:@selector(clickDeleteButton) forControlEvents:UIControlEventTouchUpInside];
+//                NSLog(@"Flone:%@", users);
+                deleteButton.tag = [[users objectForKey:@"id"] longValue];
+                [deleteButton addTarget:self action:@selector(clickDeleteButton:) forControlEvents:UIControlEventTouchUpInside];
                 UIImageView *deleteImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0-5, 0-5, GET_LAYOUT_WIDTH(deleteButton)+10, GET_LAYOUT_HEIGHT(deleteButton)+10)];
                 deleteImageView.image = [UIImage imageNamed:@"ic_delete_black"];
                 [deleteButton addSubview:deleteImageView];
@@ -360,7 +362,7 @@
     }];
 }
 
--(void)clickDeleteButton{
+-(void)clickDeleteButton:(UIButton *) delBtn{
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"deviceListUnbindConfirmTitle", nil)
                                                                              message:NSLocalizedString(@"deviceListUnbindConfirmSubtitle", nil)
                                                                       preferredStyle:UIAlertControllerStyleAlert];
@@ -370,29 +372,33 @@
         manager.responseSerializer = [AFHTTPResponseSerializer serializer];
         manager.requestSerializer.timeoutInterval = 30.0f;
         NSDictionary *parameters=@{
-                                   @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+//                                   @"user_id":[self.appDelegate.userInfo objectForKey:@"user_id"],
+                                   @"user_id": [NSString stringWithFormat:@"%d", delBtn.tag],
                                    @"device_id":[NSString stringWithFormat:@"%d", self.deviceId],
                                    @"status":@"unbind"
                                    };
+//        NSLog(@"deleteDevice:%@", [self.appDelegate.userInfo objectForKey:@"user_id"]);
+        NSLog(@"deleteDevice:%@", parameters);
         HUD_WAITING_SHOW(NSLocalizedString(@"loadingUnbinding", nil));
         [manager POST:BASE_URL(@"device/status") parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData) {
-            
+
         } progress:^(NSProgress * _Nonnull uploadProgress) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 float progress = 1.0 * uploadProgress.completedUnitCount / uploadProgress.totalUnitCount;
-                
+
                 HUD_LOADING_PROGRESS(progress);
             });
         } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
             NSLog(@"成功.%@",responseObject);
             NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingAllowFragments error:NULL];
             NSLog(@"results: %@", dic);
-            
+
             int status = [[dic objectForKey:@"status"] intValue];
-            
+
             HUD_WAITING_HIDE;
             if( status == 200 ){
                 HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindSuccess", nil));
+                [self loadData];
             }else{
                 NSString *eCode = [NSString stringWithFormat:@"e%d", status];
                 HUD_TOAST_SHOW(NSLocalizedString(eCode, nil));
@@ -400,7 +406,7 @@
         } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
             NSLog(@"失败.%@",error);
             NSLog(@"%@",[[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
-            
+
             HUD_WAITING_HIDE;
             HUD_TOAST_SHOW(NSLocalizedString(@"deviceListUnbindFailed", nil));
         }];

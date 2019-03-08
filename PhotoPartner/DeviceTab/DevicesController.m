@@ -284,6 +284,13 @@
 //            deviceLabel.text = [device objectForKey:@"device_token"];
             if ([[device objectForKey:@"isAccepted"] intValue] == 1) {
                 deviceLabel.text = [device objectForKey:@"device_name"];
+                NSString *device_token = [NSString stringWithFormat:@"(%@)", [device objectForKey:@"device_token"]];
+                NSString *deviceLabel_txt = [NSString stringWithFormat:@"%@%@",[device objectForKey:@"device_name"], device_token];
+                NSRange device_token_range = [deviceLabel_txt rangeOfString:device_token];
+                UIColor *device_token_color = RGBA_COLOR(128, 128, 128, 1);
+                NSMutableAttributedString *deviceLabel_txt_attributedStr = [[NSMutableAttributedString alloc] initWithString:deviceLabel_txt];
+                [deviceLabel_txt_attributedStr addAttributes:@{NSForegroundColorAttributeName:device_token_color} range:device_token_range];
+                deviceLabel.attributedText = deviceLabel_txt_attributedStr;
             } else {
                 NSString *device_token = [NSString stringWithFormat:@"(%@)", NSLocalizedString(@"waitingForConfirmation", nil)];
                 NSString *deviceLabel_txt = [NSString stringWithFormat:@"%@%@",[device objectForKey:@"device_name"], device_token];
