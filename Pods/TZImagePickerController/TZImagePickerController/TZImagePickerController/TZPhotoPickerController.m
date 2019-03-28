@@ -456,7 +456,9 @@ static CGFloat itemMargin = 5;
         if( tzImagePickerVc.allowPickingImage ){
             cell.imageView.image = [UIImage imageNamedFromMyBundle:tzImagePickerVc.takePictureImageName];
         }else{
-            cell.imageView.image = [UIImage imageNamedFromMyBundle:@"takeVideo"];
+//            cell.imageView.image = [UIImage imageNamedFromMyBundle:@"takeVideo"];
+            cell.imageView.image = [UIImage imageNamedFromMyBundle:@"takevideoen"];
+
         }
         return cell;
     }

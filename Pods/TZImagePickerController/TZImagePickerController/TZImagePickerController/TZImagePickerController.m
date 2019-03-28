@@ -285,7 +285,10 @@
 }
 
 - (void)configDefaultImageName {
-    self.takePictureImageName = @"takePicture";
+    self.takePictureImageName = @"takephotoen";
+//    self.takePictureImageName = @"homeTakePhotoTitle";
+
+//    self.takePictureImageName = @"photo_sel_photoPickerVc";
     self.photoSelImageName = @"photo_sel_photoPickerVc";
     self.photoDefImageName = @"photo_def_photoPickerVc";
     self.photoNumberIconImageName = @"photo_number_icon";
